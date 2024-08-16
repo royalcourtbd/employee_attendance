@@ -50,6 +50,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const Icon(Icons.image, color: Colors.grey),
             errorWidget: (context, url, error) => const Icon(Icons.error),
             width: EmployeeAttendanceScreen.width * 0.13,
+            height: EmployeeAttendanceScreen.width * 0.13,
           ),
         ),
         gapW15

@@ -1,6 +1,7 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
+import 'package:employee_attendance/core/static/constants.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
@@ -25,8 +26,7 @@ class HomePage extends StatelessWidget {
             theme: theme,
             userName: 'Hassan',
             greetingMessage: 'Good Morning! Mark your attendance',
-            profileImageUrl:
-                'https://browvopetshop.com/wp-content/uploads/2024/05/Sunny-Leone-Biography.jpg',
+            profileImageUrl: image,
           ),
           body: Center(
             child: Column(

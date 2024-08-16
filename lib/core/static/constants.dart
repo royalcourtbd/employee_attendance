@@ -27,3 +27,6 @@ const String playStoreUrl =
 const String websiteUrl = "https://royalcourtbd.com";
 
 const Duration defaultPageTransitionDuration = Duration(milliseconds: 370);
+
+const String image =
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR-FJUufB-BON7aBczg_whwKZSGUW8hgRNiw&s';
