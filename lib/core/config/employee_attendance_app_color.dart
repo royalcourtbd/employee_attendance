@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class EmployeeAttendanceAppColor {
-  static const Color scaffoldBachgroundColor = Color(0xFFFDFAF3);
-  static const Color primaryColor = Color(0xFF614730);
+  static const Color scaffoldBachgroundColor = Color(0xFFF8F8F9);
+  static const Color primaryColor = Color(0xFF1b5b40);
   static const Color textColor = Color(0xFF101010);
   static const Color cardColor = Color(0xFFF4EDE3);
-  static const Color secondaryColor = Color(0xFFFBECD6);
-  static const Color appbarColor = Color(0xff795B41);
+  static const Color secondaryColor = Color(0xFFcbac6b);
+  static const Color appbarColor = Color(0xFF1b5b40);
 }

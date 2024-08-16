@@ -1,12 +1,13 @@
-import 'package:employee_attendance/app/app.dart';
-import 'package:employee_attendance/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:employee_attendance/core/di/service_locator.dart';
+import 'package:employee_attendance/presentation/employee_attendance.dart';
+import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
+  await _init();
+  runApp(const EmployeeAttendance());
+}
+
+Future<void> _init() async {
+  await ServiceLocator.setup();
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -9,10 +10,10 @@ class NetworkUtil {
     if (await _requestLocationPermission()) {
       try {
         String? wifiName = await _networkInfo.getWifiName();
-        print('Connected to: $wifiName');
+        debugPrint('Connected to: $wifiName');
 
         if (wifiName == null) {
-          print('Unable to get Wi-Fi name. Check app permissions.');
+          debugPrint('Unable to get Wi-Fi name. Check app permissions.');
           return false;
         }
 
@@ -21,11 +22,11 @@ class NetworkUtil {
 
         return wifiName == _officeWifiSSID;
       } catch (e) {
-        print('Error checking Wi-Fi connection: $e');
+        debugPrint('Error checking Wi-Fi connection: $e');
         return false;
       }
     } else {
-      print('Location permission denied');
+      debugPrint('Location permission denied');
       return false;
     }
   }

@@ -4,32 +4,24 @@ class HomePageUiState extends BaseUiState {
   const HomePageUiState({
     required super.isLoading,
     required super.userMessage,
-    required this.status,
-    required this.canCheckIn,
-    required this.canCheckOut,
+    required this.nowTimeIsIt,
   });
 
   factory HomePageUiState.empty() {
-    return const HomePageUiState(
+    return HomePageUiState(
       isLoading: false,
       userMessage: '',
-      status: '',
-      canCheckIn: false,
-      canCheckOut: false,
+      nowTimeIsIt: DateTime.now(),
     );
   }
 
-  final String status;
-  final bool canCheckIn;
-  final bool canCheckOut;
+  final DateTime nowTimeIsIt;
 
   @override
   List<Object?> get props => [
         isLoading,
         userMessage,
-        status,
-        canCheckIn,
-        canCheckOut,
+        nowTimeIsIt,
       ];
 
   HomePageUiState copyWith({
@@ -38,13 +30,12 @@ class HomePageUiState extends BaseUiState {
     String? status,
     bool? canCheckIn,
     bool? canCheckOut,
+    DateTime? nowTimeIsIt,
   }) {
     return HomePageUiState(
       isLoading: isLoading ?? super.isLoading,
       userMessage: message ?? super.userMessage,
-      status: status ?? this.status,
-      canCheckIn: canCheckIn ?? this.canCheckIn,
-      canCheckOut: canCheckOut ?? this.canCheckOut,
+      nowTimeIsIt: nowTimeIsIt ?? this.nowTimeIsIt,
     );
   }
 }

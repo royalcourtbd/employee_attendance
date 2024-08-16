@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:employee_attendance/core/config/employee_attendance_app_color.dart';
 import 'package:employee_attendance/core/static/constants.dart';
+import 'package:employee_attendance/core/static/font_family.dart';
 import 'package:employee_attendance/core/utility/logger_utility.dart';
 import 'package:employee_attendance/presentation/employee_attendance.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class EmployeeAttendanceTheme {
   EmployeeAttendanceTheme._();
 
   static ThemeData lightTheme = ThemeData(
-      // fontFamily: FontFamily.inter,
+      fontFamily: FontFamily.inter,
       scaffoldBackgroundColor:
           EmployeeAttendanceAppColor.scaffoldBachgroundColor,
       cardColor: EmployeeAttendanceAppColor.cardColor,
@@ -28,13 +29,14 @@ class EmployeeAttendanceTheme {
       appBarTheme: const AppBarTheme(
           backgroundColor: EmployeeAttendanceAppColor.appbarColor,
           iconTheme: IconThemeData(color: Colors.white),
+          elevation: 0,
           scrolledUnderElevation: 0,
           titleTextStyle: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
       textTheme: const TextTheme(
         bodyMedium: TextStyle(
           color: EmployeeAttendanceAppColor.textColor,
-          // fontFamily: FontFamily.inter,
+          fontFamily: FontFamily.inter,
           height: 1.6,
         ),
       )

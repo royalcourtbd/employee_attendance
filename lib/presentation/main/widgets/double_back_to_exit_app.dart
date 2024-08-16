@@ -2,16 +2,16 @@ import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DoubleBackToExitApp extends StatefulWidget {
+class DoubleTapBackToExitApp extends StatefulWidget {
   final Widget child;
 
-  const DoubleBackToExitApp({super.key, required this.child});
+  const DoubleTapBackToExitApp({super.key, required this.child});
 
   @override
-  DoubleBackToExitAppState createState() => DoubleBackToExitAppState();
+  DoubleTapBackToExitAppState createState() => DoubleTapBackToExitAppState();
 }
 
-class DoubleBackToExitAppState extends State<DoubleBackToExitApp> {
+class DoubleTapBackToExitAppState extends State<DoubleTapBackToExitApp> {
   DateTime _lastPressedAt = DateTime.now();
 
   @override
