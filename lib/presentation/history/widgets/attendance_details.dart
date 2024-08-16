@@ -1,0 +1,50 @@
+import 'package:employee_attendance/core/config/employee_attendance_app_color.dart';
+import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
+import 'package:employee_attendance/presentation/common/show_vertical_divider.dart';
+import 'package:employee_attendance/presentation/history/widgets/time_status_widget.dart';
+import 'package:flutter/material.dart';
+
+class AttendanceDetails extends StatelessWidget {
+  const AttendanceDetails({
+    super.key,
+    required this.theme,
+  });
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              TimeStatusWidget(
+                  theme: theme, time: '09:00 AM', status: 'Check In'),
+              const ShowVerticalDivider(),
+              TimeStatusWidget(
+                  theme: theme, time: '--:--', status: 'Check Out'),
+              const ShowVerticalDivider(),
+              TimeStatusWidget(
+                  theme: theme, time: '--:--', status: 'Total Hrs'),
+            ],
+          ),
+          Divider(
+            height: sevenPx,
+            color: EmployeeAttendanceAppColor.textColor.withOpacity(0.1),
+          ),
+          Text(
+            'Eastern Banabithi Shopping Complex ~ South Banasree',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontSize: thirteenPx,
+              color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

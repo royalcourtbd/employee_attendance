@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +42,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        CircleAvatar(
-          radius: twentyFivePx,
-          backgroundImage: NetworkImage(profileImageUrl),
+        ClipRRect(
+          borderRadius: radius50,
+          child: CachedNetworkImage(
+            imageUrl: profileImageUrl,
+            placeholder: (context, url) =>
+                const Icon(Icons.image, color: Colors.grey),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            width: EmployeeAttendanceScreen.width * 0.13,
+          ),
         ),
         gapW15
       ],

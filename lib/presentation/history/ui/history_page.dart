@@ -7,6 +7,7 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Attendance History'),
@@ -15,7 +16,7 @@ class HistoryPage extends StatelessWidget {
       body: ListView.builder(
         padding: padding15,
         itemCount: 10,
-        itemBuilder: (_, index) => const AttendanceItem(),
+        itemBuilder: (_, index) => AttendanceItem(theme: theme),
       ),
     );
   }

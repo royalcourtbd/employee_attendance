@@ -50,6 +50,7 @@ dependencies:
   flutter_neumorphic_plus: ^3.4.0
   awesome_bottom_bar: ^1.2.4
   get_it: ^7.7.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
