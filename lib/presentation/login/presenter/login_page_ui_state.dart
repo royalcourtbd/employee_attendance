@@ -1,38 +1,31 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
 
-class MainPageUiState extends BaseUiState {
-  const MainPageUiState({
+class LoginPageUiState extends BaseUiState {
+  const LoginPageUiState({
     required super.isLoading,
     required super.userMessage,
-    required this.currentNavIndex,
   });
 
-  factory MainPageUiState.empty() {
-    return const MainPageUiState(
+  factory LoginPageUiState.empty() {
+    return const LoginPageUiState(
       isLoading: false,
       userMessage: '',
-      currentNavIndex: 0,
     );
   }
-
-  final int currentNavIndex;
 
   @override
   List<Object?> get props => [
         isLoading,
         userMessage,
-        currentNavIndex,
       ];
 
-  MainPageUiState copyWith({
+  LoginPageUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    int? currentNavIndex,
   }) {
-    return MainPageUiState(
+    return LoginPageUiState(
       isLoading: isLoading ?? this.isLoading,
       userMessage: userMessage ?? this.userMessage,
-      currentNavIndex: currentNavIndex ?? this.currentNavIndex,
     );
   }
 }
