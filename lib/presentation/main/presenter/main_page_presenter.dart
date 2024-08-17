@@ -5,9 +5,8 @@ class MainPagePresenter extends BasePresenter<MainPageUiState> {
   final Obs<MainPageUiState> uiState = Obs(MainPageUiState.empty());
   MainPageUiState get currentUiState => uiState.value;
 
-  // Method to update the selected index
-  void updateIndex(int index) {
-    uiState.value = currentUiState.copyWith(currentNavIndex: index);
+  void updateIndex({required int index}) {
+    uiState.value = uiState.value.copyWith(currentNavIndex: index);
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/utility/logger_utility.dart';
+import 'package:employee_attendance/core/utility/trial_utility.dart';
 import 'package:employee_attendance/presentation/employee_attendance.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,90 +111,72 @@ Future<void> showMessage({
 //           : buildColorFilter(Theme.of(context).primaryColor),
 //     );
 
-// Future<void> copyText({required String text}) async {
-//   await catchFutureOrVoid(() async {
-//     if (text.isEmpty) return;
-//     final ClipboardData clipboardData = ClipboardData(text: text);
-//     await Clipboard.setData(clipboardData);
-//   });
-// }
+Future<void> copyText({required String text}) async {
+  await catchFutureOrVoid(() async {
+    if (text.isEmpty) return;
+    final ClipboardData clipboardData = ClipboardData(text: text);
+    await Clipboard.setData(clipboardData);
+  });
+}
 
-// Future<void> shareText({required String text}) async {
-//   await catchFutureOrVoid(() async => Share.share(text));
-// }
+Future<void> shareText({required String text}) async {
+  // await catchFutureOrVoid(() async => Share.share(text));
+}
 
-// /// Displays a message asynchronously.
-// ///
-// ///
-// /// Example usage:
-// ///
-// /// ```dart
-// /// showMessage(message: 'Error occurred!');
-// /// ```
-// ///
-// /// Rationale:
-// ///
-// /// - provides a convenient way to display short messages to the user
-// /// as toast notifications within your Flutter application.
-// /// - encapsulates the logic of showing the message with a specified duration,
-// /// toast position, and styling.
-// Future<void> showMessage({
-//   required String? message,
-//   BuildContext? context,
-// }) async {
-//   if (message == null || message.isEmpty) return;
-//   Debounce.debounce("showMessageLock", 10.inMilliseconds, () async {
-//     final ThemeData themeData = (context ?? QuranMajeed.globalContext).theme;
-//     await Fluttertoast.showToast(
-//       msg: message,
-//       toastLength: Toast.LENGTH_SHORT,
-//       gravity: ToastGravity.BOTTOM,
-//       backgroundColor: themeData.primaryColor.withOpacity(0.9),
-//       textColor: Colors.white,
-//       fontSize: sixteenPx,
-//     );
-//   });
-// }
+/// Displays a message asynchronously.
+///
+///
+/// Example usage:
+///
+/// ```dart
+/// showMessage(message: 'Error occurred!');
+/// ```
+///
+/// Rationale:
+///
+/// - provides a convenient way to display short messages to the user
+/// as toast notifications within your Flutter application.
+/// - encapsulates the logic of showing the message with a specified duration,
+/// toast position, and styling.
 
-// Future<void> showComingSoonMessage({BuildContext? context}) async {
-//   Debounce.debounce("showComingSoonMessageLock", 10.milliseconds, () async {
-//     try {
-//       final ThemeData themeData = (context ?? QuranMajeed.globalContext).theme;
-//       await Fluttertoast.showToast(
-//         msg: "শীঘ্রই আসছে ইন-শা-আল্লাহ",
-//         toastLength: Toast.LENGTH_LONG,
-//         gravity: ToastGravity.BOTTOM,
-//         backgroundColor: themeData.colorScheme.scrim.withOpacity(0.9),
-//         textColor: themeData.colorScheme.onPrimary,
-//         fontSize: sixteenPx,
-//       );
-//     } catch (e) {
-//       logErrorStatic(e, _fileName);
-//     }
-//   });
-// }
+Future<void> showComingSoonMessage({BuildContext? context}) async {
+  try {
+    final ThemeData themeData =
+        (context ?? EmployeeAttendance.globalContext).theme;
+    await Fluttertoast.showToast(
+      msg: "শীঘ্রই আসছে ইন-শা-আল্লাহ",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: themeData.colorScheme.scrim.withOpacity(0.9),
+      textColor: themeData.colorScheme.onPrimary,
+      fontSize: sixteenPx,
+    );
+  } catch (e) {
+    logErrorStatic(e, _fileName);
+  }
+}
 
-// /// Checks the internet connection asynchronously.
-// ///
-// ///
-// /// Example usage:
-// ///
-// /// ```dart
-// /// bool isConnected = await checkInternetConnection();
-// /// if (isConnected) {
-// ///   logDebug('Internet connection is available.');
-// /// } else {
-// ///   logDebug('No internet connection.');
-// /// }
-// /// ```
-// ///
-// /// Rationale:
-// ///
-// /// The `checkInternetConnection` function provides a straightforward way to determine
-// /// the availability of an internet connection within your Flutter application. By performing
-// /// a lookup for a well-known URL, it checks if the device can successfully resolve the URL's
-// /// IP address, indicating an active internet connection.
-// ///
+/// Checks the internet connection asynchronously.
+///
+///
+/// Example usage:
+///
+/// ```dart
+/// bool isConnected = await checkInternetConnection();
+/// if (isConnected) {
+///   logDebug('Internet connection is available.');
+/// } else {
+///   logDebug('No internet connection.');
+/// }
+/// ```
+///
+/// Rationale:
+///
+/// The `checkInternetConnection` function provides a straightforward way to determine
+/// the availability of an internet connection within your Flutter application. By performing
+/// a lookup for a well-known URL, it checks if the device can successfully resolve the URL's
+/// IP address, indicating an active internet connection.
+///
 // Future<bool> checkInternetConnection() async {
 //   final bool? isConnected = await catchAndReturnFuture(() async {
 //     const String kLookUpUrl = 'www.cloudflare.com';
@@ -216,7 +200,7 @@ Future<void> showMessage({
 //   final String reportInfo = await getDeviceInfo();
 //   final String currentVersion = await currentAppVersion;
 //   return '''
-// যে সমস্যাটি রিপোর্ট করছেন: 
+// যে সমস্যাটি রিপোর্ট করছেন:
 
 // App Version: $currentVersion
 // ডিভাইস ইনফরমেশন:
@@ -224,22 +208,22 @@ Future<void> showMessage({
 // ''';
 // }
 
-// /// Sends an email asynchronously with the specified subject, body, and email address.
-// ///
-// /// Example usage:
-// ///
-// /// ```dart
-// /// await sendEmail(subject: 'Feedback', body: 'Hello, I have some feedback...');
-// /// ```
-// ///
-// /// Rationale:
-// ///
-// /// - provides a simple way to send emails asynchronously from within
-// /// your Flutter application.
-// /// - encapsulates the process of composing an email with the
-// /// specified subject, body, and recipient address,
-// /// abstracting away the complexities of
-// /// integrating with the device's default email client.
+/// Sends an email asynchronously with the specified subject, body, and email address.
+///
+/// Example usage:
+///
+/// ```dart
+/// await sendEmail(subject: 'Feedback', body: 'Hello, I have some feedback...');
+/// ```
+///
+/// Rationale:
+///
+/// - provides a simple way to send emails asynchronously from within
+/// your Flutter application.
+/// - encapsulates the process of composing an email with the
+/// specified subject, body, and recipient address,
+/// abstracting away the complexities of
+/// integrating with the device's default email client.
 // Future<void> sendEmail({
 //   String subject = "",
 //   String body = "",
@@ -428,30 +412,35 @@ Future<void> showMessage({
 //   return _currentAppVersion!;
 // }
 
-// const String _fileName = "utility.dart";
+const String _fileName = "utility.dart";
 
 // String get suitableAppStoreUrl =>
 //     Platform.isAndroid ? playStoreUrl : appStoreUrl;
 
-// void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
+void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
+// Future<void> disposeKeyboard(
+//     BuildContext context, TextEditingController editingController) async {
+//   editingController.clear();
+//   KeyboardService.dismiss(context: context);
+// }
 
 // Null Function(Object _)? doNothing(_) => null;
 
-// /// Retrieves the device information asynchronously.
-// ///
-// /// Example usage:
-// ///
-// /// ```dart
-// /// String deviceInfo = await getDeviceInfo();
-// /// print(deviceInfo);
-// /// ```
-// ///
-// /// Rationale:
-// ///
-// /// - The `getDeviceInfo` function provides a convenient way to retrieve device information
-// /// asynchronously.
-// /// - Utilizes the `catchAndReturnFuture` method to handle any errors that
-// /// might occur during the execution of the asynchronous code.
+/// Retrieves the device information asynchronously.
+///
+/// Example usage:
+///
+/// ```dart
+/// String deviceInfo = await getDeviceInfo();
+/// print(deviceInfo);
+/// ```
+///
+/// Rationale:
+///
+/// - The `getDeviceInfo` function provides a convenient way to retrieve device information
+/// asynchronously.
+/// - Utilizes the `catchAndReturnFuture` method to handle any errors that
+/// might occur during the execution of the asynchronous code.
 // Future<String> getDeviceInfo() async {
 //   final String? deviceInfo = await catchAndReturnFuture(() async {
 //     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

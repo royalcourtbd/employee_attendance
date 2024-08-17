@@ -21,6 +21,15 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+diff_output.txt
+# If you're building an application, you may want to check-in your pubspec.lock
+pubspec.lock
+.DS_Store
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
