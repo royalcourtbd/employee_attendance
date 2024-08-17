@@ -21,6 +21,9 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
+# Environment variables file
+.env
+
 # Files and directories created by pub
 .dart_tool/
 .packages
