@@ -22,7 +22,7 @@ migrate_working_dir/
 #.vscode/
 
 # Environment variables file
-.env
+.env 
 
 # Files and directories created by pub
 .dart_tool/

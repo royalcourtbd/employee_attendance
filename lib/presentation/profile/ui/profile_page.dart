@@ -1,4 +1,6 @@
 import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
+import 'package:employee_attendance/presentation/profile/ui/edit_profile_page.dart';
 import 'package:employee_attendance/presentation/profile/widgets/copyright.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_header.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_option.dart';
@@ -17,7 +19,7 @@ class ProfilePage extends StatelessWidget {
           gapH16,
           ProfileOption(
             theme: theme,
-            onTap: () {},
+            onTap: () => context.navigatorPush(EditProfilePage()),
             icon: Icons.edit,
             text: 'Edit Profile',
           ),

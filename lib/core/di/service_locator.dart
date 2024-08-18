@@ -4,6 +4,7 @@ import 'package:employee_attendance/presentation/home/presenter/home_presenter.d
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 import 'package:employee_attendance/presentation/notification/presenter/notification_presenter.dart';
+import 'package:employee_attendance/presentation/profile/presenter/edit_profile_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:get_it/get_it.dart';
 
@@ -32,6 +33,7 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(ProfilePagePresenter()))
       ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))
       ..registerLazySingleton(() => loadPresenter(MainPagePresenter()))
-      ..registerLazySingleton(() => loadPresenter(LoginPagePresenter()));
+      ..registerLazySingleton(() => loadPresenter(LoginPagePresenter()))
+      ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()));
   }
 }

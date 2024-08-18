@@ -32,6 +32,12 @@ class LoginPage extends StatelessWidget {
           padding: paddingH16,
           child: Column(
             children: [
+              SvgPicture.asset(
+                SvgPath.icTimeManagement,
+                width: EmployeeAttendanceScreen.width * 0.6,
+                height: EmployeeAttendanceScreen.width * 0.6,
+              ),
+              gapH15,
               LoginHeader(theme: theme),
               gapH40,
               CustomTextField(
@@ -40,6 +46,7 @@ class LoginPage extends StatelessWidget {
                 hintText: 'Enter your email',
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) => _loginPresenter.updateEmail(email: value),
+                icon: Icons.email,
               ),
               gapH25,
               CustomTextField(
@@ -47,14 +54,9 @@ class LoginPage extends StatelessWidget {
                 theme: theme,
                 hintText: 'Enter your password',
                 isPassword: true,
+                icon: Icons.lock,
                 onChanged: (value) =>
                     _loginPresenter.updatePassword(password: value),
-              ),
-              const Spacer(),
-              SvgPicture.asset(
-                SvgPath.icTimeManagement,
-                width: EmployeeAttendanceScreen.width * 0.7,
-                height: EmployeeAttendanceScreen.width * 0.7,
               ),
               const Spacer(),
               PrimaryButton(

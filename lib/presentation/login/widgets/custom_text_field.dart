@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.keyboardType,
     this.onChanged,
+    this.icon,
   }) : _emailController = emailController;
 
   final TextEditingController _emailController;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final bool? isPassword;
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,10 @@ class CustomTextField extends StatelessWidget {
         fontSize: fourteenPx,
       ),
       decoration: InputDecoration(
+        prefixIcon: Icon(
+          icon,
+          color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+        ),
         hintText: hintText,
         hintStyle: theme.textTheme.bodyMedium!.copyWith(
           fontSize: fourteenPx,
