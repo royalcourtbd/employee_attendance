@@ -1,5 +1,4 @@
 import 'package:employee_attendance/core/config/themes.dart';
-import 'package:employee_attendance/presentation/login/ui/login_page.dart';
 import 'package:employee_attendance/presentation/main/ui/main_page.dart';
 
 import 'package:flutter/material.dart';

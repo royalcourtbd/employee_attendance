@@ -40,6 +40,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
       await toggleLoading(loading: false);
       await showMessage(message: 'Login successful');
+
       context.navigatorPushReplacement(MainPage());
     }
   }
