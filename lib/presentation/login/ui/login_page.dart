@@ -1,5 +1,7 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
+import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
+import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/common/primary_button.dart';
@@ -20,55 +22,72 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: theme.scaffoldBackgroundColor,
-        toolbarHeight: fortyPx,
-      ),
-      body: Form(
-        key: _loginPresenter.formKey,
-        child: Padding(
-          padding: paddingH16,
-          child: Column(
-            children: [
-              SvgPicture.asset(
-                SvgPath.icTimeManagement,
-                width: EmployeeAttendanceScreen.width * 0.6,
-                height: EmployeeAttendanceScreen.width * 0.6,
+    return PresentableWidgetBuilder(
+        presenter: _loginPresenter,
+        builder: () {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            extendBody: true,
+            appBar: AppBar(
+              backgroundColor: theme.scaffoldBackgroundColor,
+              toolbarHeight: fortyPx,
+            ),
+            body: Form(
+              key: _loginPresenter.formKey,
+              child: Padding(
+                padding: paddingH16,
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      SvgPath.icTimeManagement,
+                      width: EmployeeAttendanceScreen.width * 0.6,
+                      height: EmployeeAttendanceScreen.width * 0.6,
+                    ),
+                    gapH15,
+                    LoginHeader(theme: theme),
+                    gapH40,
+                    CustomTextField(
+                      emailController: _emailController,
+                      theme: theme,
+                      hintText: 'Enter your email',
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        _loginPresenter.formKey.currentState!.validate();
+                      },
+                      validator: _loginPresenter.validateEmail,
+                      icon: Icons.email,
+                    ),
+                    gapH25,
+                    CustomTextField(
+                      emailController: _passwordController,
+                      theme: theme,
+                      hintText: 'Enter your password',
+                      isPassword: true,
+                      icon: Icons.lock,
+                      onChanged: (value) {
+                        _loginPresenter.formKey.currentState!.validate();
+                      },
+                      validator: _loginPresenter.validatePassword,
+                    ),
+                    const Spacer(),
+                    _loginPresenter.currentUiState.isLoading
+                        ? LoadingIndicator(
+                            theme: theme,
+                            color: theme.primaryColor,
+                            ringColor: theme.primaryColor.withOpacity(0.5),
+                          )
+                        : PrimaryButton(
+                            theme: theme,
+                            onPressed: () =>
+                                _loginPresenter.handleLogin(context),
+                            buttonText: 'Login',
+                          ),
+                    gapH30,
+                  ],
+                ),
               ),
-              gapH15,
-              LoginHeader(theme: theme),
-              gapH40,
-              CustomTextField(
-                emailController: _emailController,
-                theme: theme,
-                hintText: 'Enter your email',
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) => _loginPresenter.updateEmail(email: value),
-                icon: Icons.email,
-              ),
-              gapH25,
-              CustomTextField(
-                emailController: _passwordController,
-                theme: theme,
-                hintText: 'Enter your password',
-                isPassword: true,
-                icon: Icons.lock,
-                onChanged: (value) =>
-                    _loginPresenter.updatePassword(password: value),
-              ),
-              const Spacer(),
-              PrimaryButton(
-                theme: theme,
-                onPressed: () => _loginPresenter.handleLogin(context),
-                buttonText: 'Login',
-              ),
-              gapH30,
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

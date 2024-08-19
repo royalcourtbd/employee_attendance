@@ -1,5 +1,6 @@
 import 'package:employee_attendance/core/config/themes.dart';
 import 'package:employee_attendance/presentation/login/ui/login_page.dart';
+import 'package:employee_attendance/presentation/main/ui/main_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class EmployeeAttendance extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: EmployeeAttendanceTheme.lightTheme,
       title: 'Employee Attendance',
-      home: LoginPage(),
+      home: MainPage(),
     );
   }
 }

@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.onChanged,
     this.icon,
+    this.validator,
   }) : _emailController = emailController;
 
   final TextEditingController _emailController;
@@ -22,11 +23,13 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
   final IconData? icon;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       onTapOutside: (event) => closeKeyboard(),
+      validator: validator,
       onChanged: onChanged,
       obscureText: isPassword!,
       keyboardType: keyboardType,

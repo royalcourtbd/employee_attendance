@@ -10,26 +10,38 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void updateEmail({required String email}) {
-    uiState.value = currentUiState.copyWith(email: email);
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    String pattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+    return null;
   }
 
-  void updatePassword({required String password}) {
-    uiState.value = currentUiState.copyWith(password: password);
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return null;
   }
 
   void handleLogin(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      login().then((_) {
-        context.navigatorPushReplacement(MainPage());
-      });
-    }
-  }
+      await toggleLoading(loading: true);
 
-  Future<void> login() async {
-    await toggleLoading(loading: true);
-    // Implement login logic here
-    await toggleLoading(loading: false);
+      await Future.delayed(const Duration(seconds: 5));
+
+      await toggleLoading(loading: false);
+      await showMessage(message: 'Login successful');
+      context.navigatorPushReplacement(MainPage());
+    }
   }
 
   @override
