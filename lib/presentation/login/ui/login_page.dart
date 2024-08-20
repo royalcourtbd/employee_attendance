@@ -4,6 +4,7 @@ import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/presentation/authentication/presenter/auth_presenter.dart';
 import 'package:employee_attendance/presentation/common/primary_button.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
@@ -15,6 +16,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   final LoginPagePresenter _loginPresenter = locate<LoginPagePresenter>();
+  late final AuthPresenter _authPresenter = locate<AuthPresenter>();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -65,6 +67,7 @@ class LoginPage extends StatelessWidget {
                       isPassword: true,
                       icon: Icons.lock,
                       onChanged: (value) {
+                        print(_loginPresenter.currentUiState.email);
                         _loginPresenter.formKey.currentState!.validate();
                       },
                       validator: _loginPresenter.validatePassword,
@@ -83,6 +86,11 @@ class LoginPage extends StatelessWidget {
                             buttonText: 'Login',
                           ),
                     gapH30,
+                    PrimaryButton(
+                        theme: theme,
+                        buttonText: 'Demo User',
+                        onPressed: () =>
+                            _authPresenter.createDemoUser(isEmployee: false))
                   ],
                 ),
               ),
