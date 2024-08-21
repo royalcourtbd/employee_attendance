@@ -8,6 +8,7 @@ import 'package:employee_attendance/presentation/home/presenter/home_presenter.d
 import 'package:employee_attendance/presentation/home/widgets/attendance_time_widget.dart';
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
@@ -50,7 +51,22 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH50,
                 NeumorphicButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.dialog(
+                      AlertDialog(
+                        title: const Text('Attendance Marked'),
+                        content: const Text('Your attendance has been marked'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   style: const NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     boxShape: NeumorphicBoxShape.circle(),

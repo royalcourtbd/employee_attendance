@@ -1,7 +1,7 @@
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/presentation/authentication/presenter/auth_presenter.dart';
+import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/ui/edit_profile_page.dart';
 import 'package:employee_attendance/presentation/profile/widgets/copyright.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_header.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
-  late final AuthPresenter _authPresenter = locate();
+  late final ProfilePagePresenter _profilePagePresenter = locate();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
           gapH16,
           ProfileOption(
             theme: theme,
-            onTap: () => _authPresenter.signOut(),
+            onTap: () => _profilePagePresenter.logout(),
             icon: Icons.logout,
             text: 'Log Out',
           ),
