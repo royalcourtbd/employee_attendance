@@ -42,8 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        ClipRRect(
-          borderRadius: radius50,
+        ClipOval(
           child: CachedNetworkImage(
             imageUrl: profileImageUrl,
             placeholder: (context, url) =>
@@ -51,6 +50,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             errorWidget: (context, url, error) => const Icon(Icons.error),
             width: EmployeeAttendanceScreen.width * 0.13,
             height: EmployeeAttendanceScreen.width * 0.13,
+            fit: BoxFit.cover,
           ),
         ),
         gapW15

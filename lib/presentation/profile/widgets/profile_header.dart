@@ -1,5 +1,5 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
-import 'package:employee_attendance/core/static/constants.dart';
+
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_image.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_name.dart';
@@ -8,8 +8,17 @@ import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatelessWidget {
   final ThemeData theme;
+  final String? userName;
+  final String? employeeIt;
+  final String? profileImage;
 
-  const ProfileHeader({super.key, required this.theme});
+  const ProfileHeader({
+    super.key,
+    required this.theme,
+    this.userName,
+    this.employeeIt,
+    this.profileImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +30,14 @@ class ProfileHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           gapH50,
-          const ProfileImage(userImage: image),
+          ProfileImage(profileImage: profileImage),
           gapH16,
-          ProfileName(theme: theme, userName: 'Shaikh Ahmadullah'),
+          ProfileName(
+            theme: theme,
+            userName: userName ?? 'User Name',
+          ),
           gapH10,
-          ProfilePhone(theme: theme, phone: '+880 1234567890'),
+          ProfileId(theme: theme, phone: employeeIt ?? 'Employee ID'),
         ],
       ),
     );

@@ -5,11 +5,15 @@ import 'package:employee_attendance/domain/repositories/user_repository.dart';
 import 'package:employee_attendance/presentation/admin/ui/admin_dashboard_page.dart';
 import 'package:employee_attendance/presentation/login/ui/login_page.dart';
 import 'package:employee_attendance/presentation/main/ui/main_page.dart';
+import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
+
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 
 class AuthWrapper extends StatelessWidget {
   final UserRepository _userRepository = locate<UserRepository>();
+  final ProfilePagePresenter _profilePagePresenter =
+      locate<ProfilePagePresenter>();
 
   AuthWrapper({super.key});
 
@@ -36,7 +40,7 @@ class AuthWrapper extends StatelessWidget {
                       return MainPage();
                     }
                   } else {
-                    _userRepository.logout();
+                    _profilePagePresenter.logout();
                     return LoginPage();
                   }
                 }

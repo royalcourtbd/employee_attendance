@@ -2,6 +2,7 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/data/repositories/user_repository_impl.dart';
 import 'package:employee_attendance/domain/repositories/user_repository.dart';
+import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/domain/usecases/user_usecases.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_presenter.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
@@ -31,7 +32,9 @@ class ServiceLocator {
   }
 
   Future<void> _setupUseCase() async {
-    _serviceLocator.registerLazySingleton(() => UserUseCases(locate()));
+    _serviceLocator
+      ..registerLazySingleton(() => UserUseCases(locate()))
+      ..registerLazySingleton(() => GetGreetingUseCase());
   }
 
   Future<void> _setupService() async {
@@ -46,16 +49,13 @@ class ServiceLocator {
 
   Future<void> _setupPresenter() async {
     _serviceLocator
-          ..registerFactory(() => loadPresenter(HomePresenter()))
-          ..registerLazySingleton(() => loadPresenter(HistoryPagePresenter()))
-          ..registerLazySingleton(
-              () => loadPresenter(ProfilePagePresenter(locate())))
-          ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))
-          ..registerLazySingleton(() => loadPresenter(MainPagePresenter()))
-          ..registerLazySingleton(() => loadPresenter(LoginPagePresenter(locate())))
-          ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()))
-        // ..registerFactory(
-        //     () => loadPresenter(AuthPresenter(locate(), locate(), locate())))
-        ;
+      ..registerFactory(() => loadPresenter(HomePresenter(locate())))
+      ..registerLazySingleton(() => loadPresenter(HistoryPagePresenter()))
+      ..registerLazySingleton(
+          () => loadPresenter(ProfilePagePresenter(locate(), locate())))
+      ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))
+      ..registerLazySingleton(() => loadPresenter(MainPagePresenter()))
+      ..registerLazySingleton(() => loadPresenter(LoginPagePresenter(locate())))
+      ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()));
   }
 }

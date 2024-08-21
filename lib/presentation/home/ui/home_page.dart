@@ -1,12 +1,12 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
-import 'package:employee_attendance/core/static/constants.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/home/widgets/attendance_time_widget.dart';
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
+import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +15,8 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final HomePresenter homePresenter = locate<HomePresenter>();
+  final ProfilePagePresenter _profilePagePresenter =
+      locate<ProfilePagePresenter>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,10 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           appBar: CustomAppBar(
             theme: theme,
-            userName: 'Hassan',
-            greetingMessage: 'Good Morning! Mark your attendance',
-            profileImageUrl: image,
+            userName: _profilePagePresenter.currentUiState.user!.name!,
+            greetingMessage:
+                '${homePresenter.currentUiState.greetingMessage} Mark your attendance',
+            profileImageUrl: _profilePagePresenter.currentUiState.user!.image!,
           ),
           body: Center(
             child: Column(

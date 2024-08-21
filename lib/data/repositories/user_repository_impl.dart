@@ -3,6 +3,7 @@ import 'package:employee_attendance/data/models/user_model.dart';
 import 'package:employee_attendance/domain/entities/user.dart';
 import 'package:employee_attendance/domain/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/material.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirebaseService _firebaseService;
@@ -39,7 +40,7 @@ class UserRepositoryImpl implements UserRepository {
 
       return user;
     } catch (e) {
-      print('Error creating demo user: $e');
+      debugPrint('Error creating demo user: $e');
       return null;
     }
   }
@@ -54,7 +55,7 @@ class UserRepositoryImpl implements UserRepository {
       );
       return await fetchUserData(userCredential.user!.uid);
     } catch (e) {
-      print('Error logging in: $e');
+      debugPrint('Error logging in: $e');
       return null;
     }
   }
@@ -76,7 +77,7 @@ class UserRepositoryImpl implements UserRepository {
       }
       return null;
     } catch (e) {
-      print('Error fetching user data: $e');
+      debugPrint('Error fetching user data: $e');
       return null;
     }
   }
@@ -84,12 +85,13 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> updateUser(User user) async {
     try {
+      final UserModel userModel = UserModel.fromUser(user);
       await _firebaseService.firestore
           .collection('users')
           .doc(user.id)
-          .update((user as UserModel).toJson());
+          .update((userModel.toJson()));
     } catch (e) {
-      print('Error updating user: $e');
+      debugPrint('Error updating user: $e');
     }
   }
 

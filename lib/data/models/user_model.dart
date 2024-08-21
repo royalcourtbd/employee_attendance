@@ -51,4 +51,22 @@ class UserModel extends User {
       'designation': designation,
     };
   }
+
+  // এই মেথডটি `User` অবজেক্ট থেকে `UserModel` অবজেক্ট তৈরি করতে সহায়ক হবে।
+  factory UserModel.fromUser(User user) {
+    return UserModel(
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      joiningDate: user.joiningDate,
+      image: user.image,
+      employeeId: user.employeeId,
+      documentId: user.documentId,
+      phoneNumber: user.phoneNumber,
+      deviceToken: user.deviceToken,
+      employeeStatus: user.employeeStatus,
+      email: user.email,
+      designation: user.designation,
+    );
+  }
 }

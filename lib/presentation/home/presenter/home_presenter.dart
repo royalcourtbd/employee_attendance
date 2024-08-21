@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
 
 class HomePresenter extends BasePresenter<HomePageUiState> {
+  final GetGreetingUseCase _getGreetingUseCase;
+
+  HomePresenter(this._getGreetingUseCase);
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
   HomePageUiState get currentUiState => uiState.value;
 
@@ -12,6 +16,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   @override
   void onInit() {
     super.onInit();
+    getGreeting();
     startClock();
   }
 
@@ -29,6 +34,11 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
 
   void updateCurrentTime() {
     uiState.value = currentUiState.copyWith(nowTimeIsIt: DateTime.now());
+  }
+
+  Future<void> getGreeting() async {
+    final greeting = _getGreetingUseCase.execute();
+    uiState.value = currentUiState.copyWith(greetingMessage: greeting);
   }
 
   @override

@@ -50,6 +50,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
         final String? deviceToken = await _userUseCases.getDeviceToken();
 
         if (deviceToken != null && deviceToken.isNotEmpty) {
+          debugPrint('Device Token: $deviceToken');
           await _userUseCases
               .updateUser(user.copyWith(deviceToken: deviceToken));
           await addUserMessage('Device Activated for Notifications');

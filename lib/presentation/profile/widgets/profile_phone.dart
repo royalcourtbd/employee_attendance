@@ -1,11 +1,11 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePhone extends StatelessWidget {
+class ProfileId extends StatelessWidget {
   final ThemeData theme;
   final String? phone;
 
-  const ProfilePhone({super.key, required this.theme, this.phone});
+  const ProfileId({super.key, required this.theme, this.phone});
 
   @override
   Widget build(BuildContext context) {
