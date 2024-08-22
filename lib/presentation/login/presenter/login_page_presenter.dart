@@ -53,7 +53,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
           debugPrint('Device Token: $deviceToken');
           await _userUseCases
               .updateUser(user.copyWith(deviceToken: deviceToken));
-          await addUserMessage('Device Activated for Notifications');
+          await addUserMessage('Login successful');
           showMessage(
             message: currentUiState.userMessage,
           );

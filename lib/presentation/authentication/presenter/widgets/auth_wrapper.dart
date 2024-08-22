@@ -28,11 +28,14 @@ class AuthWrapper extends StatelessWidget {
           if (user == null) {
             return LoginPage();
           } else {
+            _profilePagePresenter.initUserStream(user.uid);
             return FutureBuilder(
               future: _userRepository.fetchUserData(user.uid),
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.done) {
                   final appUser = userSnapshot.data;
+                  
+                  
                   if (appUser != null) {
                     if (appUser.role == 'admin') {
                       return const AdminDashboardPage();

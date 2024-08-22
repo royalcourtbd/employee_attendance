@@ -24,13 +24,15 @@ class HomePage extends StatelessWidget {
     return PresentableWidgetBuilder(
       presenter: homePresenter,
       builder: () {
+        final user = _profilePagePresenter.currentUiState.user;
+
         return Scaffold(
           appBar: CustomAppBar(
             theme: theme,
-            userName: _profilePagePresenter.currentUiState.user!.name!,
+            userName: user!.name ?? '',
             greetingMessage:
                 '${homePresenter.currentUiState.greetingMessage} Mark your attendance',
-            profileImageUrl: _profilePagePresenter.currentUiState.user!.image!,
+            profileImageUrl: user.image ?? '',
           ),
           body: Center(
             child: Column(
@@ -54,22 +56,7 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH50,
                 NeumorphicButton(
-                  onPressed: () {
-                    Get.dialog(
-                      AlertDialog(
-                        title: const Text('Attendance Marked'),
-                        content: const Text('Your attendance has been marked'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                  onPressed: () {},
                   style: const NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     boxShape: NeumorphicBoxShape.circle(),
