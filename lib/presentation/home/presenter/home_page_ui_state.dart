@@ -5,7 +5,13 @@ class HomePageUiState extends BaseUiState {
     required super.isLoading,
     required super.userMessage,
     required this.nowTimeIsIt,
-    required this.greetingMessage, // New property for greeting message
+    required this.greetingMessage,
+    this.checkInTime,
+    this.checkOutTime,
+    this.workDuration,
+    this.isCheckedIn = false,
+    this.officeStartTime,
+    this.officeEndTime,
   });
 
   factory HomePageUiState.empty() {
@@ -13,33 +19,56 @@ class HomePageUiState extends BaseUiState {
       isLoading: false,
       userMessage: '',
       nowTimeIsIt: DateTime.now(),
-      greetingMessage: '', // Initialize with an empty greeting message
+      greetingMessage: '',
     );
   }
 
   final DateTime nowTimeIsIt;
-  final String greetingMessage; // New property for greeting message
+  final String greetingMessage;
+  final DateTime? checkInTime;
+  final DateTime? checkOutTime;
+  final Duration? workDuration;
+  final bool isCheckedIn;
+  final DateTime? officeStartTime;
+  final DateTime? officeEndTime;
 
   @override
   List<Object?> get props => [
         isLoading,
         userMessage,
         nowTimeIsIt,
-        greetingMessage, // Add greetingMessage to props
+        greetingMessage,
+        checkInTime,
+        checkOutTime,
+        workDuration,
+        isCheckedIn,
+        officeStartTime,
+        officeEndTime,
       ];
 
   HomePageUiState copyWith({
     bool? isLoading,
-    String? message,
+    String? userMessage,
     DateTime? nowTimeIsIt,
-    String? greetingMessage, // Add greetingMessage to copyWith method
+    String? greetingMessage,
+    DateTime? checkInTime,
+    DateTime? checkOutTime,
+    Duration? workDuration,
+    bool? isCheckedIn,
+    DateTime? officeStartTime,
+    DateTime? officeEndTime,
   }) {
     return HomePageUiState(
-      isLoading: isLoading ?? super.isLoading,
-      userMessage: message ?? super.userMessage,
+      isLoading: isLoading ?? this.isLoading,
+      userMessage: userMessage ?? this.userMessage,
       nowTimeIsIt: nowTimeIsIt ?? this.nowTimeIsIt,
-      greetingMessage:
-          greetingMessage ?? this.greetingMessage, // Update greetingMessage
+      greetingMessage: greetingMessage ?? this.greetingMessage,
+      checkInTime: checkInTime ?? this.checkInTime,
+      checkOutTime: checkOutTime ?? this.checkOutTime,
+      workDuration: workDuration ?? this.workDuration,
+      isCheckedIn: isCheckedIn ?? this.isCheckedIn,
+      officeStartTime: officeStartTime ?? this.officeStartTime,
+      officeEndTime: officeEndTime ?? this.officeEndTime,
     );
   }
 }

@@ -28,6 +28,7 @@ migrate_working_dir/
 .dart_tool/
 .packages
 build/
+test/
 diff_output.txt
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock

@@ -8,7 +8,6 @@ import 'package:employee_attendance/presentation/home/widgets/attendance_time_wi
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,6 +24,7 @@ class HomePage extends StatelessWidget {
       presenter: homePresenter,
       builder: () {
         final user = _profilePagePresenter.currentUiState.user;
+        final homeState = homePresenter.currentUiState;
 
         return Scaffold(
           appBar: CustomAppBar(
@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH50,
                 NeumorphicButton(
-                  onPressed: () {},
+                  onPressed: () => homePresenter.handleAttendanceAction(),
                   style: const NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     boxShape: NeumorphicBoxShape.circle(),
@@ -69,7 +69,9 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.all(fiftyPx),
                   child: Image.asset(
                     SvgPath.icTouch,
-                    color: theme.primaryColor,
+                    color: homePresenter.currentUiState.isCheckedIn
+                        ? Colors.red
+                        : theme.primaryColor,
                     width: 80,
                   ),
                 ),
@@ -79,24 +81,37 @@ class HomePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const AttendanceTimeWidget(
+                      AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeIn,
-                        time: '09:00 AM',
+                        time: homeState.checkInTime != null
+                            ? DateFormat('hh:mm a')
+                                .format(homeState.checkInTime!)
+                            : '--:--',
                         label: 'Check In',
                       ),
                       gapW10,
-                      const AttendanceTimeWidget(
+                      AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeOut,
+                        time: homeState.checkOutTime != null
+                            ? DateFormat('hh:mm a')
+                                .format(homeState.checkOutTime!)
+                            : '--:--',
                         label: 'Check Out',
                       ),
                       gapW10,
-                      const AttendanceTimeWidget(
+                      AttendanceTimeWidget(
                         iconPath: SvgPath.icTotalHrs,
+                        time: homeState.workDuration != null
+                            ? '${homeState.workDuration!.inHours}h ${homeState.workDuration!.inMinutes.remainder(60)}m'
+                            : '--:--',
                         label: 'Total Hrs',
                       ),
                     ],
                   ),
                 ),
+                TextButton(
+                    onPressed: () => homePresenter.initializeSettings(),
+                    child: const Text('Initialize Settings')),
               ],
             ),
           ),
