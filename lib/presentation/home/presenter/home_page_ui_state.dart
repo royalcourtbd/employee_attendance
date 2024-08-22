@@ -31,9 +31,6 @@ class HomePageUiState extends BaseUiState {
   HomePageUiState copyWith({
     bool? isLoading,
     String? message,
-    String? status,
-    bool? canCheckIn,
-    bool? canCheckOut,
     DateTime? nowTimeIsIt,
     String? greetingMessage, // Add greetingMessage to copyWith method
   }) {
