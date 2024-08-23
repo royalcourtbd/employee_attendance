@@ -59,6 +59,20 @@ switch ($args[0]) {
         }
         Start-Process -FilePath "explorer.exe" -ArgumentList "build\app\outputs\bundle\release\"
     }
+
+    "run" {
+        Write-Host "Running Flutter project...`n"
+        Start-Process -NoNewWindow -FilePath "flutter" -ArgumentList "clean" -PassThru | ForEach-Object {
+            Show-Loading "Cleaning project...                                    " $_.Id
+        }
+        Start-Process -NoNewWindow -FilePath "flutter" -ArgumentList "pub", "get" -PassThru | ForEach-Object {
+            Show-Loading "Getting dependencies...                                " $_.Id
+        }
+        Start-Process -NoNewWindow -FilePath "flutter" -ArgumentList "run" -PassThru | ForEach-Object {
+            Show-Loading "Running Flutter project...                             " $_.Id
+        }
+    }
+
     "cleanup" {
         Write-Host "Cleaning up project...     `n"
         Start-Process -NoNewWindow -FilePath "dart" -ArgumentList "fix", "--apply" -PassThru | ForEach-Object {
