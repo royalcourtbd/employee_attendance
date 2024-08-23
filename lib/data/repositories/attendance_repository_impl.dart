@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
+import 'package:flutter/material.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final FirebaseService _firebaseService;
@@ -49,7 +50,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         });
       }
     } catch (e) {
-      print('Error during check out: $e');
+      debugPrint('Error during check out: $e');
       rethrow;
     }
   }
