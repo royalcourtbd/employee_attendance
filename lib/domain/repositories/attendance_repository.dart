@@ -7,4 +7,5 @@ abstract class AttendanceRepository {
   Stream<Map<String, dynamic>> getOfficeSettingsStream();
   Future<bool> canCheckInToday(String userId);
   Future<bool> canCheckOutToday(String userId);
+  Stream<List<Attendance>> getUserAttendanceStream(String userId);
 }

@@ -131,4 +131,16 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         .get();
     return doc.data() ?? {};
   }
+
+  @override
+  Stream<List<Attendance>> getUserAttendanceStream(String userId) {
+    return _firebaseService.firestore
+        .collection('attendances')
+        .where('userId', isEqualTo: userId)
+        .orderBy('checkInTime', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => AttendanceModel.fromJson(doc.data()))
+            .toList());
+  }
 }

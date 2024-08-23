@@ -1,20 +1,24 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ShowDateContainer extends StatelessWidget {
-  const ShowDateContainer({super.key});
+  const ShowDateContainer({super.key, required this.date});
+
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isToday = _isToday(date);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: fifteenPx,
         vertical: sevenPx,
       ),
       decoration: BoxDecoration(
-        color: theme.primaryColor,
+        color: isToday ? theme.primaryColor : theme.colorScheme.secondary,
         borderRadius: radius10,
       ),
       child: Column(
@@ -22,7 +26,7 @@ class ShowDateContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '26',
+            DateFormat('dd').format(date),
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: thirtyPx,
               fontWeight: FontWeight.bold,
@@ -30,7 +34,7 @@ class ShowDateContainer extends StatelessWidget {
             ),
           ),
           Text(
-            'Thu',
+            DateFormat('E').format(date),
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: thirteenPx,
               color: Colors.white,
@@ -39,5 +43,12 @@ class ShowDateContainer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool _isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 }

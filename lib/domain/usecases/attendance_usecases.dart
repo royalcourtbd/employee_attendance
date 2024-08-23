@@ -13,11 +13,12 @@ class AttendanceUseCases {
   Stream<Map<String, dynamic>> getOfficeSettingsStream() =>
       _repository.getOfficeSettingsStream();
 
-  // নতুন মেথড যোগ করুন
   Future<bool> canCheckInToday(String userId) =>
       _repository.canCheckInToday(userId);
 
-  // নতুন মেথড যোগ করুন
   Future<bool> canCheckOutToday(String userId) =>
       _repository.canCheckOutToday(userId);
+
+  Stream<List<Attendance>> getUserAttendanceStream(String userId) =>
+      _repository.getUserAttendanceStream(userId);
 }

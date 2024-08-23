@@ -59,7 +59,8 @@ class ServiceLocator {
     _serviceLocator
       ..registerFactory(
           () => loadPresenter(HomePresenter(locate(), locate(), locate())))
-      ..registerLazySingleton(() => loadPresenter(HistoryPagePresenter()))
+      ..registerLazySingleton(
+          () => loadPresenter(HistoryPagePresenter(locate(), locate())))
       ..registerLazySingleton(
           () => loadPresenter(ProfilePagePresenter(locate(), locate())))
       ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))

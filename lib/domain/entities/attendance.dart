@@ -15,21 +15,5 @@ class Attendance {
     required this.isLate,
   });
 
-  Attendance copyWith({
-    String? id,
-    String? userId,
-    DateTime? checkInTime,
-    DateTime? checkOutTime,
-    Duration? workDuration,
-    bool? isLate,
-  }) {
-    return Attendance(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      checkInTime: checkInTime ?? this.checkInTime,
-      checkOutTime: checkOutTime ?? this.checkOutTime,
-      workDuration: workDuration ?? this.workDuration,
-      isLate: isLate ?? this.isLate,
-    );
-  }
+  bool get isCheckedIn => checkOutTime == null;
 }

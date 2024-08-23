@@ -18,8 +18,8 @@ class MainPage extends StatelessWidget {
 
   final List<Widget> _pages = [
     HomePage(),
-    const HistoryPage(),
-     ProfilePage(),
+    HistoryPage(),
+    ProfilePage(),
   ];
 
   @override

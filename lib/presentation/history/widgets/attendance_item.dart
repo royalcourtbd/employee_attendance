@@ -1,5 +1,6 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/presentation/history/widgets/attendance_details.dart';
 import 'package:employee_attendance/presentation/history/widgets/show_date_container.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,11 @@ class AttendanceItem extends StatelessWidget {
   const AttendanceItem({
     super.key,
     required this.theme,
+    required this.attendance,
   });
 
   final ThemeData theme;
-
+  final Attendance attendance;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,9 +26,14 @@ class AttendanceItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const ShowDateContainer(),
+            ShowDateContainer(
+              date: attendance.checkInTime,
+            ),
             gapW8,
-            AttendanceDetails(theme: theme)
+            AttendanceDetails(
+              theme: theme,
+              attendance: attendance,
+            ),
           ],
         ),
       ),
