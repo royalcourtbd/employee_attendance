@@ -6,7 +6,7 @@ import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
-import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

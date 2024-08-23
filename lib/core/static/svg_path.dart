@@ -7,4 +7,5 @@ class SvgPath {
   static const String icTimeManagement = 'assets/svg/time_management.svg';
   static const String dicBG = 'assets/svg/dialog_bg.svg';
   static const String icDelete = 'assets/svg/ic_delete.svgg/dialog_bg.svg';
+  static const String dicLogOut = 'assets/svg/log_out.svg';
 }

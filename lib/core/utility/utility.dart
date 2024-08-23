@@ -571,3 +571,6 @@ void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 // //     logErrorStatic(e, _fileName);
 // //   }
 // // }
+
+ColorFilter buildColorFilter(Color? color) =>
+    ColorFilter.mode(color ?? Colors.black, BlendMode.srcATop);

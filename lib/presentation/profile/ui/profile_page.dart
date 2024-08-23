@@ -5,6 +5,7 @@ import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/ui/edit_profile_page.dart';
 import 'package:employee_attendance/presentation/profile/widgets/copyright.dart';
+import 'package:employee_attendance/presentation/profile/widgets/log_out_dialog.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_header.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_option.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,12 @@ class ProfilePage extends StatelessWidget {
                 gapH16,
                 ProfileOption(
                   theme: theme,
-                  onTap: () => _profilePagePresenter.logout(),
+                  onTap: () => LogOutDialog.show(
+                    context: context,
+                    title: 'Sign Out',
+                    onRemove: () => _profilePagePresenter.logout(),
+                  ),
+                  // onTap: () => _profilePagePresenter.logout(),
                   icon: Icons.logout,
                   text: 'Log Out',
                 ),

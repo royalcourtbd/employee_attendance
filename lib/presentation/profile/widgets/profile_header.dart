@@ -30,7 +30,7 @@ class ProfileHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           gapH50,
-          ProfileImage(profileImage: profileImage),
+          ProfileImage(profileImage: profileImage ?? ''),
           gapH16,
           ProfileName(
             theme: theme,

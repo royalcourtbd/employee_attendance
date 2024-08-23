@@ -42,15 +42,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        ClipOval(
-          child: CachedNetworkImage(
-            imageUrl: profileImageUrl,
-            placeholder: (context, url) =>
-                const Icon(Icons.image, color: Colors.grey),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            width: EmployeeAttendanceScreen.width * 0.13,
-            height: EmployeeAttendanceScreen.width * 0.13,
-            fit: BoxFit.cover,
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: theme.primaryColor,
+              width: 2,
+            ),
+          ),
+          child: ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: profileImageUrl,
+              placeholder: (context, url) =>
+                  const Icon(Icons.image, color: Colors.grey),
+              errorWidget: (context, url, error) =>
+                  const Icon(Icons.error, color: Colors.grey),
+              width: EmployeeAttendanceScreen.width * 0.13,
+              height: EmployeeAttendanceScreen.width * 0.13,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         gapW15
