@@ -13,11 +13,11 @@ import 'package:intl/intl.dart';
 class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
-  final ProfilePagePresenter _profilePagePresenter;
+
   final FirebaseService _firebaseService;
 
   HomePresenter(this._getGreetingUseCase, this._attendanceUseCases,
-      this._profilePagePresenter, this._firebaseService);
+      this._firebaseService);
 
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
   HomePageUiState get currentUiState => uiState.value;
@@ -34,6 +34,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     initTodayAttendanceStream();
     _updateButtonState();
     _initSettingsStream();
+    _listenToAuthStateChanges();
   }
 
   @override
@@ -42,6 +43,12 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     _attendanceSubscription?.cancel();
     _settingsSubscription?.cancel();
     super.onClose();
+  }
+
+  void reset() {
+    onClose();
+    uiState.value = HomePageUiState.empty();
+    onInit();
   }
 
   void startClock() {
@@ -80,8 +87,32 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     return _firebaseService.auth.currentUser?.uid;
   }
 
+  // Add this method
+  void _listenToAuthStateChanges() {
+    _firebaseService.auth.authStateChanges().listen((user) {
+      if (user == null) {
+        // User logged out, reset the state
+        resetState();
+      } else {
+        // User logged in, reinitialize streams
+        initTodayAttendanceStream();
+        _updateButtonState();
+      }
+    });
+  }
+
+  // Add this method
+  void resetState() {
+    uiState.value = HomePageUiState.empty();
+    _attendanceSubscription?.cancel();
+    _settingsSubscription?.cancel();
+  }
+
   void initTodayAttendanceStream() {
-    final String userId = getCurrentUserId();
+    final String? userId = getCurrentUserId();
+    if (userId == null) return;
+
+    _attendanceSubscription?.cancel();
     _attendanceSubscription =
         _attendanceUseCases.getTodayAttendanceStream(userId).listen(
       (attendance) {
@@ -155,6 +186,26 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
       await _attendanceUseCases.checkOut(userId);
     }
     await _updateButtonState();
+  }
+
+  Color getCheckButtonColor(ThemeData theme) {
+    if (currentUiState.canCheckIn) {
+      return theme.primaryColor;
+    } else if (currentUiState.canCheckOut) {
+      return theme.colorScheme.error;
+    } else {
+      return theme.colorScheme.secondary;
+    }
+  }
+
+  String getCheckButtonText() {
+    if (currentUiState.canCheckIn) {
+      return 'Check In';
+    } else if (currentUiState.canCheckOut) {
+      return 'Check Out';
+    } else {
+      return 'Done for today!';
+    }
   }
 
   @override

@@ -69,12 +69,26 @@ class HomePage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   padding: EdgeInsets.all(fiftyPx),
-                  child: Image.asset(
-                    SvgPath.icTouch,
-                    color: homePresenter.currentUiState.isCheckedIn
-                        ? Colors.red
-                        : theme.primaryColor,
-                    width: 80,
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        SvgPath.icTouch,
+                        color: homeState.canCheckIn
+                            ? theme.primaryColor
+                            : homeState.canCheckOut
+                                ? theme.colorScheme.error
+                                : theme.colorScheme.secondary,
+                        width: 80,
+                      ),
+                      gapH10,
+                      Text(
+                        homePresenter.getCheckButtonText(),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontSize: thirteenPx,
+                          color: homePresenter.getCheckButtonColor(theme),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 gapH75,
@@ -106,9 +120,9 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                TextButton(
-                    onPressed: () => homePresenter.initializeSettings(),
-                    child: const Text('Initialize Settings')),
+                // TextButton(
+                //     onPressed: () => homePresenter.initializeSettings(),
+                //     child: const Text('Initialize Settings')),
               ],
             ),
           ),

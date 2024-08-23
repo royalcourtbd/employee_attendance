@@ -20,6 +20,7 @@ class EmployeeAttendanceTheme {
       colorScheme: const ColorScheme.light(
         primary: EmployeeAttendanceAppColor.primaryColor,
         secondary: EmployeeAttendanceAppColor.secondaryColor,
+        error: EmployeeAttendanceAppColor.recColor,
         surface: EmployeeAttendanceAppColor.cardColor,
         onSurface: EmployeeAttendanceAppColor.textColor,
         onPrimary: EmployeeAttendanceAppColor.textColor,

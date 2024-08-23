@@ -7,4 +7,5 @@ class EmployeeAttendanceAppColor {
   static const Color cardColor = Color(0xFFF4EDE3);
   static const Color secondaryColor = Color(0xFFcbac6b);
   static const Color appbarColor = Color(0xFF1b5b40);
+  static const Color recColor = Color(0xFFFF5733);
 }
