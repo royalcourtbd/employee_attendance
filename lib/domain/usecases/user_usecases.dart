@@ -9,7 +9,10 @@ class UserUseCases {
   Future<User?> createDemoUser() => _userRepository.createDemoUser();
   Future<User?> login(String email, String password) =>
       _userRepository.login(email, password);
-  Future<void> logout() => _userRepository.logout();
+  Future<void> logout() async {
+    await _userRepository.logout();
+  }
+
   Future<User?> fetchUserData(String userId) =>
       _userRepository.fetchUserData(userId);
   Future<void> updateUser(User user) => _userRepository.updateUser(user);

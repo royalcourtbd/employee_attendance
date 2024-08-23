@@ -20,7 +20,7 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final userCredential =
           await _firebaseService.auth.createUserWithEmailAndPassword(
-        email: 'demo@demo.com',
+        email: 'admin@admin.com',
         password: '123456',
       );
 

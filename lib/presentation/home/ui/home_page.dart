@@ -56,7 +56,9 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH50,
                 NeumorphicButton(
-                  onPressed: () => homePresenter.handleAttendanceAction(),
+                  onPressed: (homeState.canCheckIn || homeState.canCheckOut)
+                      ? () => homePresenter.handleAttendanceAction()
+                      : null,
                   style: const NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     boxShape: NeumorphicBoxShape.circle(),
@@ -83,27 +85,22 @@ class HomePage extends StatelessWidget {
                     children: [
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeIn,
-                        time: homeState.checkInTime != null
-                            ? DateFormat('hh:mm a')
-                                .format(homeState.checkInTime!)
-                            : '--:--',
+                        time: homePresenter
+                            .getFormattedTime(homeState.checkInTime),
                         label: 'Check In',
                       ),
                       gapW10,
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeOut,
-                        time: homeState.checkOutTime != null
-                            ? DateFormat('hh:mm a')
-                                .format(homeState.checkOutTime!)
-                            : '--:--',
+                        time: homePresenter
+                            .getFormattedTime(homeState.checkOutTime),
                         label: 'Check Out',
                       ),
                       gapW10,
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTotalHrs,
-                        time: homeState.workDuration != null
-                            ? '${homeState.workDuration!.inHours}h ${homeState.workDuration!.inMinutes.remainder(60)}m'
-                            : '--:--',
+                        time: homePresenter
+                            .getFormattedDuration(homeState.workDuration),
                         label: 'Total Hrs',
                       ),
                     ],

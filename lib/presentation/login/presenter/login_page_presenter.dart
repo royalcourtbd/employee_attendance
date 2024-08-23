@@ -1,7 +1,10 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/usecases/user_usecases.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
+import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
@@ -12,6 +15,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
   LoginPageUiState get currentUiState => uiState.value;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late final MainPagePresenter _mainPagePresenter = locate<MainPagePresenter>();
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -44,10 +48,12 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
       await toggleLoading(loading: true);
       final user = await _userUseCases.login(email, password);
       showMessage(message: currentUiState.userMessage);
+
       await toggleLoading(loading: false);
 
       if (user != null) {
         final String? deviceToken = await _userUseCases.getDeviceToken();
+        _mainPagePresenter.updateIndex(index: 0);
 
         if (deviceToken != null && deviceToken.isNotEmpty) {
           debugPrint('Device Token: $deviceToken');

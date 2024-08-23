@@ -1,19 +1,23 @@
 // lib/presentation/profile/presenter/profile_page_presenter.dart
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/user.dart';
 import 'package:employee_attendance/domain/usecases/user_usecases.dart';
+import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_ui_state.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   final UserUseCases _userUseCases;
   final FirebaseService _firebaseService;
-  
+
   ProfilePagePresenter(this._userUseCases, this._firebaseService);
-  
+
+  late final HomePresenter _homePresenter = locate<HomePresenter>();
+
   final Obs<ProfilePageUiState> uiState = Obs(ProfilePageUiState.empty());
   ProfilePageUiState get currentUiState => uiState.value;
 
@@ -83,8 +87,10 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   Future<void> logout() async {
     await toggleLoading(loading: true);
     try {
+      _homePresenter.resetAttendance();
       await _userUseCases.logout();
       uiState.value = ProfilePageUiState.empty();
+
       showMessage(message: 'Logged out successfully');
     } catch (e) {
       debugPrint('Error logging out: $e');

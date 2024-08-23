@@ -1,20 +1,23 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
   final ProfilePagePresenter _profilePagePresenter;
+  final FirebaseService _firebaseService;
 
   HomePresenter(this._getGreetingUseCase, this._attendanceUseCases,
-      this._profilePagePresenter);
+      this._profilePagePresenter, this._firebaseService);
 
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
   HomePageUiState get currentUiState => uiState.value;
@@ -28,7 +31,8 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     super.onInit();
     getGreeting();
     startClock();
-    _initAttendanceStream();
+    initTodayAttendanceStream();
+    _updateButtonState();
     _initSettingsStream();
   }
 
@@ -55,14 +59,31 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     uiState.value = currentUiState.copyWith(greetingMessage: greeting);
   }
 
-  String? getCurrentUserId() {
-    return _profilePagePresenter.currentUiState.user?.id;
+  String getFormattedTime(DateTime? time) {
+    return time != null ? DateFormat('hh:mm a').format(time) : '--:--';
   }
 
-  void _initAttendanceStream() {
-    final String? userId = getCurrentUserId();
+  String getFormattedDuration(Duration? duration) {
+    if (duration == null) return '--:--';
+    return '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
+  }
+
+  void resetAttendance() {
+    uiState.value = currentUiState.copyWith(
+      checkInTime: null,
+      checkOutTime: null,
+      workDuration: null,
+    );
+  }
+
+  String? getCurrentUserId() {
+    return _firebaseService.auth.currentUser?.uid;
+  }
+
+  void initTodayAttendanceStream() {
+    final String userId = getCurrentUserId();
     _attendanceSubscription =
-        _attendanceUseCases.getAttendanceStream(userId!).listen(
+        _attendanceUseCases.getTodayAttendanceStream(userId).listen(
       (attendance) {
         uiState.value = currentUiState.copyWith(
           checkInTime: attendance?.checkInTime,
@@ -70,7 +91,21 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
           workDuration: attendance?.workDuration,
           isCheckedIn: attendance != null && attendance.checkOutTime == null,
         );
+        _updateButtonState();
       },
+    );
+  }
+
+  Future<void> _updateButtonState() async {
+    final String? userId = getCurrentUserId();
+    if (userId == null) return;
+
+    final canCheckIn = await _attendanceUseCases.canCheckInToday(userId);
+    final canCheckOut = await _attendanceUseCases.canCheckOutToday(userId);
+
+    uiState.value = currentUiState.copyWith(
+      canCheckIn: canCheckIn,
+      canCheckOut: canCheckOut,
     );
   }
 
@@ -111,13 +146,15 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   }
 
   Future<void> handleAttendanceAction() async {
-    final String? userId =
-        getCurrentUserId(); // এটি আপনার বর্তমান ইউজারের ID হওয়া উচিত
-    if (currentUiState.isCheckedIn) {
-      await _attendanceUseCases.checkOut(userId!);
-    } else {
-      await _attendanceUseCases.checkIn(userId!);
+    final String? userId = getCurrentUserId();
+    if (userId == null) return;
+
+    if (currentUiState.canCheckIn) {
+      await _attendanceUseCases.checkIn(userId);
+    } else if (currentUiState.canCheckOut) {
+      await _attendanceUseCases.checkOut(userId);
     }
+    await _updateButtonState();
   }
 
   @override

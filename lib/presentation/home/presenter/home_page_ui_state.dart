@@ -6,10 +6,12 @@ class HomePageUiState extends BaseUiState {
     required super.userMessage,
     required this.nowTimeIsIt,
     required this.greetingMessage,
+    required this.canCheckIn,
+    required this.canCheckOut,
     this.checkInTime,
     this.checkOutTime,
     this.workDuration,
-    this.isCheckedIn = false,
+    required this.isCheckedIn,
     this.officeStartTime,
     this.officeEndTime,
   });
@@ -20,9 +22,19 @@ class HomePageUiState extends BaseUiState {
       userMessage: '',
       nowTimeIsIt: DateTime.now(),
       greetingMessage: '',
+      canCheckIn: false,
+      canCheckOut: false,
+      checkInTime: null,
+      checkOutTime: null,
+      workDuration: null,
+      isCheckedIn: false,
+      officeStartTime: null,
+      officeEndTime: null,
     );
   }
 
+  final bool canCheckIn;
+  final bool canCheckOut;
   final DateTime nowTimeIsIt;
   final String greetingMessage;
   final DateTime? checkInTime;
@@ -44,6 +56,8 @@ class HomePageUiState extends BaseUiState {
         isCheckedIn,
         officeStartTime,
         officeEndTime,
+        canCheckIn,
+        canCheckOut,
       ];
 
   HomePageUiState copyWith({
@@ -57,6 +71,8 @@ class HomePageUiState extends BaseUiState {
     bool? isCheckedIn,
     DateTime? officeStartTime,
     DateTime? officeEndTime,
+    bool? canCheckIn,
+    bool? canCheckOut,
   }) {
     return HomePageUiState(
       isLoading: isLoading ?? this.isLoading,
@@ -69,6 +85,8 @@ class HomePageUiState extends BaseUiState {
       isCheckedIn: isCheckedIn ?? this.isCheckedIn,
       officeStartTime: officeStartTime ?? this.officeStartTime,
       officeEndTime: officeEndTime ?? this.officeEndTime,
+      canCheckIn: canCheckIn ?? this.canCheckIn,
+      canCheckOut: canCheckOut ?? this.canCheckOut,
     );
   }
 }
