@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH50,
                 NeumorphicButton(
-                  onPressed: (homeState.canCheckIn || homeState.canCheckOut)
+                  onPressed: homePresenter.isCheckInButtonEnabled()
                       ? () => homePresenter.handleAttendanceAction()
                       : null,
                   style: const NeumorphicStyle(

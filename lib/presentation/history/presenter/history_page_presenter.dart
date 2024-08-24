@@ -1,4 +1,5 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_ui_state.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
@@ -14,23 +15,23 @@ class HistoryPagePresenter extends BasePresenter<HistoryPageUiState> {
 
   @override
   void onInit() {
-    _initAttendanceStream();
+    initAttendanceStream();
     super.onInit();
   }
 
-  void _initAttendanceStream() {
+  void initAttendanceStream() {
     final userId = _profilePagePresenter.currentUiState.user?.id;
     if (userId != null) {
-      initAttendanceStream(userId);
+      initUserAttendanceStream(userId);
     } else {
       addUserMessage('User not found');
     }
   }
 
-  void initAttendanceStream(String userId) async {
+  void initUserAttendanceStream(String userId) async {
     toggleLoading(loading: true);
     _attendanceUseCases.getUserAttendanceStream(userId).listen(
-      (attendances) {
+      (List<Attendance> attendances) {
         uiState.value =
             currentUiState.copyWith(attendances: attendances, isLoading: false);
       },
@@ -40,6 +41,8 @@ class HistoryPagePresenter extends BasePresenter<HistoryPageUiState> {
       },
     );
   }
+
+  
 
   @override
   Future<void> addUserMessage(String message) async {

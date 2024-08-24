@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
+import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,11 +15,11 @@ import 'package:intl/intl.dart';
 class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
-
   final FirebaseService _firebaseService;
+  final ProfilePagePresenter _profilePagePresenter ;
 
   HomePresenter(this._getGreetingUseCase, this._attendanceUseCases,
-      this._firebaseService);
+      this._firebaseService, this._profilePagePresenter, );
 
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
   HomePageUiState get currentUiState => uiState.value;
@@ -176,9 +178,20 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     }
   }
 
+
+ bool isCheckInButtonEnabled() {
+    return currentUiState.canCheckIn || currentUiState.canCheckOut;
+  }
   Future<void> handleAttendanceAction() async {
     final String? userId = getCurrentUserId();
     if (userId == null) return;
+
+     final user = _profilePagePresenter.currentUiState.user;
+    if (user == null || !user.employeeStatus) {
+      await addUserMessage('You are not athorized');
+      showMessage(message: currentUiState.userMessage);
+      return;
+    }
 
     if (currentUiState.canCheckIn) {
       await _attendanceUseCases.checkIn(userId);

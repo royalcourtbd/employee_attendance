@@ -58,7 +58,7 @@ class ServiceLocator {
   Future<void> _setupPresenter() async {
     _serviceLocator
       ..registerFactory(
-          () => loadPresenter(HomePresenter(locate(), locate(), locate())))
+          () => loadPresenter(HomePresenter(locate(), locate(), locate(), locate())))
       ..registerLazySingleton(
           () => loadPresenter(HistoryPagePresenter(locate(), locate())))
       ..registerLazySingleton(
