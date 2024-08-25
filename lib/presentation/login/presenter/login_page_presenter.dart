@@ -1,6 +1,7 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
+import 'package:employee_attendance/domain/entities/user.dart';
 import 'package:employee_attendance/domain/usecases/user_usecases.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
@@ -46,27 +47,33 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
       final String password = currentUiState.password.trim();
 
       await toggleLoading(loading: true);
-      final user = await _userUseCases.login(email, password);
-      showMessage(message: currentUiState.userMessage);
-
+      final result = await _userUseCases.login(email, password);
       await toggleLoading(loading: false);
 
-      if (user != null) {
-        final String? deviceToken = await _userUseCases.getDeviceToken();
-        _mainPagePresenter.updateIndex(index: 0);
+      result.fold(
+        (errorMessage) async {
+          await addUserMessage(errorMessage);
+          showMessage(message: currentUiState.userMessage);
+        },
+        (User? user) async {
+          if (user != null) {
+            final String? deviceToken = await _userUseCases.getDeviceToken();
+            _mainPagePresenter.updateIndex(index: 0);
 
-        if (deviceToken != null && deviceToken.isNotEmpty) {
-          debugPrint('Device Token: $deviceToken');
-          await _userUseCases
-              .updateUser(user.copyWith(deviceToken: deviceToken));
-          await addUserMessage('Login successful');
-          showMessage(
-            message: currentUiState.userMessage,
-          );
-        }
-      } else {
-        await addUserMessage('Login failed. Please check your credentials.');
-      }
+            if (deviceToken != null && deviceToken.isNotEmpty) {
+              debugPrint('Device Token: $deviceToken');
+              await _userUseCases
+                  .updateUser(user.copyWith(deviceToken: deviceToken));
+              await addUserMessage('Logged in successfully');
+              showMessage(message: currentUiState.userMessage);
+            }
+          } else {
+            await addUserMessage(
+                'An error occurred while logging in. Please try again.');
+            showMessage(message: currentUiState.userMessage);
+          }
+        },
+      );
     }
   }
 

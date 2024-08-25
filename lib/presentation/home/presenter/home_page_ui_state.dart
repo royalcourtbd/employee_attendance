@@ -1,4 +1,5 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
+import 'package:employee_attendance/domain/entities/office_settings.dart';
 
 class HomePageUiState extends BaseUiState {
   const HomePageUiState({
@@ -12,8 +13,7 @@ class HomePageUiState extends BaseUiState {
     this.checkOutTime,
     this.workDuration,
     required this.isCheckedIn,
-    this.officeStartTime,
-    this.officeEndTime,
+    this.officeSettings,
   });
 
   factory HomePageUiState.empty() {
@@ -28,8 +28,7 @@ class HomePageUiState extends BaseUiState {
       checkOutTime: null,
       workDuration: null,
       isCheckedIn: false,
-      officeStartTime: null,
-      officeEndTime: null,
+      officeSettings: null,
     );
   }
 
@@ -41,8 +40,7 @@ class HomePageUiState extends BaseUiState {
   final DateTime? checkOutTime;
   final Duration? workDuration;
   final bool isCheckedIn;
-  final DateTime? officeStartTime;
-  final DateTime? officeEndTime;
+  final OfficeSettings? officeSettings;
 
   @override
   List<Object?> get props => [
@@ -54,8 +52,7 @@ class HomePageUiState extends BaseUiState {
         checkOutTime,
         workDuration,
         isCheckedIn,
-        officeStartTime,
-        officeEndTime,
+        officeSettings,
         canCheckIn,
         canCheckOut,
       ];
@@ -69,8 +66,7 @@ class HomePageUiState extends BaseUiState {
     DateTime? checkOutTime,
     Duration? workDuration,
     bool? isCheckedIn,
-    DateTime? officeStartTime,
-    DateTime? officeEndTime,
+    OfficeSettings? officeSettings,
     bool? canCheckIn,
     bool? canCheckOut,
   }) {
@@ -83,8 +79,7 @@ class HomePageUiState extends BaseUiState {
       checkOutTime: checkOutTime ?? this.checkOutTime,
       workDuration: workDuration ?? this.workDuration,
       isCheckedIn: isCheckedIn ?? this.isCheckedIn,
-      officeStartTime: officeStartTime ?? this.officeStartTime,
-      officeEndTime: officeEndTime ?? this.officeEndTime,
+      officeSettings: officeSettings ?? this.officeSettings,
       canCheckIn: canCheckIn ?? this.canCheckIn,
       canCheckOut: canCheckOut ?? this.canCheckOut,
     );

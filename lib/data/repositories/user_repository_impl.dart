@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/data/models/user_model.dart';
 import 'package:employee_attendance/domain/entities/user.dart';
 import 'package:employee_attendance/domain/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirebaseService _firebaseService;
@@ -46,17 +50,30 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User?> login(String email, String password) async {
+  Future<Either<String, User?>> login(String email, String password) async {
     try {
       final userCredential =
           await _firebaseService.auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return await fetchUserData(userCredential.user!.uid);
+      final User? user = await fetchUserData(userCredential.user!.uid);
+      return Right(user);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return const Left('No user found for this email');
+      } else if (e.code == 'wrong-password') {
+        return const Left('Wrong password provided for this user');
+      } else {
+        return const Left('Invalid email');
+      }
+    } on SocketException catch (_) {
+      return const Left('No internet connection');
+    } on TimeoutException catch (_) {
+      return const Left('Request timed out');
     } catch (e) {
       debugPrint('Error logging in: $e');
-      return null;
+      return const Left('An error occurred');
     }
   }
 

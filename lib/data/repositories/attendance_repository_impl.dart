@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/data/models/attendance_model.dart';
+import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +18,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final attendanceRef =
         _firebaseService.firestore.collection('attendances').doc();
     final officeSettings = await _getOfficeSettings();
-    final isLate = now.isAfter(
-        officeSettings['startTime'].toDate().add(const Duration(minutes: 10)));
+    final isLate =
+        now.isAfter(officeSettings.startTime.add(const Duration(minutes: 10)));
 
     final newAttendance = AttendanceModel(
       id: attendanceRef.id,
@@ -116,20 +118,41 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Stream<Map<String, dynamic>> getOfficeSettingsStream() {
+  Stream<OfficeSettings> getOfficeSettingsStream() {
     return _firebaseService.firestore
         .collection('settings')
         .doc('office')
         .snapshots()
-        .map((snapshot) => snapshot.data() ?? {});
+        .map((snapshot) => OfficeSettingsModel.fromJson(snapshot.data() ?? {}));
   }
 
-  Future<Map<String, dynamic>> _getOfficeSettings() async {
+  Future<OfficeSettings> _getOfficeSettings() async {
     final doc = await _firebaseService.firestore
         .collection('settings')
         .doc('office')
         .get();
-    return doc.data() ?? {};
+
+    if (doc.exists && doc.data() != null) {
+      return OfficeSettingsModel.fromJson(doc.data()!);
+    } else {
+      // লগ করুন যে ডিফল্ট সেটিংস ব্যবহার করা হচ্ছে
+      debugPrint('Warning: Using default office settings');
+      return OfficeSettingsModel(
+        startTime: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 9, 0),
+        endTime: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 17, 0),
+        lateThreshold: 10,
+        workDays: const [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday'
+        ],
+        timeZone: 'Asia/Dhaka',
+      );
+    }
   }
 
   @override

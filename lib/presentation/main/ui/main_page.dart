@@ -33,7 +33,8 @@ class MainPage extends StatelessWidget {
         builder: () => Scaffold(
           body: _pages[_mainPagePresenter.uiState.value.currentNavIndex],
           bottomNavigationBar: Padding(
-            padding: EdgeInsets.symmetric(horizontal: twentyFivePx),
+            padding: EdgeInsets.only(
+                left: twentyFivePx, right: twentyFivePx, bottom: tenPx),
             child: CustomBottomNavigationbar(
               mainPagePresenter: _mainPagePresenter,
               theme: theme,

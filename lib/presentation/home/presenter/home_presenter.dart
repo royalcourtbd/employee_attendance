@@ -1,9 +1,11 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
+import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
@@ -16,17 +18,21 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
   final FirebaseService _firebaseService;
-  final ProfilePagePresenter _profilePagePresenter ;
+  final ProfilePagePresenter _profilePagePresenter;
 
-  HomePresenter(this._getGreetingUseCase, this._attendanceUseCases,
-      this._firebaseService, this._profilePagePresenter, );
+  HomePresenter(
+    this._getGreetingUseCase,
+    this._attendanceUseCases,
+    this._firebaseService,
+    this._profilePagePresenter,
+  );
 
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
   HomePageUiState get currentUiState => uiState.value;
 
   Timer? _timer;
   StreamSubscription<Attendance?>? _attendanceSubscription;
-  StreamSubscription<Map<String, dynamic>>? _settingsSubscription;
+  StreamSubscription<OfficeSettings>? _settingsSubscription;
 
   @override
   void onInit() {
@@ -145,16 +151,21 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   void _initSettingsStream() {
     _settingsSubscription =
         _attendanceUseCases.getOfficeSettingsStream().listen(
-      (settings) {
+      (OfficeSettings settings) {
         uiState.value = currentUiState.copyWith(
-          officeStartTime: settings['startTime']?.toDate(),
-          officeEndTime: settings['endTime']?.toDate(),
+          officeSettings: settings,
         );
       },
     );
   }
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String getFormattedCurrentTime() {
+    return DateFormat('hh:mm:ss a').format(currentUiState.nowTimeIsIt);
+  }
+
+  String getFormattedCurrentDate() {
+    return DateFormat('MMM dd, yyyy - EEEE').format(DateTime.now());
+  }
 
   Future<void> initializeSettings() async {
     try {
@@ -164,13 +175,27 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
       // Time after 9 hours
       DateTime endTime = now.add(const Duration(hours: 9));
 
-      await _firestore.collection('settings').doc('office').set({
-        'startTime': Timestamp.fromDate(now), //  Current time
-        'endTime': Timestamp.fromDate(endTime), // Time after 9 hours
-        'lateThreshold': 10, // 10 minutes
-        'workDays': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-        'timeZone': 'Asia/Dhaka',
-      });
+      OfficeSettings officeSettings = OfficeSettings(
+        startTime: now,
+        endTime: endTime,
+        lateThreshold: 10,
+        workDays: const [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday'
+        ],
+        timeZone: 'Asia/Dhaka',
+      );
+
+      OfficeSettingsModel officeSettingsModel =
+          OfficeSettingsModel.fromOfficeSettings(officeSettings);
+
+      await _firebaseService.firestore
+          .collection('settings')
+          .doc('office')
+          .set(officeSettingsModel.toJson());
 
       debugPrint('Office settings added successfully');
     } catch (e) {
@@ -178,15 +203,15 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     }
   }
 
-
- bool isCheckInButtonEnabled() {
+  bool isCheckInButtonEnabled() {
     return currentUiState.canCheckIn || currentUiState.canCheckOut;
   }
+
   Future<void> handleAttendanceAction() async {
     final String? userId = getCurrentUserId();
     if (userId == null) return;
 
-     final user = _profilePagePresenter.currentUiState.user;
+    final user = _profilePagePresenter.currentUiState.user;
     if (user == null || !user.employeeStatus) {
       await addUserMessage('You are not athorized');
       showMessage(message: currentUiState.userMessage);

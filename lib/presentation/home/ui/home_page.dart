@@ -8,7 +8,6 @@ import 'package:employee_attendance/presentation/home/widgets/attendance_time_wi
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -40,15 +39,14 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  DateFormat('hh:mm:ss a')
-                      .format(homePresenter.currentUiState.nowTimeIsIt),
+                  homePresenter.getFormattedCurrentTime(),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: fiftyPx,
                   ),
                 ),
                 gapH5,
                 Text(
-                  DateFormat('MMM dd, yyyy - EEEE').format(DateTime.now()),
+                  homePresenter.getFormattedCurrentDate(),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: fourteenPx,
                     color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
@@ -91,7 +89,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                gapH75,
+                gapH50,
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: tenPx),
                   child: Row(

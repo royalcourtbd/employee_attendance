@@ -1,4 +1,5 @@
 import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 
 class AttendanceUseCases {
@@ -10,7 +11,7 @@ class AttendanceUseCases {
   Future<void> checkOut(String userId) => _repository.checkOut(userId);
   Stream<Attendance?> getTodayAttendanceStream(String userId) =>
       _repository.getTodayAttendanceStream(userId);
-  Stream<Map<String, dynamic>> getOfficeSettingsStream() =>
+  Stream<OfficeSettings> getOfficeSettingsStream() =>
       _repository.getOfficeSettingsStream();
 
   Future<bool> canCheckInToday(String userId) =>
