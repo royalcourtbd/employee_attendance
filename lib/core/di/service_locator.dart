@@ -4,6 +4,7 @@ import 'package:employee_attendance/data/repositories/attendance_repository_impl
 import 'package:employee_attendance/data/repositories/user_repository_impl.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 import 'package:employee_attendance/domain/repositories/user_repository.dart';
+import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/domain/usecases/user_usecases.dart';
@@ -44,7 +45,8 @@ class ServiceLocator {
 
   Future<void> _setupService() async {
     _serviceLocator
-        .registerLazySingleton<FirebaseService>(() => FirebaseService());
+      ..registerLazySingleton<FirebaseService>(() => FirebaseService())
+      ..registerLazySingleton(() => HolidayService());
   }
 
   Future<void> _setupRepository() async {
@@ -57,10 +59,10 @@ class ServiceLocator {
 
   Future<void> _setupPresenter() async {
     _serviceLocator
-      ..registerFactory(
-          () => loadPresenter(HomePresenter(locate(), locate(), locate(), locate())))
-      ..registerLazySingleton(
-          () => loadPresenter(HistoryPagePresenter(locate(), locate())))
+      ..registerFactory(() =>
+          loadPresenter(HomePresenter(locate(), locate(), locate(), locate())))
+      ..registerLazySingleton(() =>
+          loadPresenter(HistoryPagePresenter(locate(), locate(), locate())))
       ..registerLazySingleton(
           () => loadPresenter(ProfilePagePresenter(locate(), locate())))
       ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))

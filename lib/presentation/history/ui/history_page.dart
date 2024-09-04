@@ -1,12 +1,11 @@
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
-
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_presenter.dart';
+import 'package:employee_attendance/presentation/history/widgets/attendance_calendar.dart';
 import 'package:employee_attendance/presentation/history/widgets/attendance_item.dart';
 import 'package:employee_attendance/presentation/history/widgets/empty_attendance_view.dart';
-
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -25,24 +24,34 @@ class HistoryPage extends StatelessWidget {
             title: const Text('Attendance History'),
             centerTitle: true,
           ),
-          body: _historyPagePresenter.currentUiState.isLoading
-              ? LoadingIndicator(
-                  theme: theme,
-                  color: theme.primaryColor,
-                  ringColor: theme.primaryColor.withOpacity(0.5),
-                )
-              : _historyPagePresenter.currentUiState.attendances.isEmpty
-                  ? const EmptyAttendanceView()
-                  : ListView.builder(
-                      padding: padding15,
-                      itemCount: _historyPagePresenter
-                          .currentUiState.attendances.length,
-                      itemBuilder: (_, index) => AttendanceItem(
+          body: Column(
+            children: [
+              AttendanceCalendar(
+                theme: theme,
+                presenter: _historyPagePresenter,
+              ),
+              Expanded(
+                child: _historyPagePresenter.currentUiState.isLoading
+                    ? LoadingIndicator(
                         theme: theme,
-                        attendance: _historyPagePresenter
-                            .currentUiState.attendances[index],
-                      ),
-                    ),
+                        color: theme.primaryColor,
+                        ringColor: theme.primaryColor.withOpacity(0.5),
+                      )
+                    : _historyPagePresenter.currentUiState.attendances.isEmpty
+                        ? const EmptyAttendanceView()
+                        : ListView.builder(
+                            padding: padding15,
+                            itemCount: _historyPagePresenter
+                                .currentUiState.attendances.length,
+                            itemBuilder: (_, index) => AttendanceItem(
+                              theme: theme,
+                              attendance: _historyPagePresenter
+                                  .currentUiState.attendances[index],
+                            ),
+                          ),
+              )
+            ],
+          ),
         );
       },
     );
