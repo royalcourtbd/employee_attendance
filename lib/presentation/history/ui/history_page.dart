@@ -19,6 +19,7 @@ class HistoryPage extends StatelessWidget {
     return PresentableWidgetBuilder(
       presenter: _historyPagePresenter,
       builder: () {
+        final uiState = _historyPagePresenter.currentUiState;
         return Scaffold(
           appBar: AppBar(
             title: const Text('Attendance History'),
@@ -31,22 +32,20 @@ class HistoryPage extends StatelessWidget {
                 presenter: _historyPagePresenter,
               ),
               Expanded(
-                child: _historyPagePresenter.currentUiState.isLoading
+                child: uiState.isLoading
                     ? LoadingIndicator(
                         theme: theme,
                         color: theme.primaryColor,
                         ringColor: theme.primaryColor.withOpacity(0.5),
                       )
-                    : _historyPagePresenter.currentUiState.attendances.isEmpty
+                    : uiState.filteredAttendances.isEmpty
                         ? const EmptyAttendanceView()
                         : ListView.builder(
                             padding: padding15,
-                            itemCount: _historyPagePresenter
-                                .currentUiState.attendances.length,
+                            itemCount: uiState.filteredAttendances.length,
                             itemBuilder: (_, index) => AttendanceItem(
                               theme: theme,
-                              attendance: _historyPagePresenter
-                                  .currentUiState.attendances[index],
+                              attendance: uiState.filteredAttendances[index],
                             ),
                           ),
               )

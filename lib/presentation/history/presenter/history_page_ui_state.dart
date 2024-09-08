@@ -8,7 +8,7 @@ class HistoryPageUiState extends BaseUiState {
   const HistoryPageUiState({
     required super.isLoading,
     required super.userMessage,
-    required this.attendances,
+    required this.filteredAttendances,
     required this.selectedMonth,
     required this.monthHolidays,
   });
@@ -17,13 +17,13 @@ class HistoryPageUiState extends BaseUiState {
     return HistoryPageUiState(
       isLoading: false,
       userMessage: '',
-      attendances: const [],
+      filteredAttendances: const [],
       selectedMonth: DateTime.now(),
       monthHolidays: const [],
     );
   }
 
-  final List<Attendance> attendances;
+  final List<Attendance> filteredAttendances;
   final DateTime selectedMonth;
   final List<Holiday> monthHolidays;
 
@@ -31,7 +31,7 @@ class HistoryPageUiState extends BaseUiState {
   List<Object?> get props => [
         isLoading,
         userMessage,
-        attendances,
+        filteredAttendances,
         selectedMonth,
         monthHolidays,
       ];
@@ -39,14 +39,14 @@ class HistoryPageUiState extends BaseUiState {
   HistoryPageUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    List<Attendance>? attendances,
+    List<Attendance>? filteredAttendances,
     DateTime? selectedMonth,
     List<Holiday>? monthHolidays,
   }) {
     return HistoryPageUiState(
       isLoading: isLoading ?? this.isLoading,
       userMessage: userMessage ?? this.userMessage,
-      attendances: attendances ?? this.attendances,
+      filteredAttendances: filteredAttendances ?? this.filteredAttendances,
       selectedMonth: selectedMonth ?? this.selectedMonth,
       monthHolidays: monthHolidays ?? this.monthHolidays,
     );
