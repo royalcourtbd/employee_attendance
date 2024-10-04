@@ -9,6 +9,8 @@ import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
+
+import 'package:employee_attendance/presentation/admin/attendance/presenter/view_attendance_presenter.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_presenter.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
@@ -84,6 +86,7 @@ class ServiceLocator {
       ..registerLazySingleton(
           () => loadPresenter(AdminDashboardPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(EmployeesPresenter(locate())))
-      ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())));
+      ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())))
+      ..registerLazySingleton(() => loadPresenter(ViewAttendancePresenter()));
   }
 }

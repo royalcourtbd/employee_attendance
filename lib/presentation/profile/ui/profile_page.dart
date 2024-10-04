@@ -48,7 +48,6 @@ class ProfilePage extends StatelessWidget {
                     title: 'Sign Out',
                     onRemove: () => _profilePagePresenter.logout(),
                   ),
-                  // onTap: () => _profilePagePresenter.logout(),
                   icon: Icons.logout,
                   text: 'Log Out',
                 ),

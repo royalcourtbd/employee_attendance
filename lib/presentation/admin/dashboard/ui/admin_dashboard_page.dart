@@ -1,13 +1,13 @@
 import 'package:employee_attendance/core/di/service_locator.dart';
+import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/ui/employees_page.dart';
 import 'package:employee_attendance/presentation/admin/settings/ui/settings_page.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/widgets/admin_dashboard_grid_item.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/widgets/log_out_dialog.dart';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   AdminDashboardPage({super.key});
@@ -35,17 +35,22 @@ class AdminDashboardPage extends StatelessWidget {
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: 2,
-            padding: const EdgeInsets.all(16.0),
+            padding: padding15,
             children: [
               AdminDashboardGridItem(
                 title: 'Employees',
                 icon: Icons.people,
-                onTap: () => Get.to(() => EmployeesPage()),
+                onTap: () => context.navigatorPush(EmployeesPage()),
+              ),
+              AdminDashboardGridItem(
+                title: 'Today\'s Attendance',
+                icon: Icons.assignment_turned_in_sharp,
+                onTap: () => context.navigatorPush(EmployeesPage()),
               ),
               AdminDashboardGridItem(
                 title: 'Settings',
                 icon: Icons.settings,
-                onTap: () => Get.to(SettingsPage()),
+                onTap: () => context.navigatorPush(SettingsPage()),
               ),
             ],
           ),

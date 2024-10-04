@@ -1,20 +1,15 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
 
-class EmployeesUiState extends BaseUiState {
-  final List<Employee> employees;
-
-  const EmployeesUiState({
+class ViewAttendanceUiState extends BaseUiState {
+  const ViewAttendanceUiState({
     required super.isLoading,
     required super.userMessage,
-    required this.employees,
   });
 
-  factory EmployeesUiState.empty() {
-    return const EmployeesUiState(
+  factory ViewAttendanceUiState.empty() {
+    return const ViewAttendanceUiState(
       isLoading: false,
       userMessage: '',
-      employees: [],
     );
   }
 
@@ -22,18 +17,15 @@ class EmployeesUiState extends BaseUiState {
   List<Object?> get props => [
         isLoading,
         userMessage,
-        employees,
       ];
 
-  EmployeesUiState copyWith({
+  ViewAttendanceUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    List<Employee>? employees,
   }) {
-    return EmployeesUiState(
+    return ViewAttendanceUiState(
       isLoading: isLoading ?? this.isLoading,
       userMessage: userMessage ?? this.userMessage,
-      employees: employees ?? this.employees,
     );
   }
 }

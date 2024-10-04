@@ -4,6 +4,7 @@ import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/settings_item.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/update_late_threshold_popup.dart';
+import 'package:employee_attendance/presentation/admin/settings/widgets/update_wifi_ssid_popup.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +60,14 @@ class SettingsPage extends StatelessWidget {
               SettingsItem(
                 title: 'SSID',
                 value: uiState.ssid,
-                onTap: () => _settingsPresenter.updateSSID(context),
+                onTap: () => UpdateWifiSsidPopup.show(
+                  context: context,
+                  updateSsid: () => _settingsPresenter.updateWifiSSID(
+                    context: context,
+                    navigatorPop: () => context.navigatorPop(),
+                  ),
+                ),
+                // onTap: () => _settingsPresenter.updateSSID(context),
               ),
               TextButton(
                   onPressed: () => locate<HomePresenter>().initializeSettings(),

@@ -1,24 +1,24 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
-import 'package:employee_attendance/core/external_libs/flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:employee_attendance/core/external_libs/flutter_animated_dialog/src/animated_dialog.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
-class UpdateLateThresholdPopup extends StatelessWidget {
-  UpdateLateThresholdPopup({super.key, required this.updateThreshold});
-  final VoidCallback updateThreshold;
+class UpdateWifiSsidPopup extends StatelessWidget {
+  UpdateWifiSsidPopup({super.key, required this.updateSsid});
+  final VoidCallback updateSsid;
 
   static Future<void> show({
     required BuildContext context,
-    required VoidCallback updateThreshold,
+    required VoidCallback updateSsid,
   }) async {
     await showAnimatedDialog(
       context: context,
-      builder: (context) => UpdateLateThresholdPopup(
-        updateThreshold: updateThreshold,
+      builder: (context) => UpdateWifiSsidPopup(
+        updateSsid: updateSsid,
       ),
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
@@ -27,6 +27,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
   }
 
   final SettingsPresenter _settingsPresenter = locate<SettingsPresenter>();
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -46,7 +47,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Update Late Threshold',
+              'Update Wifi SSID',
               style: theme.textTheme.bodyMedium!.copyWith(
                 fontSize: twentyPx,
                 fontWeight: FontWeight.bold,
@@ -54,10 +55,10 @@ class UpdateLateThresholdPopup extends StatelessWidget {
             ),
             gapH20,
             CustomTextField(
-              emailController: _settingsPresenter.thresholdTextController,
+              emailController: _settingsPresenter.ssidTextController,
               theme: theme,
-              hintText: 'Write new late threshold here',
-              keyboardType: TextInputType.number,
+              hintText: 'Write new wifi ssid here',
+              keyboardType: TextInputType.text,
             ),
             gapH20,
             Row(
@@ -65,7 +66,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    _settingsPresenter.thresholdTextController.clear();
+                    _settingsPresenter.ssidTextController.clear();
                     context.navigatorPop();
                   },
                   child: Text(
@@ -77,7 +78,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => updateThreshold(),
+                  onPressed: () => updateSsid(),
                   child: Text(
                     'Update',
                     style: theme.textTheme.bodyMedium!.copyWith(

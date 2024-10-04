@@ -15,7 +15,8 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
   final Obs<SettingsUiState> uiState = Obs(SettingsUiState.empty());
   SettingsUiState get currentUiState => uiState.value;
 
-  final TextEditingController thresholdController = TextEditingController();
+  final TextEditingController thresholdTextController = TextEditingController();
+  final TextEditingController ssidTextController = TextEditingController();
 
   @override
   void onInit() {
@@ -33,7 +34,7 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
           endTime: TimeOfDay.fromDateTime(settings.endTime),
           lateThreshold: settings.lateThreshold,
           workDays: settings.workDays,
-          ssid: settings.ssid, // Add this
+          ssid: settings.ssid,
         );
       },
       onError: (error) {
@@ -45,17 +46,26 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
   void updateLateThreshold(
       {required BuildContext context, required VoidCallback navigatorPop}) {
     if (_isValidThreshold()) {
-      final lateThreshold = int.parse(thresholdController.text);
+      final lateThreshold = int.parse(thresholdTextController.text);
       updateSettings(lateThreshold: lateThreshold);
-      thresholdController.clear();
+      thresholdTextController.clear();
       navigatorPop();
     }
   }
 
   bool _isValidThreshold() {
-    return thresholdController.text.isNotEmpty &&
-        int.tryParse(thresholdController.text) != null &&
-        int.parse(thresholdController.text) >= 0;
+    return thresholdTextController.text.isNotEmpty &&
+        int.tryParse(thresholdTextController.text) != null &&
+        int.parse(thresholdTextController.text) >= 0;
+  }
+
+  void updateWifiSSID(
+      {required BuildContext context, required VoidCallback navigatorPop}) {
+    if (ssidTextController.text.isNotEmpty) {
+      updateSettings(ssid: ssidTextController.text);
+      ssidTextController.clear();
+      navigatorPop();
+    }
   }
 
   Future<void> updateWorkDays(BuildContext context) async {
@@ -105,7 +115,9 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
             ),
             TextButton(
               child: const Text('Done'),
-              onPressed: () => context.navigatorPop(),
+              onPressed: () {
+                context.navigatorPop(result: selectedDays);
+              },
             ),
           ],
         );
@@ -114,43 +126,6 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
 
     if (result != null) {
       await updateSettings(workDays: result);
-    }
-  }
-
-  Future<void> updateSSID(BuildContext context) async {
-    String newSSID = '';
-    final String? result = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Update SSID'),
-        content: TextField(
-          decoration: const InputDecoration(
-            hintText: "Write new SSID here",
-          ),
-          autofocus: true,
-          onChanged: (value) {
-            newSSID = value;
-          },
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => context.navigatorPop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              if (newSSID.isNotEmpty) {
-                context.navigatorPop();
-              }
-            },
-            child: const Text('Done'),
-          ),
-        ],
-      ),
-    );
-
-    if (result != null) {
-      await updateSettings(ssid: result);
     }
   }
 
@@ -196,7 +171,7 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
       await _attendanceUseCases.updateOfficeSettings(updatedSettings);
       await addUserMessage('Updated office settings successfully');
     } catch (e) {
-      await addUserMessage('অফিস সেটিংস আপডেট করতে ব্যর্থ: $e');
+      await addUserMessage('Failed to update office settings: $e');
     } finally {
       await toggleLoading(loading: false);
     }
@@ -205,6 +180,7 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
   @override
   Future<void> addUserMessage(String message) async {
     uiState.value = currentUiState.copyWith(userMessage: message);
+    return showMessage(message: currentUiState.userMessage);
   }
 
   @override
