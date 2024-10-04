@@ -15,7 +15,6 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   final LoginPagePresenter _loginPresenter = locate<LoginPagePresenter>();
-  
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -85,11 +84,7 @@ class LoginPage extends StatelessWidget {
                                 _loginPresenter.handleLogin(context),
                             buttonText: 'Login',
                           ),
-                    gapH30,
-                    PrimaryButton(
-                        theme: theme,
-                        buttonText: 'Demo User',
-                        onPressed: ()=> _loginPresenter.createDemoUser())
+                    gapH20,
                   ],
                 ),
               ),

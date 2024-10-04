@@ -2,17 +2,18 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:employee_attendance/core/services/firebase_service.dart';
-import 'package:employee_attendance/data/models/user_model.dart';
-import 'package:employee_attendance/domain/entities/user.dart';
-import 'package:employee_attendance/domain/repositories/user_repository.dart';
+import 'package:employee_attendance/core/static/urls.dart';
+import 'package:employee_attendance/data/models/employee_user_model.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserRepositoryImpl implements UserRepository {
+class EmployeeRepositoryImpl implements EmployeeRepository {
   final FirebaseService _firebaseService;
 
-  UserRepositoryImpl(this._firebaseService);
+  EmployeeRepositoryImpl(this._firebaseService);
 
   Stream<firebase_auth.User?> get authStateChanges =>
       _firebaseService.auth.authStateChanges();
@@ -20,15 +21,15 @@ class UserRepositoryImpl implements UserRepository {
   firebase_auth.User? get currentUser => _firebaseService.auth.currentUser;
 
   @override
-  Future<User?> createDemoUser() async {
+  Future<Employee?> createDemoUser() async {
     try {
       final userCredential =
           await _firebaseService.auth.createUserWithEmailAndPassword(
-        email: 'admin@admin.com',
+        email: 'demo@demo.com',
         password: '123456',
       );
 
-      final user = UserModel(
+      final employeeModel = EmployeeUserModel(
         id: userCredential.user!.uid,
         name: 'Demo User',
         role: 'employee',
@@ -38,11 +39,11 @@ class UserRepositoryImpl implements UserRepository {
       );
 
       await _firebaseService.firestore
-          .collection('users')
-          .doc(user.id)
-          .set(user.toJson());
+          .collection(Urls.employees)
+          .doc(employeeModel.id)
+          .set(employeeModel.toJson());
 
-      return user;
+      return employeeModel;
     } catch (e) {
       debugPrint('Error creating demo user: $e');
       return null;
@@ -50,14 +51,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<String, User?>> login(String email, String password) async {
+  Future<Either<String, Employee?>> login(String email, String password) async {
     try {
       final userCredential =
           await _firebaseService.auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      final User? user = await fetchUserData(userCredential.user!.uid);
+      final Employee? user = await fetchUserData(userCredential.user!.uid);
       return Right(user);
     } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -83,14 +84,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User?> fetchUserData(String userId) async {
+  Future<Employee?> fetchUserData(String userId) async {
     try {
       final doc = await _firebaseService.firestore
-          .collection('users')
+          .collection(Urls.employees)
           .doc(userId)
           .get();
       if (doc.exists) {
-        return UserModel.fromJson(doc.data()!);
+        return EmployeeUserModel.fromJson(doc.data()!);
       }
       return null;
     } catch (e) {
@@ -100,11 +101,11 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> updateUser(User user) async {
+  Future<void> updateUser(Employee user) async {
     try {
-      final UserModel userModel = UserModel.fromUser(user);
+      final EmployeeUserModel userModel = EmployeeUserModel.fromUser(user);
       await _firebaseService.firestore
-          .collection('users')
+          .collection(Urls.employees)
           .doc(user.id)
           .update((userModel.toJson()));
     } catch (e) {
@@ -113,14 +114,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Stream<User?> getUserStream(String userId) {
+  Stream<Employee?> getUserStream(String userId) {
     return _firebaseService.firestore
-        .collection('users')
+        .collection(Urls.employees)
         .doc(userId)
         .snapshots()
         .map((doc) {
       if (doc.exists) {
-        return UserModel.fromJson(doc.data()!);
+        return EmployeeUserModel.fromJson(doc.data()!);
       }
       return null;
     });
@@ -129,5 +130,17 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<String?> getDeviceToken() {
     return _firebaseService.getDeviceToken();
+  }
+
+  @override
+  Stream<List<Employee>> getAllEmployees() {
+    return _firebaseService.firestore
+        .collection(Urls.employees)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => EmployeeUserModel.fromJson(doc.data()))
+          .toList();
+    });
   }
 }

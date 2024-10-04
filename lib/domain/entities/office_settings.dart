@@ -6,6 +6,7 @@ class OfficeSettings extends Equatable {
   final int lateThreshold;
   final List<String> workDays;
   final String timeZone;
+  final String ssid; // New property
 
   const OfficeSettings({
     required this.startTime,
@@ -13,9 +14,16 @@ class OfficeSettings extends Equatable {
     required this.lateThreshold,
     required this.workDays,
     required this.timeZone,
+    required this.ssid, // Add this
   });
 
   @override
-  List<Object?> get props =>
-      [startTime, endTime, lateThreshold, workDays, timeZone];
+  List<Object?> get props => [
+        startTime,
+        endTime,
+        lateThreshold,
+        workDays,
+        timeZone,
+        ssid, // Add this
+      ];
 }

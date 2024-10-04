@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
+import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
@@ -187,13 +188,14 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
           'Thursday'
         ],
         timeZone: 'Asia/Dhaka',
+        ssid: 'DefaultSSID', // Add this
       );
 
       OfficeSettingsModel officeSettingsModel =
           OfficeSettingsModel.fromOfficeSettings(officeSettings);
 
       await _firebaseService.firestore
-          .collection('settings')
+          .collection(Urls.settings)
           .doc('office')
           .set(officeSettingsModel.toJson());
 
@@ -211,7 +213,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     final String? userId = getCurrentUserId();
     if (userId == null) return;
 
-    final user = _profilePagePresenter.currentUiState.user;
+    final user = _profilePagePresenter.currentUiState.employee;
     if (user == null || !user.employeeStatus) {
       await addUserMessage('You are not athorized');
       showMessage(message: currentUiState.userMessage);

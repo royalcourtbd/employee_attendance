@@ -1,4 +1,4 @@
-class User {
+class Employee {
   final String id;
   final String? name;
   final String? role;
@@ -12,7 +12,7 @@ class User {
   final String? email;
   final String? designation;
 
-  const User({
+  const Employee({
     required this.id,
     this.name,
     this.role,
@@ -27,7 +27,7 @@ class User {
     this.designation,
   });
 
-  User copyWith({
+  Employee copyWith({
     String? id,
     String? name,
     String? role,
@@ -41,7 +41,7 @@ class User {
     String? email,
     String? designation,
   }) {
-    return User(
+    return Employee(
       id: id ?? this.id,
       name: name ?? this.name,
       role: role ?? this.role,

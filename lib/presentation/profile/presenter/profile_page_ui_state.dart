@@ -1,20 +1,20 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/user.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
 
 class ProfilePageUiState extends BaseUiState {
-  final User? user;
+  final Employee? employee;
 
   const ProfilePageUiState({
     required super.isLoading,
     required super.userMessage,
-    this.user,
+    this.employee,
   });
 
   factory ProfilePageUiState.empty() {
     return const ProfilePageUiState(
       isLoading: false,
       userMessage: '',
-      user: null,
+      employee: null,
     );
   }
 
@@ -22,18 +22,18 @@ class ProfilePageUiState extends BaseUiState {
   List<Object?> get props => [
         isLoading,
         userMessage,
-        user,
+        employee,
       ];
 
   ProfilePageUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    User? user,
+    Employee? employee,
   }) {
     return ProfilePageUiState(
       isLoading: isLoading ?? this.isLoading,
       userMessage: userMessage ?? this.userMessage,
-      user: user ?? this.user,
+      employee: employee ?? this.employee,
     );
   }
 }

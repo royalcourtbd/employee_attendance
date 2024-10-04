@@ -38,10 +38,12 @@ class CustomTextField extends StatelessWidget {
         fontSize: fourteenPx,
       ),
       decoration: InputDecoration(
-        prefixIcon: Icon(
-          icon,
-          color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
-        ),
+        prefixIcon: icon != null
+            ? Icon(
+                icon,
+                color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+              )
+            : null,
         hintText: hintText,
         hintStyle: theme.textTheme.bodyMedium!.copyWith(
           fontSize: fourteenPx,

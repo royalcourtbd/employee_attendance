@@ -7,6 +7,7 @@ import 'package:employee_attendance/presentation/home/presenter/home_presenter.d
 import 'package:employee_attendance/presentation/home/widgets/attendance_time_widget.dart';
 import 'package:employee_attendance/presentation/home/widgets/check_button.dart';
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
+import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 
@@ -16,6 +17,7 @@ class HomePage extends StatelessWidget {
   final HomePresenter homePresenter = locate<HomePresenter>();
   final ProfilePagePresenter _profilePagePresenter =
       locate<ProfilePagePresenter>();
+  late final MainPagePresenter _mainPagePresenter = locate<MainPagePresenter>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class HomePage extends StatelessWidget {
     return PresentableWidgetBuilder(
       presenter: homePresenter,
       builder: () {
-        final user = _profilePagePresenter.currentUiState.user;
+        final user = _profilePagePresenter.currentUiState.employee;
         final homeState = homePresenter.currentUiState;
 
         return Scaffold(
@@ -33,6 +35,7 @@ class HomePage extends StatelessWidget {
             greetingMessage:
                 '${homePresenter.currentUiState.greetingMessage} Mark your attendance',
             profileImageUrl: user.image ?? '',
+            onProfileTap: () => _mainPagePresenter.updateIndex(index: 2),
           ),
           body: Center(
             child: Column(

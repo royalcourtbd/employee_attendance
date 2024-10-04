@@ -1,7 +1,7 @@
-import 'package:employee_attendance/domain/entities/user.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
 
-class UserModel extends User {
-  const UserModel({
+class EmployeeUserModel extends Employee {
+  const EmployeeUserModel({
     required super.id,
     super.name,
     super.role,
@@ -16,8 +16,8 @@ class UserModel extends User {
     super.designation,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory EmployeeUserModel.fromJson(Map<String, dynamic> json) {
+    return EmployeeUserModel(
       id: json['id'] as String,
       name: json['name'] as String?,
       role: json['role'] as String?,
@@ -53,8 +53,8 @@ class UserModel extends User {
   }
 
   // এই মেথডটি `User` অবজেক্ট থেকে `UserModel` অবজেক্ট তৈরি করতে সহায়ক হবে।
-  factory UserModel.fromUser(User user) {
-    return UserModel(
+  factory EmployeeUserModel.fromUser(Employee user) {
+    return EmployeeUserModel(
       id: user.id,
       name: user.name,
       role: user.role,

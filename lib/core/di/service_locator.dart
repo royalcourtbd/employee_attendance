@@ -1,13 +1,16 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/data/repositories/attendance_repository_impl.dart';
-import 'package:employee_attendance/data/repositories/user_repository_impl.dart';
+import 'package:employee_attendance/data/repositories/employee_repository_impl.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
-import 'package:employee_attendance/domain/repositories/user_repository.dart';
+import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
-import 'package:employee_attendance/domain/usecases/user_usecases.dart';
+import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
+import 'package:employee_attendance/presentation/admin/employee/presenter/employees_presenter.dart';
+import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_presenter.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
@@ -38,7 +41,7 @@ class ServiceLocator {
 
   Future<void> _setupUseCase() async {
     _serviceLocator
-      ..registerLazySingleton(() => UserUseCases(locate()))
+      ..registerLazySingleton(() => EmployeeUseCases(locate()))
       ..registerLazySingleton(() => GetGreetingUseCase())
       ..registerLazySingleton(() => AttendanceUseCases(locate()));
   }
@@ -51,8 +54,8 @@ class ServiceLocator {
 
   Future<void> _setupRepository() async {
     _serviceLocator
-      ..registerLazySingleton<UserRepository>(
-          () => UserRepositoryImpl(locate()))
+      ..registerLazySingleton<EmployeeRepository>(
+          () => EmployeeRepositoryImpl(locate()))
       ..registerLazySingleton<AttendanceRepository>(
           () => AttendanceRepositoryImpl(locate()));
   }
@@ -68,6 +71,9 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))
       ..registerLazySingleton(() => loadPresenter(MainPagePresenter()))
       ..registerLazySingleton(() => loadPresenter(LoginPagePresenter(locate())))
-      ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()));
+      ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()))
+      ..registerLazySingleton(() => loadPresenter(AdminDashboardPresenter()))
+      ..registerLazySingleton(() => loadPresenter(EmployeesPresenter(locate())))
+      ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())));
   }
 }

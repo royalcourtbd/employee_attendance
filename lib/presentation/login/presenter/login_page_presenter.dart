@@ -1,15 +1,15 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/user.dart';
-import 'package:employee_attendance/domain/usecases/user_usecases.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 
 import 'package:flutter/material.dart';
 
 class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
-  final UserUseCases _userUseCases;
+  final EmployeeUseCases _userUseCases;
   LoginPagePresenter(this._userUseCases);
 
   final Obs<LoginPageUiState> uiState = Obs(LoginPageUiState.empty());
@@ -55,7 +55,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
           await addUserMessage(errorMessage);
           showMessage(message: currentUiState.userMessage);
         },
-        (User? user) async {
+        (Employee? user) async {
           if (user != null) {
             final String? deviceToken = await _userUseCases.getDeviceToken();
             _mainPagePresenter.updateIndex(index: 0);

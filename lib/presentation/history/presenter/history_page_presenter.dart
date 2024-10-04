@@ -30,7 +30,7 @@ class HistoryPagePresenter extends BasePresenter<HistoryPageUiState> {
   }
 
   void initAttendanceStream() {
-    final userId = _profilePagePresenter.currentUiState.user?.id;
+    final userId = _profilePagePresenter.currentUiState.employee?.id;
     if (userId != null) {
       initUserAttendanceStream(userId);
     } else {

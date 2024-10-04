@@ -1,6 +1,8 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
+import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/logger_utility.dart';
 import 'package:employee_attendance/core/utility/trial_utility.dart';
+import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
 import 'package:employee_attendance/presentation/employee_attendance.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -571,6 +573,70 @@ void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 // //     logErrorStatic(e, _fileName);
 // //   }
 // // }
+
+Future<void> updateTime({
+  required BuildContext context,
+  required String timeType,
+  required SettingsPresenter settingsPresenter,
+}) async {
+  final ThemeData theme = context.theme;
+  final TimeOfDay? newTime = await showTimePicker(
+    context: context,
+    initialTime: (timeType == 'startTime')
+        ? settingsPresenter.currentUiState.startTime
+        : settingsPresenter.currentUiState.endTime,
+    builder: (BuildContext context, Widget? child) {
+      return MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        child: Theme(
+          data: context.theme.copyWith(
+            timePickerTheme: TimePickerThemeData(
+              backgroundColor: theme.scaffoldBackgroundColor,
+              dialHandColor: theme.colorScheme.primary,
+              dialTextColor: WidgetStateColor.resolveWith((state) {
+                if (state.contains(WidgetState.selected)) {
+                  return Colors.white;
+                }
+                return Colors.black54;
+              }),
+              dayPeriodColor: theme.colorScheme.primary,
+              hourMinuteColor: WidgetStateColor.resolveWith((state) {
+                if (state.contains(WidgetState.selected)) {
+                  return theme.primaryColor;
+                }
+                return theme.cardColor;
+              }),
+              hourMinuteTextColor: WidgetStateColor.resolveWith((state) {
+                if (state.contains(WidgetState.selected)) {
+                  return Colors.white;
+                }
+                return Colors.black54;
+              }),
+              dayPeriodTextColor: WidgetStateColor.resolveWith((state) {
+                if (state.contains(WidgetState.selected)) {
+                  return Colors.white;
+                }
+                return Colors.black54;
+              }),
+              shape: RoundedRectangleBorder(
+                borderRadius: radius10,
+              ),
+            ),
+          ),
+          child: child!,
+        ),
+      );
+    },
+  );
+
+  if (newTime != null) {
+    if (timeType == 'startTime') {
+      await settingsPresenter.updateSettings(startTime: newTime);
+    } else {
+      await settingsPresenter.updateSettings(endTime: newTime);
+    }
+  }
+}
 
 ColorFilter buildColorFilter(Color? color) =>
     ColorFilter.mode(color ?? Colors.black, BlendMode.srcATop);

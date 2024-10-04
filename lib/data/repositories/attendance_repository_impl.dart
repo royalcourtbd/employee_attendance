@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
+import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/data/models/attendance_model.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
@@ -16,7 +17,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<void> checkIn(String userId) async {
     final now = DateTime.now();
     final attendanceRef =
-        _firebaseService.firestore.collection('attendances').doc();
+        _firebaseService.firestore.collection(Urls.attendances).doc();
     final officeSettings = await _getOfficeSettings();
     final isLate =
         now.isAfter(officeSettings.startTime.add(const Duration(minutes: 10)));
@@ -38,7 +39,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final now = DateTime.now();
     try {
       final querySnapshot = await _firebaseService.firestore
-          .collection('attendances')
+          .collection(Urls.attendances)
           .where('userId', isEqualTo: userId)
           .where('checkOutTime', isNull: true)
           .orderBy('checkInTime', descending: true)
@@ -69,7 +70,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
     return _firebaseService.firestore
-        .collection('attendances')
+        .collection(Urls.attendances)
         .where('userId', isEqualTo: userId)
         .where('checkInTime', isGreaterThanOrEqualTo: startOfDay)
         .where('checkInTime', isLessThan: endOfDay)
@@ -91,7 +92,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
     final querySnapshot = await _firebaseService.firestore
-        .collection('attendances')
+        .collection(Urls.attendances)
         .where('userId', isEqualTo: userId)
         .where('checkInTime', isGreaterThanOrEqualTo: startOfDay)
         .where('checkInTime', isLessThan: endOfDay)
@@ -107,7 +108,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
     final querySnapshot = await _firebaseService.firestore
-        .collection('attendances')
+        .collection(Urls.attendances)
         .where('userId', isEqualTo: userId)
         .where('checkInTime', isGreaterThanOrEqualTo: startOfDay)
         .where('checkInTime', isLessThan: endOfDay)
@@ -120,7 +121,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   @override
   Stream<OfficeSettings> getOfficeSettingsStream() {
     return _firebaseService.firestore
-        .collection('settings')
+        .collection(Urls.settings)
         .doc('office')
         .snapshots()
         .map((snapshot) => OfficeSettingsModel.fromJson(snapshot.data() ?? {}));
@@ -128,7 +129,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   Future<OfficeSettings> _getOfficeSettings() async {
     final doc = await _firebaseService.firestore
-        .collection('settings')
+        .collection(Urls.settings)
         .doc('office')
         .get();
 
@@ -151,6 +152,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
           'Thursday'
         ],
         timeZone: 'Asia/Dhaka',
+        ssid: 'DefaultSSID', // Add this
       );
     }
   }
@@ -158,12 +160,27 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   @override
   Stream<List<Attendance>> getUserAttendanceStream(String userId) {
     return _firebaseService.firestore
-        .collection('attendances')
+        .collection(Urls.attendances)
         .where('userId', isEqualTo: userId)
         .orderBy('checkInTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => AttendanceModel.fromJson(doc.data()))
             .toList());
+  }
+
+  @override
+  Future<void> updateOfficeSettings(OfficeSettings settings) async {
+    try {
+      final OfficeSettingsModel settingsModel =
+          OfficeSettingsModel.fromOfficeSettings(settings);
+      await _firebaseService.firestore
+          .collection(Urls.settings)
+          .doc('office')
+          .set(settingsModel.toJson());
+    } catch (e) {
+      debugPrint('Error updating office settings: $e');
+      throw Exception('Failed to update office settings');
+    }
   }
 }

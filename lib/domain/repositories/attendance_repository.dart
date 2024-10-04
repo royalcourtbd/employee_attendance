@@ -9,4 +9,5 @@ abstract class AttendanceRepository {
   Future<bool> canCheckInToday(String userId);
   Future<bool> canCheckOutToday(String userId);
   Stream<List<Attendance>> getUserAttendanceStream(String userId);
+  Future<void> updateOfficeSettings(OfficeSettings settings);
 }

@@ -4,14 +4,14 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/user.dart';
-import 'package:employee_attendance/domain/usecases/user_usecases.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_ui_state.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
-  final UserUseCases _userUseCases;
+  final EmployeeUseCases _userUseCases;
   final FirebaseService _firebaseService;
 
   ProfilePagePresenter(this._userUseCases, this._firebaseService);
@@ -41,7 +41,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     _userUseCases.getUserStream(userId).listen(
       (user) {
         if (user != null) {
-          uiState.value = currentUiState.copyWith(user: user);
+          uiState.value = currentUiState.copyWith(employee: user);
         } else {
           addUserMessage('User data not found');
         }
@@ -58,7 +58,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     try {
       final user = await _userUseCases.fetchUserData(userId);
       if (user != null) {
-        uiState.value = currentUiState.copyWith(user: user);
+        uiState.value = currentUiState.copyWith(employee: user);
       } else {
         await addUserMessage('Failed to fetch user data');
       }
@@ -70,15 +70,15 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     }
   }
 
-  Future<void> updateUser(User updatedUser) async {
+  Future<void> updateUser(Employee updatedUser) async {
     await toggleLoading(loading: true);
     try {
       await _userUseCases.updateUser(updatedUser);
-      uiState.value = currentUiState.copyWith(user: updatedUser);
+      uiState.value = currentUiState.copyWith(employee: updatedUser);
       await addUserMessage('User updated successfully');
     } catch (e) {
       debugPrint('Error updating user: $e');
-      await addUserMessage('Error updating user');
+      await addUserMessage('Error updating employee');
     } finally {
       await toggleLoading(loading: false);
     }

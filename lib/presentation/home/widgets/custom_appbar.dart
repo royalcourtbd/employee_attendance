@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String greetingMessage;
   final String profileImageUrl;
   final ThemeData theme;
+  final VoidCallback onProfileTap;
 
   const CustomAppBar({
     super.key,
@@ -15,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.userName,
     required this.greetingMessage,
     required this.profileImageUrl,
+    required this.onProfileTap,
   });
 
   @override
@@ -42,24 +44,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: theme.primaryColor,
-              width: 2,
+        InkWell(
+          onTap: onProfileTap,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: theme.primaryColor,
+                width: 2,
+              ),
             ),
-          ),
-          child: ClipOval(
-            child: CachedNetworkImage(
-              imageUrl: profileImageUrl,
-              placeholder: (context, url) =>
-                  const Icon(Icons.image, color: Colors.grey),
-              errorWidget: (context, url, error) =>
-                  const Icon(Icons.error, color: Colors.grey),
-              width: EmployeeAttendanceScreen.width * 0.13,
-              height: EmployeeAttendanceScreen.width * 0.13,
-              fit: BoxFit.cover,
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: profileImageUrl,
+                placeholder: (context, url) =>
+                    const Icon(Icons.image, color: Colors.grey),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error, color: Colors.grey),
+                width: EmployeeAttendanceScreen.width * 0.13,
+                height: EmployeeAttendanceScreen.width * 0.13,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

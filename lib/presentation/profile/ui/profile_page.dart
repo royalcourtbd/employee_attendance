@@ -27,10 +27,11 @@ class ProfilePage extends StatelessWidget {
                 ProfileHeader(
                   theme: theme,
                   profileImage:
-                      _profilePagePresenter.currentUiState.user!.image,
+                      _profilePagePresenter.currentUiState.employee!.image,
                   employeeIt:
-                      _profilePagePresenter.currentUiState.user!.employeeId,
-                  userName: _profilePagePresenter.currentUiState.user!.name!,
+                      _profilePagePresenter.currentUiState.employee!.employeeId,
+                  userName:
+                      _profilePagePresenter.currentUiState.employee!.name!,
                 ),
                 gapH16,
                 ProfileOption(

@@ -22,4 +22,7 @@ class AttendanceUseCases {
 
   Stream<List<Attendance>> getUserAttendanceStream(String userId) =>
       _repository.getUserAttendanceStream(userId);
+
+  Future<void> updateOfficeSettings(OfficeSettings settings) =>
+      _repository.updateOfficeSettings(settings);
 }
