@@ -2,6 +2,7 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_ui_state.dart';
+import 'package:flutter/material.dart';
 
 class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
   final EmployeeUseCases _userUseCases;
@@ -10,6 +11,8 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
 
   final Obs<EmployeesUiState> uiState = Obs(EmployeesUiState.empty());
   EmployeesUiState get currentUiState => uiState.value;
+
+  final TextEditingController searchTextController = TextEditingController();
 
   @override
   void onInit() {
@@ -22,15 +25,39 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
 
     _userUseCases.getAllEmployees().listen(
       (List<Employee> employees) {
-        uiState.value = currentUiState.copyWith(employees: employees);
+        uiState.value = currentUiState.copyWith(
+          employees: employees,
+          filteredEmployees: employees,
+        );
       },
       onError: (error) {
-        addUserMessage('কর্মচারীদের তথ্য লোড করতে সমস্যা হয়েছে: $error');
+        addUserMessage('Failed to load employee information. $error');
       },
       onDone: () {
         toggleLoading(loading: false);
       },
     );
+  }
+
+  // lib/presentation/admin/employee/presenter/employees_presenter.dart ফাইলে
+
+  void searchEmployees(String query) {
+    if (query.isEmpty) {
+      uiState.value = currentUiState.copyWith(
+        filteredEmployees: currentUiState.employees,
+      );
+    } else {
+      final List<Employee> filteredList =
+          currentUiState.employees.where((employee) {
+        return employee.name?.toLowerCase().contains(query.toLowerCase()) ==
+                true ||
+            employee.employeeId?.toLowerCase().contains(query.toLowerCase()) ==
+                true;
+      }).toList();
+      uiState.value = currentUiState.copyWith(
+        filteredEmployees: filteredList,
+      );
+    }
   }
 
   void editEmployee(Employee employee) {

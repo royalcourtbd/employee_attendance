@@ -22,7 +22,7 @@ class EditProfileForm extends StatelessWidget {
       child: Column(
         children: [
           CustomTextField(
-            emailController: presenter.nameController,
+            textEditingController: presenter.nameController,
             theme: theme,
             hintText: 'Enter your name',
             onChanged: (value) {},
@@ -30,7 +30,7 @@ class EditProfileForm extends StatelessWidget {
           ),
           gapH25,
           CustomTextField(
-            emailController: presenter.emailController,
+            textEditingController: presenter.emailController,
             theme: theme,
             hintText: 'Enter your email',
             keyboardType: TextInputType.emailAddress,
@@ -39,7 +39,7 @@ class EditProfileForm extends StatelessWidget {
           ),
           gapH25,
           CustomTextField(
-            emailController: presenter.phoneController,
+            textEditingController: presenter.phoneController,
             theme: theme,
             hintText: 'Enter your phone number',
             keyboardType: TextInputType.phone,

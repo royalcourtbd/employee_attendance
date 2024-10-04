@@ -68,66 +68,33 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
     }
   }
 
-  Future<void> updateWorkDays(BuildContext context) async {
-    final List<String> allDays = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ];
-    final List<String> selectedDays = List.from(currentUiState.workDays);
-
-    final List<String>? result = await showDialog<List<String>>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Update Work Days'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return SingleChildScrollView(
-                child: ListBody(
-                  children: allDays.map((String day) {
-                    return CheckboxListTile(
-                      title: Text(day),
-                      value: selectedDays.contains(day),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value == true) {
-                            selectedDays.add(day);
-                          } else {
-                            selectedDays.remove(day);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => context.navigatorPop(),
-            ),
-            TextButton(
-              child: const Text('Done'),
-              onPressed: () {
-                context.navigatorPop(result: selectedDays);
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-    if (result != null) {
-      await updateSettings(workDays: result);
+  void toggleWorkDay(String day) {
+    final updatedWorkDays = [...currentUiState.workDays];
+    if (updatedWorkDays.contains(day)) {
+      updatedWorkDays.remove(day);
+    } else {
+      updatedWorkDays.add(day);
     }
+
+    uiState.value = currentUiState.copyWith(workDays: updatedWorkDays);
   }
+
+  Future<void> updateWorkingDays() async {
+    await toggleLoading(loading: true);
+    await updateSettings(workDays: currentUiState.workDays);
+    await toggleLoading(loading: false);
+  }
+
+  // Days of the week
+  final List<String> listOfDays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   Future<void> updateSettings({
     TimeOfDay? startTime,

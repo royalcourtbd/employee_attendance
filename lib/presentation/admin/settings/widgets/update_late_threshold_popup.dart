@@ -54,7 +54,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
             ),
             gapH20,
             CustomTextField(
-              emailController: _settingsPresenter.thresholdTextController,
+              textEditingController: _settingsPresenter.thresholdTextController,
               theme: theme,
               hintText: 'Write new late threshold here',
               keyboardType: TextInputType.number,

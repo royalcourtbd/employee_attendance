@@ -55,7 +55,7 @@ class UpdateWifiSsidPopup extends StatelessWidget {
             ),
             gapH20,
             CustomTextField(
-              emailController: _settingsPresenter.ssidTextController,
+              textEditingController: _settingsPresenter.ssidTextController,
               theme: theme,
               hintText: 'Write new wifi ssid here',
               keyboardType: TextInputType.text,

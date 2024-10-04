@@ -47,7 +47,7 @@ class LoginPage extends StatelessWidget {
                     LoginHeader(theme: theme),
                     gapH40,
                     CustomTextField(
-                      emailController: _emailController,
+                      textEditingController: _emailController,
                       theme: theme,
                       hintText: 'Enter your email',
                       keyboardType: TextInputType.emailAddress,
@@ -60,7 +60,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     gapH25,
                     CustomTextField(
-                      emailController: _passwordController,
+                      textEditingController: _passwordController,
                       theme: theme,
                       hintText: 'Enter your password',
                       isPassword: true,
