@@ -37,7 +37,7 @@ class AuthWrapper extends StatelessWidget {
 
                   if (appUser != null) {
                     if (appUser.role == 'admin') {
-                      return const AdminDashboardPage();
+                      return AdminDashboardPage();
                     } else {
                       return MainPage();
                     }

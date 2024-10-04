@@ -53,7 +53,6 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
       result.fold(
         (errorMessage) async {
           await addUserMessage(errorMessage);
-          showMessage(message: currentUiState.userMessage);
         },
         (Employee? user) async {
           if (user != null) {
@@ -65,12 +64,10 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
               await _userUseCases
                   .updateUser(user.copyWith(deviceToken: deviceToken));
               await addUserMessage('Logged in successfully');
-              showMessage(message: currentUiState.userMessage);
             }
           } else {
             await addUserMessage(
                 'An error occurred while logging in. Please try again.');
-            showMessage(message: currentUiState.userMessage);
           }
         },
       );
@@ -87,22 +84,21 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
   Future<void> createDemoUser() async {
     await toggleLoading(loading: true);
-    final user = await _userUseCases.createDemoUser();
+    final demoEmployee = await _userUseCases.createDemoUser();
     await toggleLoading(loading: false);
 
-    if (user != null) {
-      await addUserMessage('ডেমো ইউজার সফলভাবে তৈরি করা হয়েছে।');
-      showMessage(message: currentUiState.userMessage);
+    if (demoEmployee != null) {
+      await addUserMessage('Demo user created successfully');
     } else {
       await addUserMessage(
-          'ডেমো ইউজার তৈরি করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
-      showMessage(message: currentUiState.userMessage);
+          'An error occurred while creating demo user. Please try again.');
     }
   }
 
   @override
   Future<void> addUserMessage(String message) async {
     uiState.value = currentUiState.copyWith(userMessage: message);
+    return showMessage(message: currentUiState.userMessage);
   }
 
   @override

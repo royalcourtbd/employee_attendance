@@ -8,6 +8,7 @@ import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_presenter.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
@@ -43,7 +44,8 @@ class ServiceLocator {
     _serviceLocator
       ..registerLazySingleton(() => EmployeeUseCases(locate()))
       ..registerLazySingleton(() => GetGreetingUseCase())
-      ..registerLazySingleton(() => AttendanceUseCases(locate()));
+      ..registerLazySingleton(() => AttendanceUseCases(locate()))
+      ..registerLazySingleton(() => LogoutUseCase(locate()));
   }
 
   Future<void> _setupService() async {
@@ -62,17 +64,25 @@ class ServiceLocator {
 
   Future<void> _setupPresenter() async {
     _serviceLocator
-      ..registerFactory(() =>
-          loadPresenter(HomePresenter(locate(), locate(), locate(), locate())))
+      ..registerFactory(() => loadPresenter(HomePresenter(
+            locate(),
+            locate(),
+            locate(),
+            locate(),
+          )))
       ..registerLazySingleton(() =>
           loadPresenter(HistoryPagePresenter(locate(), locate(), locate())))
-      ..registerLazySingleton(
-          () => loadPresenter(ProfilePagePresenter(locate(), locate())))
+      ..registerLazySingleton(() => loadPresenter(ProfilePagePresenter(
+            locate(),
+            locate(),
+            locate(),
+          )))
       ..registerLazySingleton(() => loadPresenter(NotificationPresenter()))
       ..registerLazySingleton(() => loadPresenter(MainPagePresenter()))
       ..registerLazySingleton(() => loadPresenter(LoginPagePresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(EditProfilePresenter()))
-      ..registerLazySingleton(() => loadPresenter(AdminDashboardPresenter()))
+      ..registerLazySingleton(
+          () => loadPresenter(AdminDashboardPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(EmployeesPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())));
   }

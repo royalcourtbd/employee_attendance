@@ -7,6 +7,7 @@ import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -23,10 +24,23 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   @override
   Future<Employee?> createDemoUser() async {
     try {
-      final userCredential =
-          await _firebaseService.auth.createUserWithEmailAndPassword(
-        email: 'demo@demo.com',
-        password: '123456',
+      const email = 'ami@ami.com';
+      const password = '123456';
+
+      // Store the current user
+      final currentUser = _firebaseService.auth.currentUser;
+
+      // Create a secondary Firebase Auth instance
+      final secondaryApp = await Firebase.initializeApp(
+          name: 'SecondaryApp', options: Firebase.app().options);
+
+      final secondaryAuth =
+          firebase_auth.FirebaseAuth.instanceFor(app: secondaryApp);
+
+      // Create user with secondary Auth instance
+      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
 
       final employeeModel = EmployeeUserModel(
@@ -34,7 +48,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
         name: 'Demo User',
         role: 'employee',
         joiningDate: DateTime.now(),
-        email: 'demo@example.com',
+        email: email,
         employeeStatus: true,
       );
 
@@ -42,6 +56,18 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
           .collection(Urls.employees)
           .doc(employeeModel.id)
           .set(employeeModel.toJson());
+
+      // Delete the secondary app
+      await secondaryApp.delete();
+
+      // If there was a user logged in before, make sure they're still logged in
+      if (currentUser != null) {
+        await _firebaseService.auth.signInWithEmailAndPassword(
+            email: currentUser.email!,
+            password:
+                password // You'll need to handle this securely in a real app
+            );
+      }
 
       return employeeModel;
     } catch (e) {

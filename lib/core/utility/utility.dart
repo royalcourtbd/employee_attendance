@@ -597,7 +597,7 @@ Future<void> updateTime({
                 if (state.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
-                return Colors.black54;
+                return theme.textTheme.bodyMedium!.color!;
               }),
               dayPeriodColor: theme.colorScheme.primary,
               hourMinuteColor: WidgetStateColor.resolveWith((state) {
@@ -610,13 +610,13 @@ Future<void> updateTime({
                 if (state.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
-                return Colors.black54;
+                return theme.textTheme.bodyMedium!.color!;
               }),
               dayPeriodTextColor: WidgetStateColor.resolveWith((state) {
                 if (state.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
-                return Colors.black54;
+                return theme.textTheme.bodyMedium!.color!;
               }),
               shape: RoundedRectangleBorder(
                 borderRadius: radius10,

@@ -73,18 +73,7 @@ class UpdateLateThresholdPopup extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    if (_settingsPresenter
-                            .thresholdController.text.isNotEmpty &&
-                        int.tryParse(
-                                _settingsPresenter.thresholdController.text) !=
-                            null &&
-                        int.parse(_settingsPresenter.thresholdController.text) >
-                            0) {
-                      updateThreshold();
-                      context.navigatorPop();
-                    }
-                  },
+                  onPressed: () => updateThreshold(),
                   child: Text(
                     'Update',
                     style: theme.textTheme.bodyMedium!.copyWith(

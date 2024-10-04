@@ -9,6 +9,7 @@ import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
+
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 
@@ -19,6 +20,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
   final FirebaseService _firebaseService;
+
   final ProfilePagePresenter _profilePagePresenter;
 
   HomePresenter(

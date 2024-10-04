@@ -6,20 +6,26 @@ import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_ui_state.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   final EmployeeUseCases _userUseCases;
+  final LogoutUseCase _logoutUseCase;
+
   final FirebaseService _firebaseService;
 
-  ProfilePagePresenter(this._userUseCases, this._firebaseService);
-
-  late final HomePresenter _homePresenter = locate<HomePresenter>();
+  ProfilePagePresenter(
+    this._userUseCases,
+    this._firebaseService,
+    this._logoutUseCase,
+  );
 
   final Obs<ProfilePageUiState> uiState = Obs(ProfilePageUiState.empty());
   ProfilePageUiState get currentUiState => uiState.value;
+  late final HomePresenter _homePresenter = locate<HomePresenter>();
 
   @override
   void onInit() {
@@ -47,7 +53,6 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
         }
       },
       onError: (error) {
-        debugPrint('Error fetching user data: $error');
         addUserMessage('Error fetching user data');
       },
     );
@@ -63,7 +68,6 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
         await addUserMessage('Failed to fetch user data');
       }
     } catch (e) {
-      debugPrint('Error fetching user data: $e');
       await addUserMessage('Error fetching user data');
     } finally {
       await toggleLoading(loading: false);
@@ -77,7 +81,6 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
       uiState.value = currentUiState.copyWith(employee: updatedUser);
       await addUserMessage('User updated successfully');
     } catch (e) {
-      debugPrint('Error updating user: $e');
       await addUserMessage('Error updating employee');
     } finally {
       await toggleLoading(loading: false);
@@ -88,12 +91,10 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     await toggleLoading(loading: true);
     try {
       _homePresenter.resetAttendance();
-      await _userUseCases.logout();
+      await _logoutUseCase.execute();
       uiState.value = ProfilePageUiState.empty();
-
       showMessage(message: 'Logged out successfully');
     } catch (e) {
-      debugPrint('Error logging out: $e');
       await addUserMessage('Error logging out');
     } finally {
       await toggleLoading(loading: false);
@@ -103,6 +104,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   @override
   Future<void> addUserMessage(String message) async {
     uiState.value = currentUiState.copyWith(userMessage: message);
+    return showMessage(message: currentUiState.userMessage);
   }
 
   @override
