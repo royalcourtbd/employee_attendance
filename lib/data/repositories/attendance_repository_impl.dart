@@ -158,6 +158,23 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  Future<List<Attendance>> getTodaysAttendance() async {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    final querySnapshot = await _firebaseService.firestore
+        .collection(Urls.attendances)
+        .where('checkInTime', isGreaterThanOrEqualTo: startOfDay)
+        .where('checkInTime', isLessThan: endOfDay)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => AttendanceModel.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
   Stream<List<Attendance>> getUserAttendanceStream(String userId) {
     return _firebaseService.firestore
         .collection(Urls.attendances)

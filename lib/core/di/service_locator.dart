@@ -17,6 +17,7 @@ import 'package:employee_attendance/domain/usecases/get_user_stream_use_case.dar
 import 'package:employee_attendance/domain/usecases/login_use_case.dart';
 import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
+import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
 
 import 'package:employee_attendance/presentation/admin/attendance/presenter/view_attendance_presenter.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
@@ -109,6 +110,8 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(ViewAttendancePresenter()))
       ..registerLazySingleton(
-          () => loadPresenter(AddEmployeePresenter(locate(), locate())));
+          () => loadPresenter(AddEmployeePresenter(locate(), locate())))
+      ..registerLazySingleton(
+          () => loadPresenter(TodaysAttendancePresenter(locate())));
   }
 }
