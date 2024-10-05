@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 
 class ProfileId extends StatelessWidget {
   final ThemeData theme;
-  final String? phone;
+  final String employeeId;
 
-  const ProfileId({super.key, required this.theme, this.phone});
+  const ProfileId({
+    super.key,
+    required this.theme,
+    required this.employeeId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      phone ?? '+88017',
+      employeeId,
       style: theme.textTheme.bodyMedium!.copyWith(
         fontSize: fifteenPx,
         fontWeight: FontWeight.w500,

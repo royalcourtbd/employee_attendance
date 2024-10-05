@@ -5,7 +5,7 @@ import 'package:employee_attendance/core/external_libs/presentable_widget_builde
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
-import 'package:employee_attendance/presentation/common/primary_button.dart';
+import 'package:employee_attendance/presentation/common/loading_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class UpdateWorkingDaysPopup extends StatelessWidget {
@@ -91,13 +91,15 @@ class UpdateWorkingDaysPopup extends StatelessWidget {
                   }).toList(),
                 ),
                 gapH30,
-                PrimaryButton(
-                    theme: theme,
-                    buttonText: 'Update',
-                    onPressed: () {
-                      updateWorkingDays();
-                      context.navigatorPop();
-                    }),
+                LoadingButtonWidget(
+                  isLoading: _settingsPresenter.currentUiState.isLoading,
+                  theme: theme,
+                  buttonText: 'Update',
+                  onPressed: () {
+                    updateWorkingDays();
+                    context.navigatorPop();
+                  },
+                ),
               ],
             ),
           ),

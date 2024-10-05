@@ -25,17 +25,23 @@ class AddEmployeePresenter extends BasePresenter<AddEmployeeUiState> {
     uiState.value = currentUiState.copyWith(selectedRole: role);
   }
 
+  void updateJoiningDate(DateTime date) {
+    uiState.value = currentUiState.copyWith(selectedJoiningDate: date);
+  }
+
   Future<void> addEmployee() async {
     if (_validateInputs()) {
       await toggleLoading(loading: true);
       try {
         final newEmployeeId = await _generateNewEmployeeIdUseCase.execute();
+
         final newEmployee = Employee(
           id: '', // This will be set by Firebase
           documentId: '', // This will be set by Firebase
           name: nameController.text,
           email: emailController.text,
           designation: designationController.text,
+          joiningDate: currentUiState.selectedJoiningDate,
           phoneNumber: phoneController.text,
           role: currentUiState.selectedRole,
           employeeId: newEmployeeId,

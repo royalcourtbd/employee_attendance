@@ -103,7 +103,9 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
         name: employee.name,
         email: employee.email,
         role: employee.role,
+        employeeId: employee.employeeId,
         designation: employee.designation,
+        joiningDate: employee.joiningDate,
         phoneNumber: employee.phoneNumber,
         employeeStatus: employee.employeeStatus,
       );

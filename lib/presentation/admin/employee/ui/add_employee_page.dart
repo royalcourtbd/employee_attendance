@@ -2,7 +2,8 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_presenter.dart';
-import 'package:employee_attendance/presentation/common/primary_button.dart';
+import 'package:employee_attendance/presentation/common/date_picker_widget.dart';
+import 'package:employee_attendance/presentation/common/loading_button_widget.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +55,12 @@ class AddEmployeePage extends StatelessWidget {
                   keyboardType: TextInputType.phone,
                 ),
                 gapH20,
+                DatePickerWidget(
+                  selectedDate: uiState.selectedJoiningDate,
+                  onDateSelected: _addEmployeePresenter.updateJoiningDate,
+                  labelText: 'Joining Date',
+                ),
+                gapH20,
                 Text(
                   'Role:',
                   style: theme.textTheme.titleMedium,
@@ -81,7 +88,8 @@ class AddEmployeePage extends StatelessWidget {
                   ],
                 ),
                 gapH30,
-                PrimaryButton(
+                LoadingButtonWidget(
+                  isLoading: _addEmployeePresenter.currentUiState.isLoading,
                   theme: theme,
                   buttonText: 'Add Employee',
                   onPressed: () => _addEmployeePresenter.addEmployee(),

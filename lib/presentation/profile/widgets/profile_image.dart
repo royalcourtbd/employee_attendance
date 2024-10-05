@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:flutter/material.dart';
 
 class ProfileImage extends StatelessWidget {
@@ -16,16 +18,23 @@ class ProfileImage extends StatelessWidget {
         ),
       ),
       child: ClipOval(
-        child: CachedNetworkImage(
-          imageUrl: profileImage,
-          placeholder: (context, url) =>
-              const Icon(Icons.image, color: Colors.grey),
-          errorWidget: (context, url, error) =>
-              const Icon(Icons.error, color: Colors.grey),
-          width: 170,
-          height: 170,
-          fit: BoxFit.cover,
-        ),
+        child: profileImage.isNotEmpty
+            ? CachedNetworkImage(
+                imageUrl: profileImage,
+                placeholder: (context, url) =>
+                    const Icon(Icons.image, color: Colors.grey),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error, color: Colors.grey),
+                width: 170,
+                height: 170,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                SvgPath.icDemoUser,
+                width: 170,
+                height: 170,
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
