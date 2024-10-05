@@ -3,16 +3,25 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
-import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/domain/usecases/get_device_token_use_case.dart';
+import 'package:employee_attendance/domain/usecases/login_use_case.dart';
+import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 
 import 'package:flutter/material.dart';
 
 class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
-  final EmployeeUseCases _userUseCases;
+  final LoginUseCase _loginUseCase;
   final CreateDemoUserUseCase _createDemoUserUseCase;
-  LoginPagePresenter(this._userUseCases, this._createDemoUserUseCase);
+  final GetDeviceTokenUseCase _getDeviceTokenUseCase;
+  final UpdateUserUseCase _updateUserUseCase;
+  LoginPagePresenter(
+    this._createDemoUserUseCase,
+    this._loginUseCase,
+    this._updateUserUseCase,
+    this._getDeviceTokenUseCase,
+  );
 
   final Obs<LoginPageUiState> uiState = Obs(LoginPageUiState.empty());
   LoginPageUiState get currentUiState => uiState.value;
@@ -49,7 +58,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
       final String password = currentUiState.password.trim();
 
       await toggleLoading(loading: true);
-      final result = await _userUseCases.login(email, password);
+      final result = await _loginUseCase.execute(email, password);
       await toggleLoading(loading: false);
 
       result.fold(
@@ -58,13 +67,13 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
         },
         (Employee? user) async {
           if (user != null) {
-            final String? deviceToken = await _userUseCases.getDeviceToken();
+            final String? deviceToken = await _getDeviceTokenUseCase.execute();
             _mainPagePresenter.updateIndex(index: 0);
 
             if (deviceToken != null && deviceToken.isNotEmpty) {
               debugPrint('Device Token: $deviceToken');
-              await _userUseCases
-                  .updateUser(user.copyWith(deviceToken: deviceToken));
+              await _updateUserUseCase
+                  .execute(user.copyWith(deviceToken: deviceToken));
               await addUserMessage('Logged in successfully');
             }
           } else {

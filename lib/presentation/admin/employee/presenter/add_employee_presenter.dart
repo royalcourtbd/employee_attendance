@@ -1,14 +1,17 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
-import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
+import 'package:employee_attendance/domain/usecases/generate_new_employee_id_use_case.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_ui_state.dart';
 import 'package:flutter/material.dart';
 
 class AddEmployeePresenter extends BasePresenter<AddEmployeeUiState> {
-  final EmployeeUseCases _employeeUseCases;
+  final AddEmployeeUseCase _addEmployeeUseCase;
+  final GenerateNewEmployeeIdUseCase _generateNewEmployeeIdUseCase;
 
-  AddEmployeePresenter(this._employeeUseCases);
+  AddEmployeePresenter(
+      this._addEmployeeUseCase, this._generateNewEmployeeIdUseCase);
 
   final Obs<AddEmployeeUiState> uiState = Obs(AddEmployeeUiState.empty());
   AddEmployeeUiState get currentUiState => uiState.value;
@@ -26,17 +29,20 @@ class AddEmployeePresenter extends BasePresenter<AddEmployeeUiState> {
     if (_validateInputs()) {
       await toggleLoading(loading: true);
       try {
+        final newEmployeeId = await _generateNewEmployeeIdUseCase.execute();
         final newEmployee = Employee(
           id: '', // This will be set by Firebase
+          documentId: '', // This will be set by Firebase
           name: nameController.text,
           email: emailController.text,
           designation: designationController.text,
           phoneNumber: phoneController.text,
           role: currentUiState.selectedRole,
+          employeeId: newEmployeeId,
           employeeStatus: true,
         );
 
-        await _employeeUseCases.addEmployee(newEmployee);
+        await _addEmployeeUseCase.execute(newEmployee);
         await addUserMessage('Employee added successfully');
         _clearInputs();
       } catch (e) {

@@ -25,7 +25,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   @override
   Future<Employee?> createDemoUser() async {
     try {
-      const email = 'ami@ami.com';
+      const email = 'dfhg@jfdg.com';
       const password = '123456';
 
       // Store the current user
@@ -99,6 +99,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
 
       final employeeModel = EmployeeUserModel(
         id: userCredential.user!.uid,
+        documentId: userCredential.user!.uid,
         name: employee.name,
         email: employee.email,
         role: employee.role,

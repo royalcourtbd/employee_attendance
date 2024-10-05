@@ -5,22 +5,27 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
-import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
+import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
+import 'package:employee_attendance/domain/usecases/get_user_stream_use_case.dart';
 import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
+import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_ui_state.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
-  final EmployeeUseCases _userUseCases;
   final LogoutUseCase _logoutUseCase;
-
+  final UpdateUserUseCase _updateUserUseCase;
+  final FetchUserDataUseCase _fetchUserDataUseCase;
+  final GetUserStreamUseCase _getUserStreamUseCase;
   final FirebaseService _firebaseService;
 
   ProfilePagePresenter(
-    this._userUseCases,
     this._firebaseService,
     this._logoutUseCase,
+    this._fetchUserDataUseCase,
+    this._getUserStreamUseCase,
+    this._updateUserUseCase,
   );
 
   final Obs<ProfilePageUiState> uiState = Obs(ProfilePageUiState.empty());
@@ -44,7 +49,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
 
   void initUserStream(String userId) {
     debugPrint('User ID: $userId');
-    _userUseCases.getUserStream(userId).listen(
+    _getUserStreamUseCase.execute(userId).listen(
       (user) {
         if (user != null) {
           uiState.value = currentUiState.copyWith(employee: user);
@@ -61,7 +66,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   Future<void> fetchUserData(String userId) async {
     await toggleLoading(loading: true);
     try {
-      final user = await _userUseCases.fetchUserData(userId);
+      final user = await _fetchUserDataUseCase.execute(userId);
       if (user != null) {
         uiState.value = currentUiState.copyWith(employee: user);
       } else {
@@ -77,7 +82,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   Future<void> updateUser(Employee updatedUser) async {
     await toggleLoading(loading: true);
     try {
-      await _userUseCases.updateUser(updatedUser);
+      await _updateUserUseCase.execute(updatedUser);
       uiState.value = currentUiState.copyWith(employee: updatedUser);
       await addUserMessage('User updated successfully');
     } catch (e) {

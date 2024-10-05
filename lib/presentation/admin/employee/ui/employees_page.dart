@@ -24,35 +24,38 @@ class EmployeesPage extends StatelessWidget {
             title: const Text('Employees'),
           ),
           resizeToAvoidBottomInset: false,
-          body: Column(
-            children: [
-              Padding(
-                padding: padding10,
-                child: CustomTextField(
-                  textEditingController:
-                      _employeesPresenter.searchTextController,
-                  theme: theme,
-                  icon: Icons.search,
-                  hintText: 'Find Employee by Name or ID',
-                  onChanged: (value) =>
-                      _employeesPresenter.searchEmployees(value),
-                ),
-              ),
-              ListView.builder(
-                itemCount: uiState.filteredEmployees.length,
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final employee = uiState.filteredEmployees[index];
-
-                  return EmployeeListItem(
-                    employee: employee,
-                    onEdit: () => _employeesPresenter.editEmployee(employee),
+          body: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: padding10,
+                  child: CustomTextField(
+                    textEditingController:
+                        _employeesPresenter.searchTextController,
                     theme: theme,
-                  );
-                },
-              ),
-            ],
+                    icon: Icons.search,
+                    hintText: 'Find Employee by Name or ID',
+                    onChanged: (value) =>
+                        _employeesPresenter.searchEmployees(value),
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: uiState.filteredEmployees.length,
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final employee = uiState.filteredEmployees[index];
+
+                    return EmployeeListItem(
+                      employee: employee,
+                      onEdit: () => _employeesPresenter.editEmployee(employee),
+                      theme: theme,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => _employeesPresenter.addEmployee(context: context),
