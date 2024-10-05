@@ -55,7 +55,7 @@ class EmployeesPage extends StatelessWidget {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: _employeesPresenter.addEmployee,
+            onPressed: () => _employeesPresenter.addEmployee(context: context),
             child: const Icon(
               Icons.add,
               color: Colors.white,

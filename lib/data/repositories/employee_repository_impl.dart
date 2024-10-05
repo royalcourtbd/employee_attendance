@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
@@ -72,6 +73,77 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       return employeeModel;
     } catch (e) {
       debugPrint('Error creating demo user: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<void> addEmployee(Employee employee) async {
+    try {
+      const password = '123456';
+
+      // Store the current user
+      final currentUser = _firebaseService.auth.currentUser;
+
+      // Create a secondary Firebase Auth instance
+      final secondaryApp = await Firebase.initializeApp(
+          name: 'SecondaryApp', options: Firebase.app().options);
+
+      final secondaryAuth =
+          firebase_auth.FirebaseAuth.instanceFor(app: secondaryApp);
+
+      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
+        email: employee.email!,
+        password: password,
+      );
+
+      final employeeModel = EmployeeUserModel(
+        id: userCredential.user!.uid,
+        name: employee.name,
+        email: employee.email,
+        role: employee.role,
+        designation: employee.designation,
+        phoneNumber: employee.phoneNumber,
+        employeeStatus: employee.employeeStatus,
+      );
+
+      await _firebaseService.firestore
+          .collection(Urls.employees)
+          .doc(employeeModel.id)
+          .set(employeeModel.toJson());
+
+      // Delete the secondary app
+      await secondaryApp.delete();
+
+      // If there was a user logged in before, make sure they're still logged in
+      if (currentUser != null) {
+        await _firebaseService.auth.signInWithEmailAndPassword(
+            email: currentUser.email!,
+            password:
+                password // You'll need to handle this securely in a real app
+            );
+      }
+    } catch (e) {
+      showMessage(message: 'Failed to add employee: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String?> getLastEmployeeId() async {
+    try {
+      final querySnapshot = await _firebaseService.firestore
+          .collection(Urls.employees)
+          .orderBy('employeeId', descending: true)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.get('employeeId') as String?;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error getting last employee ID: $e');
       return null;
     }
   }

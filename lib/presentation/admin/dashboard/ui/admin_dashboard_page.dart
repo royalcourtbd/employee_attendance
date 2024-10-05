@@ -6,7 +6,6 @@ import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin
 import 'package:employee_attendance/presentation/admin/employee/ui/employees_page.dart';
 import 'package:employee_attendance/presentation/admin/settings/ui/settings_page.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/widgets/admin_dashboard_grid_item.dart';
-import 'package:employee_attendance/presentation/admin/settings/widgets/update_working_days_popup.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/widgets/log_out_dialog.dart';
 import 'package:flutter/material.dart';
@@ -66,13 +65,6 @@ class AdminDashboardPage extends StatelessWidget {
             onPressed: () => locate<LoginPagePresenter>().createDemoUser(),
             child: const Text('Add user'),
           ),
-          ElevatedButton(
-            onPressed: () => UpdateWorkingDaysPopup.show(
-              context: context,
-              updateWorkingDays: () {},
-            ),
-            child: const Text('show working days'),
-          )
         ],
       ),
     );

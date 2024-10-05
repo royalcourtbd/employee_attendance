@@ -24,15 +24,23 @@ class ProfilePicWidget extends StatelessWidget {
         ),
       ),
       child: ClipOval(
-        child: CachedNetworkImage(
-          imageUrl: networkImageURL,
-          placeholder: (context, url) =>
-              const Icon(Icons.image, color: Colors.grey),
-          errorWidget: (context, url, error) => Image.asset(SvgPath.icDemoUser),
-          width: EmployeeAttendanceScreen.width * 0.13,
-          height: EmployeeAttendanceScreen.width * 0.13,
-          fit: BoxFit.cover,
-        ),
+        child: networkImageURL.isNotEmpty
+            ? CachedNetworkImage(
+                imageUrl: networkImageURL,
+                placeholder: (context, url) =>
+                    const Icon(Icons.image, color: Colors.grey),
+                errorWidget: (context, url, error) =>
+                    Image.asset(SvgPath.icDemoUser),
+                width: EmployeeAttendanceScreen.width * 0.13,
+                height: EmployeeAttendanceScreen.width * 0.13,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                SvgPath.icDemoUser,
+                width: EmployeeAttendanceScreen.width * 0.13,
+                height: EmployeeAttendanceScreen.width * 0.13,
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }

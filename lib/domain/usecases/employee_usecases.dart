@@ -7,7 +7,6 @@ class EmployeeUseCases {
 
   EmployeeUseCases(this._userRepository);
 
-  Future<Employee?> createDemoUser() => _userRepository.createDemoUser();
   Future<Either<String, Employee?>> login(String email, String password) =>
       _userRepository.login(email, password);
   Future<void> logout() async {
@@ -22,6 +21,9 @@ class EmployeeUseCases {
   Stream<List<Employee>> getAllEmployees() {
     return _userRepository.getAllEmployees();
   }
+
+  Future<void> addEmployee(Employee employee) =>
+      _userRepository.addEmployee(employee);
 
   Future<String?> getDeviceToken() => _userRepository.getDeviceToken();
 }

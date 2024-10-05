@@ -1,7 +1,9 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_ui_state.dart';
+import 'package:employee_attendance/presentation/admin/employee/ui/add_employee_page.dart';
 import 'package:flutter/material.dart';
 
 class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
@@ -64,7 +66,8 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
     // Implement edit employee logic
   }
 
-  void addEmployee() {
+  void addEmployee({required BuildContext context}) {
+    context.navigatorPush(AddEmployeePage());
     // Implement add employee logic
   }
 

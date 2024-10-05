@@ -2,6 +2,7 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/employee_usecases.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
@@ -10,7 +11,8 @@ import 'package:flutter/material.dart';
 
 class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
   final EmployeeUseCases _userUseCases;
-  LoginPagePresenter(this._userUseCases);
+  final CreateDemoUserUseCase _createDemoUserUseCase;
+  LoginPagePresenter(this._userUseCases, this._createDemoUserUseCase);
 
   final Obs<LoginPageUiState> uiState = Obs(LoginPageUiState.empty());
   LoginPageUiState get currentUiState => uiState.value;
@@ -84,7 +86,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
   Future<void> createDemoUser() async {
     await toggleLoading(loading: true);
-    final demoEmployee = await _userUseCases.createDemoUser();
+    final demoEmployee = await _createDemoUserUseCase.execute();
     await toggleLoading(loading: false);
 
     if (demoEmployee != null) {

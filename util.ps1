@@ -126,7 +126,7 @@ switch ($args[0]) {
     স্ক্রিপ্টটি চালানোর জন্য নিম্নলিখিত কমান্ড ব্যবহার করুন:
     .\flutter_script.ps1 [build|cleanup|setup|unused]
 
-    যেমন: .\util.ps1 build
+    যেমন: .\flutter_script.ps1 build
 
     
     #>
