@@ -6,7 +6,9 @@ class OfficeSettings extends Equatable {
   final int lateThreshold;
   final List<String> workDays;
   final String timeZone;
-  final String ssid; // New property
+  final String ssid;
+  final double latitude;
+  final double longitude;
 
   const OfficeSettings({
     required this.startTime,
@@ -14,7 +16,9 @@ class OfficeSettings extends Equatable {
     required this.lateThreshold,
     required this.workDays,
     required this.timeZone,
-    required this.ssid, // Add this
+    required this.ssid,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override
@@ -24,6 +28,8 @@ class OfficeSettings extends Equatable {
         lateThreshold,
         workDays,
         timeZone,
-        ssid, // Add this
+        ssid,
+        latitude,
+        longitude,
       ];
 }

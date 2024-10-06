@@ -153,6 +153,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         ],
         timeZone: 'Asia/Dhaka',
         ssid: 'DefaultSSID', // Add this
+        latitude: 23.8103,
+        longitude: 90.4125,
       );
     }
   }

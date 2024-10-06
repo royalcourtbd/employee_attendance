@@ -17,6 +17,8 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
 
   final TextEditingController thresholdTextController = TextEditingController();
   final TextEditingController ssidTextController = TextEditingController();
+  final TextEditingController latitudeTextController = TextEditingController();
+  final TextEditingController longitudeTextController = TextEditingController();
 
   @override
   void onInit() {
@@ -35,6 +37,8 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
           lateThreshold: settings.lateThreshold,
           workDays: settings.workDays,
           ssid: settings.ssid,
+          latitude: settings.latitude,
+          longitude: settings.longitude,
         );
       },
       onError: (error) {
@@ -85,6 +89,27 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
     await toggleLoading(loading: false);
   }
 
+  void updateLatitudeLongitude({
+    required BuildContext context,
+    required VoidCallback navigatorPop,
+  }) {
+    if (_isValidLatitudeLongitude()) {
+      final latitude = double.parse(latitudeTextController.text);
+      final longitude = double.parse(longitudeTextController.text);
+      updateSettings(latitude: latitude, longitude: longitude);
+      latitudeTextController.clear();
+      longitudeTextController.clear();
+      navigatorPop();
+    }
+  }
+
+  bool _isValidLatitudeLongitude() {
+    return latitudeTextController.text.isNotEmpty &&
+        longitudeTextController.text.isNotEmpty &&
+        double.tryParse(latitudeTextController.text) != null &&
+        double.tryParse(longitudeTextController.text) != null;
+  }
+
   // Days of the week
   final List<String> listOfDays = [
     'Monday',
@@ -102,6 +127,8 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
     int? lateThreshold,
     List<String>? workDays,
     String? ssid,
+    double? latitude,
+    double? longitude,
   }) async {
     await toggleLoading(loading: true);
     try {
@@ -133,6 +160,8 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
         workDays: workDays ?? currentSettings.workDays,
         timeZone: currentSettings.timeZone,
         ssid: ssid ?? currentSettings.ssid, // Add this
+        latitude: latitude ?? currentSettings.latitude,
+        longitude: longitude ?? currentSettings.longitude,
       );
 
       await _attendanceUseCases.updateOfficeSettings(updatedSettings);

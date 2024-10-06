@@ -8,7 +8,9 @@ class OfficeSettingsModel extends OfficeSettings {
     required super.lateThreshold,
     required super.workDays,
     required super.timeZone,
-    required super.ssid, // Add this
+    required super.ssid,
+    required super.latitude,
+    required super.longitude,
   });
 
   factory OfficeSettingsModel.fromJson(Map<String, dynamic> json) {
@@ -18,7 +20,9 @@ class OfficeSettingsModel extends OfficeSettings {
       lateThreshold: json['lateThreshold'] as int,
       workDays: List<String>.from(json['workDays']),
       timeZone: json['timeZone'] as String,
-      ssid: json['ssid'] as String, // Add this
+      ssid: json['ssid'] as String,
+      latitude: json['latitude'] as double,
+      longitude: json['longitude'] as double,
     );
   }
 
@@ -29,7 +33,9 @@ class OfficeSettingsModel extends OfficeSettings {
       'lateThreshold': lateThreshold,
       'workDays': workDays,
       'timeZone': timeZone,
-      'ssid': ssid, // Add this
+      'ssid': ssid,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -40,7 +46,9 @@ class OfficeSettingsModel extends OfficeSettings {
       lateThreshold: settings.lateThreshold,
       workDays: settings.workDays,
       timeZone: settings.timeZone,
-      ssid: settings.ssid, // Add this
+      ssid: settings.ssid,
+      latitude: settings.latitude,
+      longitude: settings.longitude,
     );
   }
 }

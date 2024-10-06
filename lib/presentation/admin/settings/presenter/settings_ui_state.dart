@@ -7,6 +7,8 @@ class SettingsUiState extends BaseUiState {
   final int lateThreshold;
   final List<String> workDays;
   final String ssid; // Add this new property
+  final double latitude;
+  final double longitude;
 
   const SettingsUiState({
     required super.isLoading,
@@ -16,6 +18,8 @@ class SettingsUiState extends BaseUiState {
     required this.lateThreshold,
     required this.workDays,
     required this.ssid, // Add this
+    required this.latitude,
+    required this.longitude,
   });
 
   factory SettingsUiState.empty() {
@@ -27,6 +31,8 @@ class SettingsUiState extends BaseUiState {
       lateThreshold: 10,
       workDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
       ssid: '', // Add this with a default empty string
+      latitude: 0.0,
+      longitude: 0.0,
     );
   }
 
@@ -39,6 +45,8 @@ class SettingsUiState extends BaseUiState {
         lateThreshold,
         workDays,
         ssid, // Add this
+        latitude,
+        longitude,
       ];
 
   SettingsUiState copyWith({
@@ -49,6 +57,8 @@ class SettingsUiState extends BaseUiState {
     int? lateThreshold,
     List<String>? workDays,
     String? ssid, // Add this
+    double? latitude,
+    double? longitude,
   }) {
     return SettingsUiState(
       isLoading: isLoading ?? this.isLoading,
@@ -58,6 +68,8 @@ class SettingsUiState extends BaseUiState {
       lateThreshold: lateThreshold ?? this.lateThreshold,
       workDays: workDays ?? this.workDays,
       ssid: ssid ?? this.ssid, // Add this
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }

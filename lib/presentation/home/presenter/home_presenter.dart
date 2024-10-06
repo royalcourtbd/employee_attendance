@@ -191,6 +191,8 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
         ],
         timeZone: 'Asia/Dhaka',
         ssid: 'DefaultSSID', // Add this
+        latitude: 0.0,
+        longitude: 0.0,
       );
 
       OfficeSettingsModel officeSettingsModel =

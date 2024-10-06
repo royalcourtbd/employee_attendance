@@ -4,6 +4,7 @@ import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/settings_item.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/update_late_threshold_popup.dart';
+import 'package:employee_attendance/presentation/admin/settings/widgets/update_latitude_longitude_popup.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/update_wifi_ssid_popup.dart';
 import 'package:employee_attendance/presentation/admin/settings/widgets/update_working_days_popup.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
@@ -72,6 +73,18 @@ class SettingsPage extends StatelessWidget {
                   context: context,
                   updateWorkingDays: () =>
                       _settingsPresenter.updateWorkingDays(),
+                ),
+              ),
+              SettingsItem(
+                title: 'Location',
+                value: '${uiState.latitude}, ${uiState.longitude}',
+                onTap: () => UpdateLatitudeLongitudePopup.show(
+                  context: context,
+                  updateLatitudeLongitude: () =>
+                      _settingsPresenter.updateLatitudeLongitude(
+                    context: context,
+                    navigatorPop: () => context.navigatorPop(),
+                  ),
                 ),
               ),
               TextButton(
