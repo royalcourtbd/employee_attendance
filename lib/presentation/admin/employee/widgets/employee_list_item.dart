@@ -43,7 +43,7 @@ class EmployeeListItem extends StatelessWidget {
                           fontSize: sixteenPx,
                         )),
                     Text(
-                      'as a ${employee.designation}',
+                      employee.email ?? '',
                       style: theme.textTheme.bodyMedium!.copyWith(
                         fontSize: thirteenPx,
                         fontWeight: FontWeight.w400,

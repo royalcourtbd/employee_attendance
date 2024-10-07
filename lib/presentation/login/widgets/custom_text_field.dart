@@ -6,7 +6,7 @@ import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
-    required TextEditingController textEditingController,
+    this.textEditingController,
     required this.theme,
     required this.hintText,
     this.isPassword = false,
@@ -14,9 +14,9 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.icon,
     this.validator,
-  }) : _textEditingController = textEditingController;
+  });
 
-  final TextEditingController _textEditingController;
+  final TextEditingController? textEditingController;
   final ThemeData theme;
   final String hintText;
   final bool? isPassword;
@@ -33,7 +33,7 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: isPassword!,
       keyboardType: keyboardType,
-      controller: _textEditingController,
+      controller: textEditingController,
       style: theme.textTheme.bodyMedium!.copyWith(
         fontSize: fourteenPx,
       ),

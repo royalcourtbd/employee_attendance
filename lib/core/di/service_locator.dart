@@ -111,7 +111,9 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(ViewAttendancePresenter()))
       ..registerLazySingleton(
           () => loadPresenter(AddEmployeePresenter(locate(), locate())))
-      ..registerLazySingleton(
-          () => loadPresenter(TodaysAttendancePresenter(locate())));
+      ..registerLazySingleton(() => loadPresenter(TodaysAttendancePresenter(
+            locate(),
+            locate(),
+          )));
   }
 }
