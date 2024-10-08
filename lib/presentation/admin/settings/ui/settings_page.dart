@@ -47,7 +47,7 @@ class SettingsPage extends StatelessWidget {
               SettingsItem(
                 title: 'SSID',
                 value: uiState.ssid,
-                onTap: () => UpdateWifiSsidPopup.show(
+                onTap: () => UpdateWifiSsidPopUp.show(
                   context: context,
                   updateSsid: () => _settingsPresenter.updateWifiSSID(
                     context: context,

@@ -34,7 +34,7 @@ class HistoryPagePresenter extends BasePresenter<HistoryPageUiState> {
     if (userId != null) {
       initUserAttendanceStream(userId);
     } else {
-      addUserMessage('ইউজার পাওয়া যায়নি');
+      addUserMessage('User not found');
     }
   }
 

@@ -7,8 +7,8 @@ import 'package:employee_attendance/presentation/admin/settings/presenter/settin
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
-class UpdateWifiSsidPopup extends StatelessWidget {
-  UpdateWifiSsidPopup({super.key, required this.updateSsid});
+class UpdateWifiSsidPopUp extends StatelessWidget {
+  UpdateWifiSsidPopUp({super.key, required this.updateSsid});
   final VoidCallback updateSsid;
 
   static Future<void> show({
@@ -17,9 +17,7 @@ class UpdateWifiSsidPopup extends StatelessWidget {
   }) async {
     await showAnimatedDialog(
       context: context,
-      builder: (context) => UpdateWifiSsidPopup(
-        updateSsid: updateSsid,
-      ),
+      builder: (context) => UpdateWifiSsidPopUp(updateSsid: updateSsid),
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
       barrierDismissible: true,
