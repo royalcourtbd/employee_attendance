@@ -234,7 +234,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Stream<List<Employee>> getAllEmployees() {
+  Stream<List<EmployeeUserModel>> getAllEmployees() {
     return _firebaseService.firestore
         .collection(Urls.employees)
         .snapshots()

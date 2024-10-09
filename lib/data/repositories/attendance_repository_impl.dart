@@ -136,7 +136,6 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     if (doc.exists && doc.data() != null) {
       return OfficeSettingsModel.fromJson(doc.data()!);
     } else {
-      // লগ করুন যে ডিফল্ট সেটিংস ব্যবহার করা হচ্ছে
       debugPrint('Warning: Using default office settings');
       return OfficeSettingsModel(
         startTime: DateTime(DateTime.now().year, DateTime.now().month,
@@ -160,20 +159,19 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Future<List<Attendance>> getTodaysAttendance() async {
+  Stream<List<Attendance>> getTodaysAttendanceStream() {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
-    final querySnapshot = await _firebaseService.firestore
+    return _firebaseService.firestore
         .collection(Urls.attendances)
         .where('checkInTime', isGreaterThanOrEqualTo: startOfDay)
         .where('checkInTime', isLessThan: endOfDay)
-        .get();
-
-    return querySnapshot.docs
-        .map((doc) => AttendanceModel.fromJson(doc.data()))
-        .toList();
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => AttendanceModel.fromJson(doc.data()))
+            .toList());
   }
 
   @override

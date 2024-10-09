@@ -7,6 +7,7 @@ import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_all_employees_use_case.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_ui_state.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TodaysAttendancePresenter extends BasePresenter<TodaysAttendanceUiState> {
   final AttendanceUseCases _attendanceUseCases;
@@ -27,27 +28,29 @@ class TodaysAttendancePresenter extends BasePresenter<TodaysAttendanceUiState> {
     _loadTodaysAttendance();
   }
 
-  Future<void> _loadTodaysAttendance() async {
-    await toggleLoading(loading: true);
-    try {
-      final todaysAttendance = await _attendanceUseCases.getTodaysAttendance();
-      final allEmployees = await _getAllEmployeesUseCase.execute().first
-          as List<EmployeeUserModel>;
+  void _loadTodaysAttendance() {
+    toggleLoading(loading: true);
 
-      final attendancesWithEmployee =
-          _combineAttendancesWithEmployees(todaysAttendance, allEmployees);
-      final summary = _calculateSummary(attendancesWithEmployee);
-
-      uiState.value = currentUiState.copyWith(
-        attendancesWithEmployee: attendancesWithEmployee,
-        summary: summary,
-        filteredAttendancesWithEmployee: attendancesWithEmployee,
-      );
-    } catch (e) {
-      await addUserMessage('আজকের অ্যাটেনডেন্স লোড করতে সমস্যা হয়েছে: $e');
-    } finally {
-      await toggleLoading(loading: false);
-    }
+    Rx.combineLatest2<List<Attendance>, List<EmployeeUserModel>,
+            List<AttendanceWithEmployee>>(
+        _attendanceUseCases.getTodaysAttendanceStream(),
+        _getAllEmployeesUseCase.execute(), (attendances, employees) {
+      return _combineAttendancesWithEmployees(attendances, employees);
+    }).listen(
+      (attendancesWithEmployee) {
+        final summary = _calculateSummary(attendancesWithEmployee);
+        uiState.value = currentUiState.copyWith(
+          attendancesWithEmployee: attendancesWithEmployee,
+          summary: summary,
+          filteredAttendancesWithEmployee: attendancesWithEmployee,
+          isLoading: false,
+        );
+      },
+      onError: (error) {
+        addUserMessage('Faild To load Today Attendance: $error');
+        toggleLoading(loading: false);
+      },
+    );
   }
 
   List<AttendanceWithEmployee> _combineAttendancesWithEmployees(

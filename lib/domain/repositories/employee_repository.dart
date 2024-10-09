@@ -1,3 +1,4 @@
+import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -10,7 +11,7 @@ abstract class EmployeeRepository {
   Future<Employee?> fetchUserData(String userId);
   Future<void> updateUser(Employee user);
   Stream<Employee?> getUserStream(String userId);
-  Stream<List<Employee>> getAllEmployees();
+  Stream<List<EmployeeUserModel>> getAllEmployees();
 
   Future<String?> getDeviceToken();
 }
