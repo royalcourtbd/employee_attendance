@@ -3,6 +3,7 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/common/loading_button_widget.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
@@ -68,7 +69,7 @@ class LoginPage extends StatelessWidget {
                       _loginPresenter.updatePassword(password: value);
                       _loginPresenter.formKey.currentState!.validate();
                     },
-                    validator: _loginPresenter.validatePassword,
+                    validator: validatePassword,
                   ),
                   const Spacer(),
                   LoadingButtonWidget(

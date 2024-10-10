@@ -93,10 +93,8 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   void _listenToAuthStateChanges() {
     _firebaseService.auth.authStateChanges().listen((user) {
       if (user == null) {
-        // User logged out, reset the state
         resetState();
       } else {
-        // User logged in, reinitialize streams
         initTodayAttendanceStream();
         _updateButtonState();
       }

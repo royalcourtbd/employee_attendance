@@ -185,6 +185,20 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
+  Future<void> changePassword(String newPassword) async {
+    try {
+      final user = _firebaseService.auth.currentUser;
+      if (user != null) {
+        await user.updatePassword(newPassword);
+      } else {
+        throw Exception('No user is currently signed in.');
+      }
+    } catch (e) {
+      throw Exception('Failed to change password: $e');
+    }
+  }
+
+  @override
   Future<Employee?> fetchUserData(String userId) async {
     try {
       final doc = await _firebaseService.firestore

@@ -7,6 +7,7 @@ import 'package:employee_attendance/domain/repositories/employee_repository.dart
 import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
+import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
 import 'package:employee_attendance/domain/usecases/generate_new_employee_id_use_case.dart';
@@ -64,7 +65,8 @@ class ServiceLocator {
       ..registerLazySingleton(() => GetDeviceTokenUseCase(locate()))
       ..registerLazySingleton(() => GetUserStreamUseCase(locate()))
       ..registerLazySingleton(() => LoginUseCase(locate()))
-      ..registerLazySingleton(() => UpdateUserUseCase(locate()));
+      ..registerLazySingleton(() => UpdateUserUseCase(locate()))
+      ..registerLazySingleton(() => ChangePasswordUseCase(locate()));
   }
 
   Future<void> _setupService() async {
@@ -92,6 +94,7 @@ class ServiceLocator {
       ..registerLazySingleton(() =>
           loadPresenter(HistoryPagePresenter(locate(), locate(), locate())))
       ..registerLazySingleton(() => loadPresenter(ProfilePagePresenter(
+            locate(),
             locate(),
             locate(),
             locate(),

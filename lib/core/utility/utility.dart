@@ -593,6 +593,16 @@ String getFormattedDuration(Duration? duration) {
   return '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
 }
 
+String? validatePassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter your password';
+  }
+  if (value.length < 6) {
+    return 'Password must be at least 6 characters';
+  }
+  return null;
+}
+
 Future<void> updateTime({
   required BuildContext context,
   required String timeType,

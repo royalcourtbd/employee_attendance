@@ -2,13 +2,13 @@ import 'package:employee_attendance/core/config/employee_attendance_screen.dart'
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:flutter/material.dart';
 
-class ProfileOption extends StatelessWidget {
+class ProfileOptionTile extends StatelessWidget {
   final IconData icon;
   final String text;
   final ThemeData theme;
   final VoidCallback onTap;
 
-  const ProfileOption({
+  const ProfileOptionTile({
     super.key,
     required this.theme,
     required this.icon,

@@ -41,16 +41,6 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
     return null;
   }
 
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
   Future<void> handleLogin(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();

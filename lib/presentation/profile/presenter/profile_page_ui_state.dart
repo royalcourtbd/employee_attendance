@@ -3,11 +3,15 @@ import 'package:employee_attendance/domain/entities/employee.dart';
 
 class ProfilePageUiState extends BaseUiState {
   final Employee? employee;
+  final bool isUpdatingImage;
+  final double uploadProgress;
 
   const ProfilePageUiState({
     required super.isLoading,
     required super.userMessage,
     this.employee,
+    required this.isUpdatingImage,
+    required this.uploadProgress,
   });
 
   factory ProfilePageUiState.empty() {
@@ -15,6 +19,8 @@ class ProfilePageUiState extends BaseUiState {
       isLoading: false,
       userMessage: '',
       employee: null,
+      isUpdatingImage: false,
+      uploadProgress: 0,
     );
   }
 
@@ -23,17 +29,23 @@ class ProfilePageUiState extends BaseUiState {
         isLoading,
         userMessage,
         employee,
+        isUpdatingImage,
+        uploadProgress,
       ];
 
   ProfilePageUiState copyWith({
     bool? isLoading,
     String? userMessage,
     Employee? employee,
+    bool? isUpdatingImage,
+    double? uploadProgress,
   }) {
     return ProfilePageUiState(
       isLoading: isLoading ?? this.isLoading,
       userMessage: userMessage ?? this.userMessage,
       employee: employee ?? this.employee,
+      isUpdatingImage: isUpdatingImage ?? this.isUpdatingImage,
+      uploadProgress: uploadProgress ?? this.uploadProgress,
     );
   }
 }

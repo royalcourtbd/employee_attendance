@@ -41,7 +41,7 @@ class TodayAttendanceItem extends StatelessWidget {
                       fontSize: sixteenPx,
                     )),
                 Text(
-                  '${getFormattedDate(item.attendance.checkOutTime)} • ${getFormattedDate(item.attendance.checkOutTime)}',
+                  '${getFormattedTime(item.attendance.checkInTime)} • ${getFormattedTime(item.attendance.checkOutTime)}',
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: thirteenPx,
                     fontWeight: FontWeight.w400,
@@ -53,7 +53,7 @@ class TodayAttendanceItem extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  'Hours:',
+                  'Hours',
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: thirteenPx,
                     fontWeight: FontWeight.w400,

@@ -1,17 +1,23 @@
 // lib/presentation/profile/presenter/profile_page_presenter.dart
 
+import 'dart:io';
+
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_user_stream_use_case.dart';
 import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_ui_state.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   final LogoutUseCase _logoutUseCase;
@@ -19,6 +25,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   final FetchUserDataUseCase _fetchUserDataUseCase;
   final GetUserStreamUseCase _getUserStreamUseCase;
   final FirebaseService _firebaseService;
+  final ChangePasswordUseCase _changePasswordUseCase;
 
   ProfilePagePresenter(
     this._firebaseService,
@@ -26,11 +33,18 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     this._fetchUserDataUseCase,
     this._getUserStreamUseCase,
     this._updateUserUseCase,
+    this._changePasswordUseCase,
   );
 
   final Obs<ProfilePageUiState> uiState = Obs(ProfilePageUiState.empty());
   ProfilePageUiState get currentUiState => uiState.value;
   late final HomePresenter _homePresenter = locate<HomePresenter>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController currentPasswordController =
+      TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   void onInit() {
@@ -92,6 +106,54 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     }
   }
 
+  Future<void> updateProfileImage({required String userId}) async {
+    try {
+      final XFile? image = await _firebaseService.imagePicker
+          .pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        await addUserMessage('No image selected');
+        return;
+      }
+      // final String userId = currentUiState.employee?.id ?? '';
+
+      if (userId.isEmpty) {
+        await addUserMessage('User ID not found');
+        return;
+      }
+      uiState.value = currentUiState.copyWith(isUpdatingImage: true);
+      final File imageFile = File(image.path);
+      final String fileName = 'profile_images/$userId.jpg';
+      final Reference storageRef =
+          _firebaseService.storage.ref().child(fileName);
+
+      // Use putData instead of putFile
+      final Uint8List imageData = await imageFile.readAsBytes();
+      final UploadTask uploadTask = storageRef.putData(imageData);
+
+      // Listen to upload progress
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        double progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        uiState.value = currentUiState.copyWith(uploadProgress: progress);
+      });
+
+      final TaskSnapshot taskSnapshot = await uploadTask;
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      final updatedEmployee =
+          currentUiState.employee?.copyWith(image: downloadUrl);
+      if (updatedEmployee != null) {
+        await updateUser(updatedEmployee);
+        await addUserMessage('Successfully updated profile image');
+      }
+    } catch (e) {
+      await addUserMessage('Error uploading image: $e');
+    } finally {
+      uiState.value = currentUiState.copyWith(
+        isUpdatingImage: false,
+        uploadProgress: 0,
+      );
+    }
+  }
+
   Future<void> logout() async {
     await toggleLoading(loading: true);
     try {
@@ -104,6 +166,38 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     } finally {
       await toggleLoading(loading: false);
     }
+  }
+
+  Future<void> changePassword(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      if (_validateInputs()) {
+        await toggleLoading(loading: true);
+        try {
+          await _changePasswordUseCase.execute(newPasswordController.text);
+          await addUserMessage('Password changed successfully');
+          _clearInputs();
+          await toggleLoading(loading: false);
+          context.navigatorPop();
+        } catch (e) {
+          await addUserMessage('Failed to change password: $e');
+        }
+      }
+    }
+  }
+
+  bool _validateInputs() {
+    if (newPasswordController.text != confirmPasswordController.text) {
+      addUserMessage('New password and confirm password do not match');
+      return false;
+    }
+    return true;
+  }
+
+  void _clearInputs() {
+    currentPasswordController.clear();
+    newPasswordController.clear();
+    confirmPasswordController.clear();
   }
 
   @override

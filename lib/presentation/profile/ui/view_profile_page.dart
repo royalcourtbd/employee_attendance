@@ -31,9 +31,9 @@ class ViewProfilePage extends StatelessWidget {
                   theme: theme,
                   employee: _viewProfilePresenter.currentUiState.employee,
                   isPhotoEditable: true,
-                  onEdit: () {
-                    print('Edit Profile');
-                  },
+                  onEdit: () => _viewProfilePresenter.updateProfileImage(
+                      userId: employee!.id),
+                  presenter: _viewProfilePresenter,
                 ),
                 Padding(
                   padding: padding20,
