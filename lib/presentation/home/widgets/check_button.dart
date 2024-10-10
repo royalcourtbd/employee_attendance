@@ -3,6 +3,7 @@ import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
+import 'package:employee_attendance/presentation/home/widgets/check_in_bottom_sheet.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 
 class CheckButton extends StatelessWidget {
@@ -21,8 +22,15 @@ class CheckButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return NeumorphicButton(
       onPressed: homePresenter.isCheckInButtonEnabled()
-          ? () => homePresenter.handleAttendanceAction()
+          ? () => CheckInBottomSheet.show(
+                context: context,
+                title: homePresenter.getCheckButtonText(),
+                onCheckIn: () => homePresenter.handleAttendanceAction(),
+              )
           : null,
+      // onPressed: homePresenter.isCheckInButtonEnabled()
+      //     ? () => homePresenter.handleAttendanceAction()
+      //     : null,
       style: const NeumorphicStyle(
         shape: NeumorphicShape.convex,
         boxShape: NeumorphicBoxShape.circle(),

@@ -10,11 +10,15 @@ import 'package:flutter/material.dart';
 class ProfileHeader extends StatelessWidget {
   final ThemeData theme;
   final Employee? employee;
+  final VoidCallback? onEdit;
+  final bool isPhotoEditable;
 
   const ProfileHeader({
     super.key,
     required this.theme,
     this.employee,
+    this.onEdit,
+    this.isPhotoEditable = false,
   });
 
   @override
@@ -22,18 +26,22 @@ class ProfileHeader extends StatelessWidget {
     return Container(
       color: theme.primaryColor,
       width: EmployeeAttendanceScreen.width,
-      height: EmployeeAttendanceScreen.height * 0.45,
+      height: EmployeeAttendanceScreen.height * 0.4,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           gapH50,
-          ProfileImage(profileImage: employee!.image ?? ''),
+          ProfileImage(
+            profileImage: employee!.image ?? '',
+            onTap: onEdit,
+            isPhotoEditable: isPhotoEditable,
+          ),
           gapH16,
           ProfileName(
             theme: theme,
             userName: employee!.name ?? 'User Name',
           ),
-          gapH10,
+          gapH5,
           ProfileId(theme: theme, employeeId: employee!.employeeId ?? ''),
         ],
       ),

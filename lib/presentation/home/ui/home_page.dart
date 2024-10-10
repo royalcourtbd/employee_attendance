@@ -3,9 +3,11 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/home/widgets/attendance_time_widget.dart';
 import 'package:employee_attendance/presentation/home/widgets/check_button.dart';
+import 'package:employee_attendance/presentation/home/widgets/check_in_bottom_sheet.dart';
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
@@ -50,7 +52,7 @@ class HomePage extends StatelessWidget {
                 ),
                 gapH5,
                 Text(
-                  homePresenter.getFormattedCurrentDate(),
+                  getFormattedCurrentDate(),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: fourteenPx,
                     color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
@@ -62,6 +64,16 @@ class HomePage extends StatelessWidget {
                   homeState: homeState,
                   theme: theme,
                 ),
+
+                TextButton(
+                    onPressed: () => CheckInBottomSheet.show(
+                          context: context,
+                          title: homePresenter.getCheckButtonText(),
+                          onCheckIn: () =>
+                              homePresenter.handleAttendanceAction(),
+                        ),
+                    child: const Text('Initialize Settings')),
+
                 gapH50,
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: tenPx),
@@ -70,22 +82,19 @@ class HomePage extends StatelessWidget {
                     children: [
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeIn,
-                        time: homePresenter
-                            .getFormattedTime(homeState.checkInTime),
+                        time: getFormattedTime(homeState.checkInTime),
                         label: 'Check In',
                       ),
                       gapW10,
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTimeOut,
-                        time: homePresenter
-                            .getFormattedTime(homeState.checkOutTime),
+                        time: getFormattedTime(homeState.checkOutTime),
                         label: 'Check Out',
                       ),
                       gapW10,
                       AttendanceTimeWidget(
                         iconPath: SvgPath.icTotalHrs,
-                        time: homePresenter
-                            .getFormattedDuration(homeState.workDuration),
+                        time: getFormattedDuration(homeState.workDuration),
                         label: 'Total Hrs',
                       ),
                     ],

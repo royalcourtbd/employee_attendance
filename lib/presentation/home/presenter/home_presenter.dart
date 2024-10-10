@@ -77,15 +77,6 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     uiState.value = currentUiState.copyWith(greetingMessage: greeting);
   }
 
-  String getFormattedTime(DateTime? time) {
-    return time != null ? DateFormat('hh:mm a').format(time) : '--:--';
-  }
-
-  String getFormattedDuration(Duration? duration) {
-    if (duration == null) return '--:--';
-    return '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
-  }
-
   void resetAttendance() {
     uiState.value = currentUiState.copyWith(
       checkInTime: null,
@@ -164,10 +155,6 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
 
   String getFormattedCurrentTime() {
     return DateFormat('hh:mm:ss a').format(currentUiState.nowTimeIsIt);
-  }
-
-  String getFormattedCurrentDate() {
-    return DateFormat('MMM dd, yyyy - EEEE').format(DateTime.now());
   }
 
   Future<void> initializeSettings() async {

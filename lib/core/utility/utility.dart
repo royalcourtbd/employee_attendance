@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart' as rs;
 
@@ -573,6 +574,24 @@ void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 // //     logErrorStatic(e, _fileName);
 // //   }
 // // }
+
+String getFormattedCurrentDate() {
+  return DateFormat('MMM dd, yyyy - EEEE').format(DateTime.now());
+}
+
+String getFormattedDate(DateTime? date, {String format = 'dd MMM yyyy'}) {
+  if (date == null) return '';
+  return DateFormat(format).format(date);
+}
+
+String getFormattedTime(DateTime? time) {
+  return time != null ? DateFormat('hh:mm a').format(time) : '--:--';
+}
+
+String getFormattedDuration(Duration? duration) {
+  if (duration == null) return '--:--';
+  return '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
+}
 
 Future<void> updateTime({
   required BuildContext context,

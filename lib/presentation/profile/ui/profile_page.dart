@@ -3,7 +3,7 @@ import 'package:employee_attendance/core/external_libs/presentable_widget_builde
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
-import 'package:employee_attendance/presentation/profile/ui/edit_profile_page.dart';
+import 'package:employee_attendance/presentation/profile/ui/view_profile_page.dart';
 import 'package:employee_attendance/presentation/profile/widgets/copyright.dart';
 import 'package:employee_attendance/presentation/profile/widgets/log_out_dialog.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_header.dart';
@@ -31,9 +31,16 @@ class ProfilePage extends StatelessWidget {
                 gapH16,
                 ProfileOption(
                   theme: theme,
-                  onTap: () => context.navigatorPush(EditProfilePage()),
+                  onTap: () => context.navigatorPush(ViewProfilePage()),
+                  icon: Icons.account_circle,
+                  text: 'View Profile',
+                ),
+                gapH16,
+                ProfileOption(
+                  theme: theme,
+                  onTap: () => context.navigatorPush(ViewProfilePage()),
                   icon: Icons.edit,
-                  text: 'Edit Profile',
+                  text: 'Edit Password',
                 ),
                 gapH16,
                 ProfileOption(
