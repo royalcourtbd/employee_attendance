@@ -177,10 +177,11 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
           await _changePasswordUseCase.execute(newPasswordController.text);
           await addUserMessage('Password changed successfully');
           _clearInputs();
-          await toggleLoading(loading: false);
           context.navigatorPop();
         } catch (e) {
           await addUserMessage('Failed to change password: $e');
+        } finally {
+          await toggleLoading(loading: false);
         }
       }
     }

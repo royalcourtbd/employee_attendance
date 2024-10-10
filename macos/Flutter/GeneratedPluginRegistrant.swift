@@ -15,7 +15,7 @@ import firebase_messaging
 import firebase_storage
 import network_info_plus
 import path_provider_foundation
-import sqflite
+import sqflite_darwin
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
