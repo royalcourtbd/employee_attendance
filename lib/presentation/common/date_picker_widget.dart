@@ -1,7 +1,7 @@
 // lib/presentation/common/date_picker_widget.dart
 
+import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DatePickerWidget extends StatelessWidget {
   final DateTime selectedDate;
@@ -17,12 +17,32 @@ class DatePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return InkWell(
       onTap: () async {
         final DateTime? picked = await showDatePicker(
           context: context,
           initialDate: selectedDate,
-          firstDate: DateTime(2000),
+          initialEntryMode: DatePickerEntryMode.calendarOnly,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                colorScheme: ColorScheme.light(
+                  primary: theme.primaryColor,
+                  onPrimary: Colors.white,
+                  surface: theme.scaffoldBackgroundColor,
+                ),
+                dialogBackgroundColor: Colors.white,
+                dividerTheme: const DividerThemeData(
+                  space: 0,
+                  thickness: 1,
+                  color: Colors.black12,
+                ),
+              ),
+              child: child!,
+            );
+          },
+          firstDate: DateTime(2019),
           lastDate: DateTime.now(),
         );
         if (picked != null) {
@@ -38,7 +58,7 @@ class DatePickerWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              DateFormat('dd-MM-yyyy').format(selectedDate),
+              getFormattedDate(selectedDate),
             ),
             const Icon(Icons.calendar_today),
           ],

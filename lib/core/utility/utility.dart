@@ -611,6 +611,7 @@ Future<void> updateTime({
   final ThemeData theme = context.theme;
   final TimeOfDay? newTime = await showTimePicker(
     context: context,
+    initialEntryMode: TimePickerEntryMode.dialOnly,
     initialTime: (timeType == 'startTime')
         ? settingsPresenter.currentUiState.startTime
         : settingsPresenter.currentUiState.endTime,

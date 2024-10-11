@@ -83,10 +83,8 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
     try {
       const password = '123456';
 
-      // Store the current user
       final currentUser = _firebaseService.auth.currentUser;
 
-      // Create a secondary Firebase Auth instance
       final secondaryApp = await Firebase.initializeApp(
           name: 'SecondaryApp', options: Firebase.app().options);
 

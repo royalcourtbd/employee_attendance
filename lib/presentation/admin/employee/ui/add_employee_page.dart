@@ -61,10 +61,6 @@ class AddEmployeePage extends StatelessWidget {
                   labelText: 'Joining Date',
                 ),
                 gapH20,
-                Text(
-                  'Role:',
-                  style: theme.textTheme.titleMedium,
-                ),
                 Row(
                   children: [
                     Expanded(
