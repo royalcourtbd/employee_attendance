@@ -14,9 +14,10 @@ class ShowDateContainer extends StatelessWidget {
     final isToday = _isToday(date);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: fifteenPx,
+        horizontal: thirteenPx,
         vertical: sevenPx,
       ),
+      width: 19.percentWidth,
       decoration: BoxDecoration(
         color: isToday ? theme.primaryColor : theme.colorScheme.secondary,
         borderRadius: radius10,
