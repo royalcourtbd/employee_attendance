@@ -1,3 +1,4 @@
+import 'package:employee_attendance/domain/entities/all_attendance.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/entities/office_settings.dart';
 
@@ -7,6 +8,7 @@ abstract class AttendanceRepository {
   Stream<Attendance?> getTodayAttendanceStream(String userId);
   Stream<List<Attendance>> getTodaysAttendanceStream();
   Stream<OfficeSettings> getOfficeSettingsStream();
+  Stream<List<AllAttendance>> getAllAttendancesStream();
   Future<bool> canCheckInToday(String userId);
   Future<bool> canCheckOutToday(String userId);
   Stream<List<Attendance>> getUserAttendanceStream(String userId);

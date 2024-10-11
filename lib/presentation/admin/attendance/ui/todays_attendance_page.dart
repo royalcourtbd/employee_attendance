@@ -1,10 +1,12 @@
 import 'package:employee_attendance/core/di/service_locator.dart';
+import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
 import 'package:employee_attendance/presentation/admin/attendance/widgets/show_sort_option_popup.dart';
 import 'package:employee_attendance/presentation/admin/attendance/widgets/today_attendance_item.dart';
 import 'package:employee_attendance/presentation/admin/attendance/widgets/today_attendance_summary.dart';
+import 'package:employee_attendance/presentation/history/widgets/empty_attendance_view.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
@@ -55,9 +57,13 @@ class TodaysAttendancePage extends StatelessWidget {
               ),
               Expanded(
                 child: uiState.isLoading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? LoadingIndicator(
+                        theme: theme,
+                        color: theme.primaryColor,
+                        ringColor: theme.primaryColor.withOpacity(0.5),
+                      )
                     : uiState.filteredAttendancesWithEmployee.isEmpty
-                        ? const Center(child: Text('No attendance found'))
+                        ? const EmptyAttendanceView()
                         : ListView.builder(
                             itemCount:
                                 uiState.filteredAttendancesWithEmployee.length,

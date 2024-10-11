@@ -11,6 +11,7 @@ import 'package:employee_attendance/domain/usecases/change_password_use_case.dar
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
 import 'package:employee_attendance/domain/usecases/generate_new_employee_id_use_case.dart';
+import 'package:employee_attendance/domain/usecases/get_all_attendance_usecase.dart';
 import 'package:employee_attendance/domain/usecases/get_all_employees_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_device_token_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
@@ -20,7 +21,7 @@ import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
 
-import 'package:employee_attendance/presentation/admin/attendance/presenter/view_attendance_presenter.dart';
+import 'package:employee_attendance/presentation/admin/attendance/presenter/all_attendance_presenter.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_presenter.dart';
@@ -66,7 +67,8 @@ class ServiceLocator {
       ..registerLazySingleton(() => GetUserStreamUseCase(locate()))
       ..registerLazySingleton(() => LoginUseCase(locate()))
       ..registerLazySingleton(() => UpdateUserUseCase(locate()))
-      ..registerLazySingleton(() => ChangePasswordUseCase(locate()));
+      ..registerLazySingleton(() => ChangePasswordUseCase(locate()))
+      ..registerLazySingleton(() => GetAllAttendanceUseCase(locate()));
   }
 
   Future<void> _setupService() async {
@@ -109,7 +111,8 @@ class ServiceLocator {
           () => loadPresenter(AdminDashboardPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(EmployeesPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())))
-      ..registerLazySingleton(() => loadPresenter(ViewAttendancePresenter()))
+      ..registerLazySingleton(
+          () => loadPresenter(AllAttendancePresenter(locate())))
       ..registerLazySingleton(
           () => loadPresenter(AddEmployeePresenter(locate(), locate())))
       ..registerLazySingleton(() => loadPresenter(TodaysAttendancePresenter(

@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/data/models/attendance_model.dart';
+import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
+import 'package:employee_attendance/domain/entities/all_attendance.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
@@ -199,5 +201,28 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       debugPrint('Error updating office settings: $e');
       throw Exception('Failed to update office settings');
     }
+  }
+
+  @override
+  Stream<List<AllAttendance>> getAllAttendancesStream() {
+    return _firebaseService.firestore
+        .collection(Urls.attendances)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      List<AllAttendance> allAttendances = [];
+      for (var doc in snapshot.docs) {
+        final attendance = AttendanceModel.fromJson(doc.data());
+        final employee = await _firebaseService.firestore
+            .collection(Urls.employees)
+            .doc(attendance.userId)
+            .get()
+            .then((value) => EmployeeUserModel.fromJson(value.data()!));
+        allAttendances.add(AllAttendance(
+          attendance: attendance,
+          employee: employee,
+        ));
+      }
+      return allAttendances;
+    });
   }
 }

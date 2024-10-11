@@ -2,6 +2,7 @@ import 'package:employee_attendance/core/config/employee_attendance_screen.dart'
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
+import 'package:employee_attendance/presentation/admin/attendance/ui/all_attendance_page.dart';
 import 'package:employee_attendance/presentation/admin/attendance/ui/todays_attendance_page.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/ui/employees_page.dart';
@@ -60,6 +61,12 @@ class AdminDashboardPage extends StatelessWidget {
                 icon: Icons.settings,
                 theme: theme,
                 onTap: () => context.navigatorPush(SettingsPage()),
+              ),
+              AdminDashboardGridItem(
+                title: 'All Attendance',
+                icon: Icons.list_alt,
+                theme: theme,
+                onTap: () => context.navigatorPush(AllAttendancePage()),
               ),
             ],
           ),
