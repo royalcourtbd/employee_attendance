@@ -7,7 +7,6 @@ import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/home/widgets/attendance_time_widget.dart';
 import 'package:employee_attendance/presentation/home/widgets/check_button.dart';
-import 'package:employee_attendance/presentation/home/widgets/check_in_bottom_sheet.dart';
 import 'package:employee_attendance/presentation/home/widgets/custom_appbar.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
@@ -64,15 +63,6 @@ class HomePage extends StatelessWidget {
                   homeState: homeState,
                   theme: theme,
                 ),
-
-                TextButton(
-                    onPressed: () => CheckInBottomSheet.show(
-                          context: context,
-                          title: homePresenter.getCheckButtonText(),
-                          onCheckIn: () =>
-                              homePresenter.handleAttendanceAction(),
-                        ),
-                    child: const Text('Initialize Settings')),
 
                 gapH50,
                 Padding(

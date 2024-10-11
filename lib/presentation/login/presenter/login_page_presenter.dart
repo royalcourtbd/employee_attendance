@@ -47,26 +47,31 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
       final String email = currentUiState.email.trim();
       final String password = currentUiState.password.trim();
 
+      debugPrint('Attempting login with email: $email');
       await toggleLoading(loading: true);
       final result = await _loginUseCase.execute(email, password);
       await toggleLoading(loading: false);
 
       result.fold(
         (errorMessage) async {
+          debugPrint('Login error: $errorMessage');
           await addUserMessage(errorMessage);
         },
         (Employee? user) async {
+          debugPrint('Login successful. User: $user');
           if (user != null) {
             final String? deviceToken = await _getDeviceTokenUseCase.execute();
+            debugPrint('Device token: $deviceToken');
             _mainPagePresenter.updateIndex(index: 0);
 
             if (deviceToken != null && deviceToken.isNotEmpty) {
-              debugPrint('Device Token: $deviceToken');
-              await _updateUserUseCase
-                  .execute(user.copyWith(deviceToken: deviceToken));
+              final updatedUser = user.copyWith(deviceToken: deviceToken);
+              debugPrint('Updating user with device token: $updatedUser');
+              await _updateUserUseCase.execute(updatedUser);
               await addUserMessage('Logged in successfully');
             }
           } else {
+            debugPrint('User is null after successful login');
             await addUserMessage(
                 'An error occurred while logging in. Please try again.');
           }

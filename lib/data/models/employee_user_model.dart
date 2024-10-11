@@ -69,4 +69,8 @@ class EmployeeUserModel extends Employee {
       designation: user.designation,
     );
   }
+  @override
+  String toString() {
+    return 'EmployeeUserModel(id: $id, name: $name, email: $email, role: $role)';
+  }
 }

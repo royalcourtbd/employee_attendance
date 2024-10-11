@@ -8,6 +8,7 @@ import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
@@ -154,12 +155,14 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   @override
   Future<Either<String, Employee?>> login(String email, String password) async {
     try {
-      final userCredential =
+      final UserCredential userCredential =
           await _firebaseService.auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       final Employee? user = await fetchUserData(userCredential.user!.uid);
+
       return Right(user);
     } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -174,7 +177,6 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
     } on TimeoutException catch (_) {
       return const Left('Request timed out');
     } catch (e) {
-      debugPrint('Error logging in: $e');
       return const Left('An error occurred');
     }
   }
@@ -206,11 +208,15 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
           .doc(userId)
           .get();
       if (doc.exists) {
-        return EmployeeUserModel.fromJson(doc.data()!);
+        final data = doc.data()!;
+
+        final employee = EmployeeUserModel.fromJson(data);
+
+        return employee;
       }
+
       return null;
     } catch (e) {
-      debugPrint('Error fetching user data: $e');
       return null;
     }
   }
