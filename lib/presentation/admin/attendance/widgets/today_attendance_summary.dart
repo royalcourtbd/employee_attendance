@@ -1,6 +1,6 @@
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
-import 'package:employee_attendance/presentation/admin/attendance/widgets/summary_item.dart';
+import 'package:employee_attendance/presentation/admin/attendance/widgets/today_attendance_summary_item.dart';
 import 'package:flutter/material.dart';
 
 class TodayAttendanceSummary extends StatelessWidget {
@@ -20,13 +20,13 @@ class TodayAttendanceSummary extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SummaryItem(
+          TodayAttendanceSummaryItem(
             label: 'Total Present',
             value: todaysAttendancePresenter.currentUiState.summary.totalPresent
                 .toString(),
             theme: theme,
           ),
-          SummaryItem(
+          TodayAttendanceSummaryItem(
             label: 'Total Late',
             value: todaysAttendancePresenter.currentUiState.summary.totalLate
                 .toString(),

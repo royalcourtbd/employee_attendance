@@ -5,8 +5,8 @@ import 'package:employee_attendance/presentation/history/widgets/attendance_deta
 import 'package:employee_attendance/presentation/history/widgets/show_date_container.dart';
 import 'package:flutter/material.dart';
 
-class AttendanceItem extends StatelessWidget {
-  const AttendanceItem({
+class AttendanceHistoryItem extends StatelessWidget {
+  const AttendanceHistoryItem({
     super.key,
     required this.theme,
     required this.attendance,

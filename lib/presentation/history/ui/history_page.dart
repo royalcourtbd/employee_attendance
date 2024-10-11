@@ -4,7 +4,7 @@ import 'package:employee_attendance/core/external_libs/presentable_widget_builde
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_presenter.dart';
 import 'package:employee_attendance/presentation/history/widgets/attendance_calendar.dart';
-import 'package:employee_attendance/presentation/history/widgets/attendance_item.dart';
+import 'package:employee_attendance/presentation/history/widgets/attendance_history_item.dart';
 import 'package:employee_attendance/presentation/history/widgets/empty_attendance_view.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +43,7 @@ class HistoryPage extends StatelessWidget {
                         : ListView.builder(
                             padding: padding15,
                             itemCount: uiState.filteredAttendances.length,
-                            itemBuilder: (_, index) => AttendanceItem(
+                            itemBuilder: (_, index) => AttendanceHistoryItem(
                               theme: theme,
                               attendance: uiState.filteredAttendances[index],
                             ),

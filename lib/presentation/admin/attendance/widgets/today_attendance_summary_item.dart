@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SummaryItem extends StatelessWidget {
-  const SummaryItem(
+class TodayAttendanceSummaryItem extends StatelessWidget {
+  const TodayAttendanceSummaryItem(
       {super.key,
       required this.label,
       required this.value,

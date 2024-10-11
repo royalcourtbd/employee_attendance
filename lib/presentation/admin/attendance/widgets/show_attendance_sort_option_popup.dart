@@ -6,8 +6,8 @@ import 'package:employee_attendance/presentation/admin/attendance/presenter/toda
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_ui_state.dart';
 import 'package:flutter/material.dart';
 
-class ShowSortOptionPopUp extends StatelessWidget {
-  const ShowSortOptionPopUp({
+class ShowAttendanceSortOptionPopUp extends StatelessWidget {
+  const ShowAttendanceSortOptionPopUp({
     super.key,
     required this.todaysAttendancePresenter,
   });
@@ -19,7 +19,7 @@ class ShowSortOptionPopUp extends StatelessWidget {
   }) async {
     await showAnimatedDialog(
       context: context,
-      builder: (context) => ShowSortOptionPopUp(
+      builder: (context) => ShowAttendanceSortOptionPopUp(
         todaysAttendancePresenter: todaysAttendancePresenter,
       ),
       animationType: DialogTransitionType.scale,

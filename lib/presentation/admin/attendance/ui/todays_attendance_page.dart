@@ -3,8 +3,8 @@ import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
-import 'package:employee_attendance/presentation/admin/attendance/widgets/show_sort_option_popup.dart';
-import 'package:employee_attendance/presentation/admin/attendance/widgets/today_attendance_item.dart';
+import 'package:employee_attendance/presentation/admin/attendance/widgets/show_attendance_sort_option_popup.dart';
+import 'package:employee_attendance/presentation/admin/attendance/widgets/attendance_list_item.dart';
 import 'package:employee_attendance/presentation/admin/attendance/widgets/today_attendance_summary.dart';
 import 'package:employee_attendance/presentation/history/widgets/empty_attendance_view.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
@@ -47,7 +47,7 @@ class TodaysAttendancePage extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.sort),
-                      onPressed: () => ShowSortOptionPopUp.show(
+                      onPressed: () => ShowAttendanceSortOptionPopUp.show(
                         context: context,
                         todaysAttendancePresenter: _todaysAttendancePresenter,
                       ),
@@ -70,8 +70,12 @@ class TodaysAttendancePage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final item = uiState
                                   .filteredAttendancesWithEmployee[index];
-                              return TodayAttendanceItem(
-                                item: item,
+                              return AttendanceListItem(
+                                name: item.employee.name,
+                                employeeNetworkImageURL: item.employee.image,
+                                checkInTime: item.attendance.checkInTime,
+                                checkOutTime: item.attendance.checkOutTime,
+                                workDuration: item.attendance.workDuration,
                                 theme: theme,
                               );
                             },

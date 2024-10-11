@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 
-class UpdateDialog extends StatelessWidget {
-  const UpdateDialog({
+class NewAppUpdateDialog extends StatelessWidget {
+  const NewAppUpdateDialog({
     super.key,
   });
 
@@ -19,7 +19,7 @@ class UpdateDialog extends StatelessWidget {
     await showAnimatedDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const UpdateDialog(),
+      builder: (context) => const NewAppUpdateDialog(),
       barrierColor: Colors.black.withOpacity(0.5),
       animationType: DialogTransitionType.slideFromBottom,
       curve: Curves.bounceIn,

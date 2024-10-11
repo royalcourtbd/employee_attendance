@@ -4,16 +4,27 @@ import 'package:employee_attendance/core/config/employee_attendance_screen.dart'
 import 'package:employee_attendance/core/static/font_family.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_ui_state.dart';
 import 'package:employee_attendance/presentation/common/profile_pic_widget.dart';
 import 'package:flutter/material.dart';
 
-class TodayAttendanceItem extends StatelessWidget {
-  const TodayAttendanceItem(
-      {super.key, required this.item, required this.theme});
+class AttendanceListItem extends StatelessWidget {
+  const AttendanceListItem({
+    super.key,
+    required this.theme,
+    this.employeeNetworkImageURL,
+    this.checkInTime,
+    this.checkOutTime,
+    this.workDuration,
+    this.date,
+    this.name,
+  });
 
-  final AttendanceWithEmployee item;
-
+  final String? name;
+  final String? employeeNetworkImageURL;
+  final DateTime? checkInTime;
+  final DateTime? checkOutTime;
+  final Duration? workDuration;
+  final DateTime? date;
   final ThemeData theme;
 
   @override
@@ -29,24 +40,33 @@ class TodayAttendanceItem extends StatelessWidget {
         child: Row(
           children: [
             ProfilePicWidget(
-                theme: theme, networkImageURL: item.employee.image ?? ''),
+              theme: theme,
+              networkImageURL: employeeNetworkImageURL ?? '',
+            ),
             gapW10,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.employee.name ?? '',
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: sixteenPx,
-                      fontFamily: FontFamily.koho,
-                    )),
                 Text(
-                  '${getFormattedTime(item.attendance.checkInTime)} • ${getFormattedTime(item.attendance.checkOutTime)}',
+                  name ?? '',
                   style: theme.textTheme.bodyMedium!.copyWith(
-                    fontSize: thirteenPx,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
+                    fontSize: sixteenPx,
+                    fontFamily: FontFamily.koho,
                   ),
                 ),
+                if (date != null || checkInTime != null || checkOutTime != null)
+                  Text(
+                    [
+                      if (date != null) getFormattedDate(date),
+                      getFormattedTime(checkInTime),
+                      getFormattedTime(checkOutTime),
+                    ].where((element) => element.isNotEmpty).join(' • '),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontSize: thirteenPx,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
               ],
             ),
             const Spacer(),
@@ -60,7 +80,7 @@ class TodayAttendanceItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  getFormattedDuration(item.attendance.workDuration),
+                  getFormattedDuration(workDuration),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: thirteenPx,
                     fontWeight: FontWeight.w400,

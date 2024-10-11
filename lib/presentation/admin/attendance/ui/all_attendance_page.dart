@@ -2,8 +2,8 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
-import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/all_attendance_presenter.dart';
+import 'package:employee_attendance/presentation/admin/attendance/widgets/attendance_list_item.dart';
 import 'package:employee_attendance/presentation/common/date_picker_widget.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -95,18 +95,27 @@ class AllAttendancePage extends StatelessWidget {
                               if (index == uiState.filteredAttendances.length) {
                                 return uiState.filteredAttendances.length <
                                         uiState.totalItems
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
+                                    ? LoadingIndicator(
+                                        theme: theme,
+                                        color: theme.primaryColor,
+                                        ringColor:
+                                            theme.primaryColor.withOpacity(0.5),
+                                      )
                                     : const SizedBox.shrink();
                               }
                               final attendance =
                                   uiState.filteredAttendances[index];
-                              return ListTile(
-                                title: Text(attendance.employee.name ?? ''),
-                                subtitle: Text(
-                                    'Check-in: ${getFormattedTime(attendance.attendance.checkInTime)}'),
-                                trailing: Text(
-                                    'Duration: ${getFormattedDuration(attendance.attendance.workDuration)}'),
+                              return AttendanceListItem(
+                                theme: theme,
+                                name: attendance.employee.name,
+                                employeeNetworkImageURL:
+                                    attendance.employee.image,
+                                checkInTime: attendance.attendance.checkInTime,
+                                checkOutTime:
+                                    attendance.attendance.checkOutTime,
+                                workDuration:
+                                    attendance.attendance.workDuration,
+                                date: attendance.attendance.checkInTime,
                               );
                             },
                           ),
