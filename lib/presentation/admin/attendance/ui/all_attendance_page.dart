@@ -19,6 +19,7 @@ class AllAttendancePage extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     return PresentableWidgetBuilder(
       presenter: _allAttendancePresenter,
+      onInit: () => _allAttendancePresenter.initPage(),
       builder: () {
         final uiState = _allAttendancePresenter.currentUiState;
         return PopScope(

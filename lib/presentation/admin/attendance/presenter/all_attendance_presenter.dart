@@ -22,18 +22,31 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
     _loadAllAttendances();
   }
 
+  void initPage() {
+    _loadAllAttendances();
+  }
+
   void _loadAllAttendances() {
     toggleLoading(loading: true);
+    uiState.value = uiState.value.copyWith(
+      allAttendances: [],
+      filteredAttendances: [],
+      totalItems: 0,
+      currentPage: 1,
+    );
 
     _attendanceUseCases.getAllAttendancesStream().listen(
       (List<AllAttendance> allAttendances) {
+        allAttendances.sort((a, b) =>
+            b.attendance.checkInTime.compareTo(a.attendance.checkInTime));
+
         uiState.value = currentUiState.copyWith(
           allAttendances: allAttendances,
         );
         _applyFiltersAndPagination();
       },
       onError: (error) {
-        addUserMessage('Failed to load attendance information: $error');
+        addUserMessage('অ্যাটেন্ডেন্স তথ্য লোড করতে ব্যর্থ হয়েছে: $error');
         toggleLoading(loading: false);
       },
     );
