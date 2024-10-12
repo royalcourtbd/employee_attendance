@@ -5,11 +5,14 @@ import 'package:employee_attendance/data/repositories/employee_repository_impl.d
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
+
+import 'package:employee_attendance/domain/service/pdf_generation_service.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
+import 'package:employee_attendance/domain/usecases/generate_attendance_pdf_usecase.dart';
 import 'package:employee_attendance/domain/usecases/generate_new_employee_id_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_all_attendance_usecase.dart';
 import 'package:employee_attendance/domain/usecases/get_all_employees_use_case.dart';
@@ -20,7 +23,6 @@ import 'package:employee_attendance/domain/usecases/login_use_case.dart';
 import 'package:employee_attendance/domain/usecases/logout_usecase.dart';
 import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_presenter.dart';
-
 import 'package:employee_attendance/presentation/admin/attendance/presenter/all_attendance_presenter.dart';
 import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin_dashboard_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_presenter.dart';
@@ -68,13 +70,15 @@ class ServiceLocator {
       ..registerLazySingleton(() => LoginUseCase(locate()))
       ..registerLazySingleton(() => UpdateUserUseCase(locate()))
       ..registerLazySingleton(() => ChangePasswordUseCase(locate()))
-      ..registerLazySingleton(() => GetAllAttendanceUseCase(locate()));
+      ..registerLazySingleton(() => GetAllAttendanceUseCase(locate()))
+      ..registerLazySingleton(() => GenerateAttendancePdfUseCase(locate()));
   }
 
   Future<void> _setupService() async {
     _serviceLocator
       ..registerLazySingleton<FirebaseService>(() => FirebaseService())
-      ..registerLazySingleton(() => HolidayService());
+      ..registerLazySingleton(() => HolidayService())
+      ..registerLazySingleton(() => PdfGenerationService());
   }
 
   Future<void> _setupRepository() async {
@@ -112,7 +116,7 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(EmployeesPresenter(locate())))
       ..registerLazySingleton(() => loadPresenter(SettingsPresenter(locate())))
       ..registerLazySingleton(
-          () => loadPresenter(AllAttendancePresenter(locate())))
+          () => loadPresenter(AllAttendancePresenter(locate(), locate())))
       ..registerLazySingleton(
           () => loadPresenter(AddEmployeePresenter(locate(), locate())))
       ..registerLazySingleton(() => loadPresenter(TodaysAttendancePresenter(

@@ -37,6 +37,13 @@ class AllAttendancePage extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.download),
+                  onPressed: () =>
+                      _allAttendancePresenter.downloadAttendanceReport(),
+                ),
+              ],
             ),
             body: Column(
               children: [

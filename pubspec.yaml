@@ -59,6 +59,11 @@ dependencies:
   google_fonts: ^6.2.1
   slider_button: ^2.1.0
   image_picker: ^1.1.2
+  pdf: ^3.11.1
+  path_provider: ^2.1.4
+  open_file: ^3.5.8
+  http: ^1.2.2
+  image: ^4.2.0
 
 dev_dependencies:
   flutter_test:

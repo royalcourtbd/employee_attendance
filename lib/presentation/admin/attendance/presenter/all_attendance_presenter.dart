@@ -2,14 +2,18 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/config/pagination_config.dart';
 import 'package:employee_attendance/domain/entities/all_attendance.dart';
+import 'package:employee_attendance/domain/usecases/generate_attendance_pdf_usecase.dart';
 import 'package:employee_attendance/domain/usecases/get_all_attendance_usecase.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/all_attendance_ui_state.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
   final GetAllAttendanceUseCase _attendanceUseCases;
+  final GenerateAttendancePdfUseCase _generateAttendancePdfUseCase;
 
-  AllAttendancePresenter(this._attendanceUseCases);
+  AllAttendancePresenter(
+      this._attendanceUseCases, this._generateAttendancePdfUseCase);
 
   final Obs<AllAttendanceUiState> uiState = Obs(AllAttendanceUiState.empty());
   AllAttendanceUiState get currentUiState => uiState.value;
@@ -46,7 +50,7 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
         _applyFiltersAndPagination();
       },
       onError: (error) {
-        addUserMessage('অ্যাটেন্ডেন্স তথ্য লোড করতে ব্যর্থ হয়েছে: $error');
+        addUserMessage('Failed to load attendances: $error');
         toggleLoading(loading: false);
       },
     );
@@ -93,6 +97,35 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
       totalItems: filtered.length,
       isLoading: false,
     );
+  }
+
+  Future<void> downloadAttendanceReport() async {
+    await toggleLoading(loading: true);
+    try {
+      final file = await _generateAttendancePdfUseCase.execute(
+        currentUiState.filteredAttendances,
+        'attendance_report.pdf',
+        officeName: 'The Royal IT',
+        officeLocation: 'Rosulbag, Tongi, Gazipur',
+        startDate: currentUiState.startDate ?? DateTime.now(),
+        endDate: currentUiState.endDate ?? DateTime.now(),
+        dateRange: getDateRangeDisplay(),
+      );
+      await toggleLoading(loading: false);
+      await OpenFile.open(file.path);
+      await addUserMessage('Report generated successfully');
+    } catch (e) {
+      await toggleLoading(loading: false);
+      await addUserMessage('Failed to generate report: $e');
+    }
+  }
+
+  String getDateRangeDisplay() {
+    if (currentUiState.startDate != null && currentUiState.endDate != null) {
+      return '${getFormattedDate(currentUiState.startDate)} to ${getFormattedDate(currentUiState.endDate)}';
+    } else {
+      return 'Full App Loaded Attendance';
+    }
   }
 
   void filterAttendances(
