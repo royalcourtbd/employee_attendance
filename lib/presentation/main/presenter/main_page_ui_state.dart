@@ -11,7 +11,7 @@ class MainPageUiState extends BaseUiState {
     return const MainPageUiState(
       isLoading: false,
       userMessage: '',
-      currentNavIndex: 2,
+      currentNavIndex: 0,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
+import 'package:employee_attendance/core/static/constants.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/domain/config/pagination_config.dart';
 import 'package:employee_attendance/domain/entities/all_attendance.dart';
@@ -105,8 +106,8 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
       final file = await _generateAttendancePdfUseCase.execute(
         currentUiState.filteredAttendances,
         'attendance_report.pdf',
-        officeName: 'The Royal IT',
-        officeLocation: 'Rosulbag, Tongi, Gazipur',
+        officeName: officeName,
+        officeLocation: officeLocation,
         startDate: currentUiState.startDate ?? DateTime.now(),
         endDate: currentUiState.endDate ?? DateTime.now(),
         dateRange: getDateRangeDisplay(),
@@ -123,6 +124,8 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
   String getDateRangeDisplay() {
     if (currentUiState.startDate != null && currentUiState.endDate != null) {
       return '${getFormattedDate(currentUiState.startDate)} to ${getFormattedDate(currentUiState.endDate)}';
+    } else if (currentUiState.startDate != null) {
+      return 'From ${getFormattedDate(currentUiState.startDate)} to ${getFormattedDate(DateTime.now())}';
     } else {
       return 'Full App Loaded Attendance';
     }

@@ -72,6 +72,7 @@ class TodaysAttendancePage extends StatelessWidget {
                                   .filteredAttendancesWithEmployee[index];
                               return AttendanceListItem(
                                 name: item.employee.name,
+                                isLate: item.attendance.isLate,
                                 employeeNetworkImageURL: item.employee.image,
                                 checkInTime: item.attendance.checkInTime,
                                 checkOutTime: item.attendance.checkOutTime,

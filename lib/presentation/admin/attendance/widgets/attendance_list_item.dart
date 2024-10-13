@@ -17,6 +17,7 @@ class AttendanceListItem extends StatelessWidget {
     this.workDuration,
     this.date,
     this.name,
+    this.isLate,
   });
 
   final String? name;
@@ -26,6 +27,7 @@ class AttendanceListItem extends StatelessWidget {
   final Duration? workDuration;
   final DateTime? date;
   final ThemeData theme;
+  final bool? isLate;
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +58,22 @@ class AttendanceListItem extends StatelessWidget {
                   ),
                 ),
                 if (date != null || checkInTime != null || checkOutTime != null)
-                  Text(
-                    [
-                      if (date != null) getFormattedDate(date),
-                      getFormattedTime(checkInTime),
-                      getFormattedTime(checkOutTime),
-                    ].where((element) => element.isNotEmpty).join(' • '),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        if (date != null)
+                          TextSpan(text: '${getFormattedDate(date)} • '),
+                        TextSpan(
+                          text: getFormattedTime(checkInTime),
+                          style: TextStyle(
+                            color: isLate! ? Colors.red : null,
+                          ),
+                        ),
+                        if (checkOutTime != null)
+                          TextSpan(
+                              text: ' • ${getFormattedTime(checkOutTime)}'),
+                      ],
+                    ),
                     style: theme.textTheme.bodyMedium!.copyWith(
                       fontSize: thirteenPx,
                       fontWeight: FontWeight.w400,

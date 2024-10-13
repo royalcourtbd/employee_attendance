@@ -115,6 +115,7 @@ class AllAttendancePage extends StatelessWidget {
                                   uiState.filteredAttendances[index];
                               return AttendanceListItem(
                                 theme: theme,
+                                isLate: attendance.attendance.isLate,
                                 name: attendance.employee.name,
                                 employeeNetworkImageURL:
                                     attendance.employee.image,
