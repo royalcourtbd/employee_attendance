@@ -28,6 +28,7 @@ import 'package:employee_attendance/presentation/admin/dashboard/presenter/admin
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_presenter.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_presenter.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_presenter.dart';
+import 'package:employee_attendance/presentation/authentication/presenter/auth_wrapper_presenter.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_presenter.dart';
 import 'package:employee_attendance/presentation/home/presenter/home_presenter.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
@@ -122,6 +123,7 @@ class ServiceLocator {
       ..registerLazySingleton(() => loadPresenter(TodaysAttendancePresenter(
             locate(),
             locate(),
-          )));
+          )))
+      ..registerLazySingleton(() => loadPresenter(AuthWrapperPresenter()));
   }
 }
