@@ -1,7 +1,7 @@
-import 'package:employee_attendance/domain/repositories/employee_repository.dart';
+import 'package:employee_attendance/domain/repositories/employee/auth_repository.dart';
 
 class LogoutUseCase {
-  final EmployeeRepository _employeeRepository;
+  final AuthRepository _employeeRepository;
 
   LogoutUseCase(this._employeeRepository);
 

@@ -1,11 +1,14 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
+import 'package:employee_attendance/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:employee_attendance/data/repositories/attendance_repository_impl.dart';
+import 'package:employee_attendance/data/repositories/auth_repository_impl.dart';
 import 'package:employee_attendance/data/repositories/employee_repository_impl.dart';
+import 'package:employee_attendance/data/services/backend_as_a_service.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
+import 'package:employee_attendance/domain/repositories/employee/auth_repository.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
-
 import 'package:employee_attendance/domain/service/pdf_generation_service.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
@@ -51,9 +54,10 @@ class ServiceLocator {
     final ServiceLocator locator = ServiceLocator._();
     await locator._setupService();
     if (startOnlyService) return;
-    await locator._setupPresenter();
     await locator._setupRepository();
+    await locator._setUpDataSources();
     await locator._setupUseCase();
+    await locator._setupPresenter();
   }
 
   Future<void> _setupUseCase() async {
@@ -78,8 +82,13 @@ class ServiceLocator {
   Future<void> _setupService() async {
     _serviceLocator
       ..registerLazySingleton<FirebaseService>(() => FirebaseService())
+      ..registerLazySingleton(() => BackendAsAService(locate()))
       ..registerLazySingleton(() => HolidayService())
       ..registerLazySingleton(() => PdfGenerationService());
+  }
+
+  Future<void> _setUpDataSources() async {
+    _serviceLocator.registerLazySingleton(() => AuthRemoteDataSource(locate()));
   }
 
   Future<void> _setupRepository() async {
@@ -87,7 +96,9 @@ class ServiceLocator {
       ..registerLazySingleton<EmployeeRepository>(
           () => EmployeeRepositoryImpl(locate()))
       ..registerLazySingleton<AttendanceRepository>(
-          () => AttendanceRepositoryImpl(locate()));
+          () => AttendanceRepositoryImpl(locate()))
+      ..registerLazySingleton<AuthRepository>(
+          () => AuthRepositoryImpl(locate()));
   }
 
   Future<void> _setupPresenter() async {

@@ -1,0 +1,17 @@
+import 'package:employee_attendance/data/services/backend_as_a_service.dart';
+import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:fpdart/fpdart.dart';
+
+class AuthRemoteDataSource {
+  final BackendAsAService _backendAsAService;
+
+  AuthRemoteDataSource(this._backendAsAService);
+
+  Future<Either<String, Employee?>> login(String email, String password) async {
+    return await _backendAsAService.signIn(email, password);
+  }
+
+  Future<void> signOut() async {
+    await _backendAsAService.signOut();
+  }
+}

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
@@ -8,10 +6,8 @@ import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/domain/entities/employee.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
 
 class EmployeeRepositoryImpl implements EmployeeRepository {
   final FirebaseService _firebaseService;
@@ -148,40 +144,6 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       debugPrint('Error getting last employee ID: $e');
       return null;
     }
-  }
-
-  @override
-  Future<Either<String, Employee?>> login(String email, String password) async {
-    try {
-      final UserCredential userCredential =
-          await _firebaseService.auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      final Employee? user = await fetchUserData(userCredential.user!.uid);
-
-      return Right(user);
-    } on firebase_auth.FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return const Left('No user found for this email');
-      } else if (e.code == 'wrong-password') {
-        return const Left('Wrong password provided for this user');
-      } else {
-        return const Left('Invalid email');
-      }
-    } on SocketException catch (_) {
-      return const Left('No internet connection');
-    } on TimeoutException catch (_) {
-      return const Left('Request timed out');
-    } catch (e) {
-      return const Left('An error occurred');
-    }
-  }
-
-  @override
-  Future<void> logout() async {
-    await _firebaseService.auth.signOut();
   }
 
   @override
