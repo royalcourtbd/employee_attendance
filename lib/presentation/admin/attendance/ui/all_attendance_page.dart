@@ -89,45 +89,23 @@ class AllAttendancePage extends StatelessWidget {
                           color: theme.primaryColor,
                           ringColor: theme.primaryColor.withOpacity(0.5),
                         )
-                      : NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
-                              _allAttendancePresenter.loadMoreItems();
-                            }
-                            return true;
+                      : ListView.builder(
+                          itemCount: uiState.filteredAttendances.length,
+                          itemBuilder: (context, index) {
+                            final attendance =
+                                uiState.filteredAttendances[index];
+                            return AttendanceListItem(
+                              theme: theme,
+                              isLate: attendance.attendance.isLate,
+                              name: attendance.employee.name,
+                              employeeNetworkImageURL:
+                                  attendance.employee.image,
+                              checkInTime: attendance.attendance.checkInTime,
+                              checkOutTime: attendance.attendance.checkOutTime,
+                              workDuration: attendance.attendance.workDuration,
+                              date: attendance.attendance.checkInTime,
+                            );
                           },
-                          child: ListView.builder(
-                            itemCount: uiState.filteredAttendances.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == uiState.filteredAttendances.length) {
-                                return uiState.filteredAttendances.length <
-                                        uiState.totalItems
-                                    ? LoadingIndicator(
-                                        theme: theme,
-                                        color: theme.primaryColor,
-                                        ringColor:
-                                            theme.primaryColor.withOpacity(0.5),
-                                      )
-                                    : const SizedBox.shrink();
-                              }
-                              final attendance =
-                                  uiState.filteredAttendances[index];
-                              return AttendanceListItem(
-                                theme: theme,
-                                isLate: attendance.attendance.isLate,
-                                name: attendance.employee.name,
-                                employeeNetworkImageURL:
-                                    attendance.employee.image,
-                                checkInTime: attendance.attendance.checkInTime,
-                                checkOutTime:
-                                    attendance.attendance.checkOutTime,
-                                workDuration:
-                                    attendance.attendance.workDuration,
-                                date: attendance.attendance.checkInTime,
-                              );
-                            },
-                          ),
                         ),
                 ),
               ],

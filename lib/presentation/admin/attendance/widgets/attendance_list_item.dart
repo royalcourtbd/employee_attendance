@@ -69,9 +69,7 @@ class AttendanceListItem extends StatelessWidget {
                             color: isLate! ? Colors.red : null,
                           ),
                         ),
-                        if (checkOutTime != null)
-                          TextSpan(
-                              text: ' • ${getFormattedTime(checkOutTime)}'),
+                        TextSpan(text: ' • ${getFormattedTime(checkOutTime)}'),
                       ],
                     ),
                     style: theme.textTheme.bodyMedium!.copyWith(

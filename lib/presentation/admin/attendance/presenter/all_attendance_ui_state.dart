@@ -7,8 +7,6 @@ class AllAttendanceUiState extends BaseUiState {
   final DateTime? startDate;
   final DateTime? endDate;
   final String searchQuery;
-  final int currentPage;
-  final int totalItems;
 
   const AllAttendanceUiState({
     required super.isLoading,
@@ -18,8 +16,6 @@ class AllAttendanceUiState extends BaseUiState {
     this.startDate,
     this.endDate,
     this.searchQuery = '',
-    this.currentPage = 1,
-    this.totalItems = 0,
   });
 
   factory AllAttendanceUiState.empty() {
@@ -31,8 +27,6 @@ class AllAttendanceUiState extends BaseUiState {
       startDate: null,
       endDate: null,
       searchQuery: '',
-      currentPage: 1,
-      totalItems: 0,
     );
   }
 
@@ -45,8 +39,6 @@ class AllAttendanceUiState extends BaseUiState {
         startDate,
         endDate,
         searchQuery,
-        currentPage,
-        totalItems,
       ];
 
   AllAttendanceUiState copyWith({
@@ -57,8 +49,6 @@ class AllAttendanceUiState extends BaseUiState {
     DateTime? startDate,
     DateTime? endDate,
     String? searchQuery,
-    int? currentPage,
-    int? totalItems,
   }) {
     return AllAttendanceUiState(
       isLoading: isLoading ?? this.isLoading,
@@ -68,8 +58,6 @@ class AllAttendanceUiState extends BaseUiState {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       searchQuery: searchQuery ?? this.searchQuery,
-      currentPage: currentPage ?? this.currentPage,
-      totalItems: totalItems ?? this.totalItems,
     );
   }
 }

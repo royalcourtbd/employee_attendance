@@ -1,7 +1,6 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/static/constants.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/config/pagination_config.dart';
 import 'package:employee_attendance/domain/entities/all_attendance.dart';
 import 'package:employee_attendance/domain/usecases/generate_attendance_pdf_usecase.dart';
 import 'package:employee_attendance/domain/usecases/get_all_attendance_usecase.dart';
@@ -33,12 +32,6 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
 
   void _loadAllAttendances() {
     toggleLoading(loading: true);
-    uiState.value = uiState.value.copyWith(
-      allAttendances: [],
-      filteredAttendances: [],
-      totalItems: 0,
-      currentPage: 1,
-    );
 
     _attendanceUseCases.getAllAttendancesStream().listen(
       (List<AllAttendance> allAttendances) {
@@ -47,8 +40,9 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
 
         uiState.value = currentUiState.copyWith(
           allAttendances: allAttendances,
+          filteredAttendances: allAttendances,
+          isLoading: false,
         );
-        _applyFiltersAndPagination();
       },
       onError: (error) {
         addUserMessage('Failed to load attendances: $error');
@@ -57,7 +51,7 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
     );
   }
 
-  void _applyFiltersAndPagination() {
+  void _applyFilters() {
     List<AllAttendance> filtered = currentUiState.allAttendances;
 
     if (currentUiState.searchQuery.isNotEmpty) {
@@ -88,14 +82,8 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
           .toList();
     }
 
-    final int endIndex =
-        (currentUiState.currentPage * PaginationConfig.pageSize)
-            .clamp(0, filtered.length);
-    final paginatedList = filtered.sublist(0, endIndex);
-
     uiState.value = currentUiState.copyWith(
-      filteredAttendances: paginatedList,
-      totalItems: filtered.length,
+      filteredAttendances: filtered,
       isLoading: false,
     );
   }
@@ -137,24 +125,18 @@ class AllAttendancePresenter extends BasePresenter<AllAttendanceUiState> {
       searchQuery: searchQuery ?? currentUiState.searchQuery,
       startDate: startDate ?? currentUiState.startDate,
       endDate: endDate ?? currentUiState.endDate,
-      currentPage: 1,
     );
-    _applyFiltersAndPagination();
-  }
-
-  void loadMoreItems() {
-    if (currentUiState.filteredAttendances.length < currentUiState.totalItems) {
-      uiState.value = currentUiState.copyWith(
-        currentPage: currentUiState.currentPage + 1,
-      );
-      _applyFiltersAndPagination();
-    }
+    _applyFilters();
   }
 
   void resetFilters() {
     searchController.clear();
-    uiState.value = AllAttendanceUiState.empty();
-    _applyFiltersAndPagination();
+    uiState.value = currentUiState.copyWith(
+      searchQuery: '',
+      startDate: null,
+      endDate: null,
+    );
+    _applyFilters();
   }
 
   @override
