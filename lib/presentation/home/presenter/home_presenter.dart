@@ -8,6 +8,7 @@ import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/attendance.dart';
 import 'package:employee_attendance/domain/entities/office_settings.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
+import 'package:employee_attendance/domain/usecases/chech_in_out_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
 
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
@@ -19,6 +20,7 @@ import 'package:intl/intl.dart';
 class HomePresenter extends BasePresenter<HomePageUiState> {
   final GetGreetingUseCase _getGreetingUseCase;
   final AttendanceUseCases _attendanceUseCases;
+  final ChechInOutUseCase _chechInOutUseCase;
   final FirebaseService _firebaseService;
 
   final ProfilePagePresenter _profilePagePresenter;
@@ -28,6 +30,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     this._attendanceUseCases,
     this._firebaseService,
     this._profilePagePresenter,
+    this._chechInOutUseCase,
   );
 
   final Obs<HomePageUiState> uiState = Obs(HomePageUiState.empty());
@@ -131,8 +134,8 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     final String? userId = getCurrentUserId();
     if (userId == null) return;
 
-    final canCheckIn = await _attendanceUseCases.canCheckInToday(userId);
-    final canCheckOut = await _attendanceUseCases.canCheckOutToday(userId);
+    final canCheckIn = await _chechInOutUseCase.isCheckInAllowedToday(userId);
+    final canCheckOut = await _chechInOutUseCase.isCheckOutAllowedToday(userId);
 
     uiState.value = currentUiState.copyWith(
       canCheckIn: canCheckIn,
@@ -210,9 +213,9 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
     }
 
     if (currentUiState.canCheckIn) {
-      await _attendanceUseCases.checkIn(userId);
+      await _chechInOutUseCase.markCheckIn(userId);
     } else if (currentUiState.canCheckOut) {
-      await _attendanceUseCases.checkOut(userId);
+      await _chechInOutUseCase.markCheckOut(userId);
     }
     await _updateButtonState();
   }

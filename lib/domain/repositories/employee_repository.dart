@@ -9,6 +9,5 @@ abstract class EmployeeRepository {
   Future<void> updateUser(Employee user);
   Stream<Employee?> getUserStream(String userId);
   Stream<List<EmployeeUserModel>> getAllEmployees();
-  Future<void> changePassword(String newPassword);
   Future<String?> getDeviceToken();
 }

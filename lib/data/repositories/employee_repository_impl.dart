@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
@@ -26,7 +27,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       const password = '123456';
 
       // Store the current user
-      final currentUser = _firebaseService.auth.currentUser;
+      // final currentUser = _firebaseService.auth.currentUser;
 
       // Create a secondary Firebase Auth instance
       final secondaryApp = await Firebase.initializeApp(
@@ -61,15 +62,12 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       // If there was a user logged in before, make sure they're still logged in
       if (currentUser != null) {
         await _firebaseService.auth.signInWithEmailAndPassword(
-            email: currentUser.email!,
-            password:
-                password // You'll need to handle this securely in a real app
-            );
+            email: currentUser!.email!, password: password);
       }
 
       return employeeModel;
     } catch (e) {
-      debugPrint('Error creating demo user: $e');
+      log('Error creating demo user: $e');
       return null;
     }
   }
@@ -78,8 +76,6 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   Future<void> addEmployee(Employee employee) async {
     try {
       const password = '123456';
-
-      final currentUser = _firebaseService.auth.currentUser;
 
       final secondaryApp = await Firebase.initializeApp(
           name: 'SecondaryApp', options: Firebase.app().options);
@@ -116,10 +112,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       // If there was a user logged in before, make sure they're still logged in
       if (currentUser != null) {
         await _firebaseService.auth.signInWithEmailAndPassword(
-            email: currentUser.email!,
-            password:
-                password // You'll need to handle this securely in a real app
-            );
+            email: currentUser!.email!, password: password);
       }
     } catch (e) {
       showMessage(message: 'Failed to add employee: $e');
@@ -141,22 +134,8 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
       }
       return null;
     } catch (e) {
-      debugPrint('Error getting last employee ID: $e');
+      log('Error getting last employee ID: $e');
       return null;
-    }
-  }
-
-  @override
-  Future<void> changePassword(String newPassword) async {
-    try {
-      final user = _firebaseService.auth.currentUser;
-      if (user != null) {
-        await user.updatePassword(newPassword);
-      } else {
-        throw Exception('No user is currently signed in.');
-      }
-    } catch (e) {
-      throw Exception('Failed to change password: $e');
     }
   }
 

@@ -11,6 +11,10 @@ class AuthRemoteDataSource {
     return await _backendAsAService.signIn(email, password);
   }
 
+  Future<void> changePassword(String newPassword) async {
+    await _backendAsAService.changePassword(newPassword);
+  }
+
   Future<void> signOut() async {
     await _backendAsAService.signOut();
   }

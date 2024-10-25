@@ -17,13 +17,14 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<void> logout() {
-    final signOut = _authRemoteDataSource.signOut();
+    final Future<void> signOut = _authRemoteDataSource.signOut();
     return signOut;
   }
 
   @override
   Future<void> changePassword(String newPassword) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
+    final Future<void> changePassword =
+        _authRemoteDataSource.changePassword(newPassword);
+    return changePassword;
   }
 }

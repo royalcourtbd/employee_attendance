@@ -34,7 +34,7 @@ class ProfileImage extends StatelessWidget {
                     placeholder: (context, url) =>
                         const Icon(Icons.image, color: Colors.grey),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.error, color: Colors.grey),
+                        Image.asset(SvgPath.icDemoUser),
                     width: 170,
                     height: 170,
                     fit: BoxFit.cover,

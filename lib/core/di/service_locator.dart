@@ -1,10 +1,16 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
+import 'package:employee_attendance/data/data_sources/remote/attendance_remote_data_source.dart';
 import 'package:employee_attendance/data/data_sources/remote/auth_remote_data_source.dart';
+import 'package:employee_attendance/data/data_sources/remote/check_in_out_remote_data_source.dart';
+import 'package:employee_attendance/data/repositories/attendance_data_repository_impl.dart';
 import 'package:employee_attendance/data/repositories/attendance_repository_impl.dart';
 import 'package:employee_attendance/data/repositories/auth_repository_impl.dart';
+import 'package:employee_attendance/data/repositories/check_in_out_repository_impl.dart';
 import 'package:employee_attendance/data/repositories/employee_repository_impl.dart';
 import 'package:employee_attendance/data/services/backend_as_a_service.dart';
+import 'package:employee_attendance/domain/repositories/attendance/attendance_data_repository.dart';
+import 'package:employee_attendance/domain/repositories/attendance/check_in_out_repository.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 import 'package:employee_attendance/domain/repositories/employee/auth_repository.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
@@ -13,6 +19,7 @@ import 'package:employee_attendance/domain/service/pdf_generation_service.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
+import 'package:employee_attendance/domain/usecases/chech_in_out_use_case.dart';
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
 import 'package:employee_attendance/domain/usecases/generate_attendance_pdf_usecase.dart';
@@ -63,7 +70,7 @@ class ServiceLocator {
   Future<void> _setupUseCase() async {
     _serviceLocator
       ..registerLazySingleton(() => GetGreetingUseCase())
-      ..registerLazySingleton(() => AttendanceUseCases(locate()))
+      ..registerLazySingleton(() => AttendanceUseCases(locate(), locate()))
       ..registerLazySingleton(() => LogoutUseCase(locate()))
       ..registerLazySingleton(() => CreateDemoUserUseCase(locate()))
       ..registerLazySingleton(() => AddEmployeeUseCase(locate()))
@@ -76,7 +83,8 @@ class ServiceLocator {
       ..registerLazySingleton(() => UpdateUserUseCase(locate()))
       ..registerLazySingleton(() => ChangePasswordUseCase(locate()))
       ..registerLazySingleton(() => GetAllAttendanceUseCase(locate()))
-      ..registerLazySingleton(() => GenerateAttendancePdfUseCase(locate()));
+      ..registerLazySingleton(() => GenerateAttendancePdfUseCase(locate()))
+      ..registerLazySingleton(() => ChechInOutUseCase(locate()));
   }
 
   Future<void> _setupService() async {
@@ -88,7 +96,10 @@ class ServiceLocator {
   }
 
   Future<void> _setUpDataSources() async {
-    _serviceLocator.registerLazySingleton(() => AuthRemoteDataSource(locate()));
+    _serviceLocator
+      ..registerLazySingleton(() => AuthRemoteDataSource(locate()))
+      ..registerLazySingleton(() => CheckInOutRemoteDataSource(locate()))
+      ..registerLazySingleton(() => AttendanceRemoteDataSource(locate()));
   }
 
   Future<void> _setupRepository() async {
@@ -98,12 +109,17 @@ class ServiceLocator {
       ..registerLazySingleton<AttendanceRepository>(
           () => AttendanceRepositoryImpl(locate()))
       ..registerLazySingleton<AuthRepository>(
-          () => AuthRepositoryImpl(locate()));
+          () => AuthRepositoryImpl(locate()))
+      ..registerLazySingleton<CheckInOutRepository>(
+          () => CheckInOutRepositoryImpl(locate()))
+      ..registerLazySingleton<AttendanceDataRepository>(
+          () => AttendanceDataRepositoryImpl(locate()));
   }
 
   Future<void> _setupPresenter() async {
     _serviceLocator
       ..registerFactory(() => loadPresenter(HomePresenter(
+            locate(),
             locate(),
             locate(),
             locate(),
