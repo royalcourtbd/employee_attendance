@@ -1,7 +1,7 @@
 // lib/presentation/history/presenter/history_page_ui_state.dart ফাইলে
 
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
 
 class HistoryPageUiState extends BaseUiState {
@@ -23,7 +23,7 @@ class HistoryPageUiState extends BaseUiState {
     );
   }
 
-  final List<Attendance> filteredAttendances;
+  final List<AttendanceEntity> filteredAttendances;
   final DateTime selectedMonth;
   final List<Holiday> monthHolidays;
 
@@ -39,7 +39,7 @@ class HistoryPageUiState extends BaseUiState {
   HistoryPageUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    List<Attendance>? filteredAttendances,
+    List<AttendanceEntity>? filteredAttendances,
     DateTime? selectedMonth,
     List<Holiday>? monthHolidays,
   }) {

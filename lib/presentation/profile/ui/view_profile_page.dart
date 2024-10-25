@@ -2,7 +2,7 @@ import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_header.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_info_item.dart.dart';
@@ -20,7 +20,7 @@ class ViewProfilePage extends StatelessWidget {
     return PresentableWidgetBuilder(
       presenter: _viewProfilePresenter,
       builder: () {
-        final Employee? employee =
+        final EmployeeEntity? employee =
             _viewProfilePresenter.currentUiState.employee;
         return Scaffold(
           body: SingleChildScrollView(

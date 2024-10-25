@@ -16,6 +16,7 @@ import 'package:employee_attendance/domain/repositories/employee/auth_repository
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/service/pdf_generation_service.dart';
+import 'package:employee_attendance/domain/service/time_service.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
@@ -90,9 +91,10 @@ class ServiceLocator {
   Future<void> _setupService() async {
     _serviceLocator
       ..registerLazySingleton<FirebaseService>(() => FirebaseService())
-      ..registerLazySingleton(() => BackendAsAService(locate()))
+      ..registerLazySingleton(() => BackendAsAService(locate(), locate()))
       ..registerLazySingleton(() => HolidayService())
-      ..registerLazySingleton(() => PdfGenerationService());
+      ..registerLazySingleton(() => PdfGenerationService())
+      ..registerLazySingleton(() => TimeService());
   }
 
   Future<void> _setUpDataSources() async {
@@ -107,7 +109,7 @@ class ServiceLocator {
       ..registerLazySingleton<EmployeeRepository>(
           () => EmployeeRepositoryImpl(locate()))
       ..registerLazySingleton<AttendanceRepository>(
-          () => AttendanceRepositoryImpl(locate()))
+          () => AttendanceRepositoryImpl(locate(), locate()))
       ..registerLazySingleton<AuthRepository>(
           () => AuthRepositoryImpl(locate()))
       ..registerLazySingleton<CheckInOutRepository>(

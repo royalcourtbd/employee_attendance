@@ -3,7 +3,7 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/data/repositories/employee_repository_impl.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:employee_attendance/presentation/authentication/presenter/auth_wrapper_ui_state.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
@@ -35,7 +35,8 @@ class AuthWrapperPresenter extends BasePresenter<AuthWrapperUiState> {
     }
 
     _profilePagePresenter.initUserStream(user.uid);
-    final Employee? appUser = await _userRepository.fetchUserData(user.uid);
+    final EmployeeEntity? appUser =
+        await _userRepository.fetchUserData(user.uid);
 
     if (appUser == null) {
       await _profilePagePresenter.logout();

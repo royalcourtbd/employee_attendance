@@ -1,17 +1,19 @@
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
+import 'package:employee_attendance/domain/service/time_service.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final FirebaseService _firebaseService;
+  final TimeService _timeService;
 
-  AttendanceRepositoryImpl(this._firebaseService);
+  AttendanceRepositoryImpl(this._firebaseService, this._timeService);
 
   @override
-  Stream<OfficeSettings> getOfficeSettingsStream() {
+  Stream<OfficeSettingsEntity> getOfficeSettingsStream() {
     return _firebaseService.firestore
         .collection(Urls.settings)
         .doc('office')
@@ -19,7 +21,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         .map((snapshot) => OfficeSettingsModel.fromJson(snapshot.data() ?? {}));
   }
 
-  Future<OfficeSettings> _getOfficeSettings() async {
+  Future<OfficeSettingsEntity> _getOfficeSettings() async {
     final doc = await _firebaseService.firestore
         .collection(Urls.settings)
         .doc('office')
@@ -29,11 +31,22 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return OfficeSettingsModel.fromJson(doc.data()!);
     } else {
       debugPrint('Warning: Using default office settings');
+      final DateTime today = _timeService.getCurrentTime();
       return OfficeSettingsModel(
-        startTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 9, 0),
-        endTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 17, 0),
+        startTime: DateTime(
+          today.year,
+          today.month,
+          today.day,
+          9,
+          0,
+        ),
+        endTime: DateTime(
+          today.year,
+          today.month,
+          today.day,
+          17,
+          0,
+        ),
         lateThreshold: 10,
         workDays: const [
           'Sunday',
@@ -51,10 +64,10 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Future<void> updateOfficeSettings(OfficeSettings settings) async {
+  Future<void> updateOfficeSettings(OfficeSettingsEntity settings) async {
     try {
       final OfficeSettingsModel settingsModel =
-          OfficeSettingsModel.fromOfficeSettings(settings);
+          OfficeSettingsModel.fromEntity(settings);
       await _firebaseService.firestore
           .collection(Urls.settings)
           .doc('office')

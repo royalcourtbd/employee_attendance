@@ -9,19 +9,21 @@ import 'package:employee_attendance/data/models/attendance_model.dart';
 import 'package:employee_attendance/data/models/employee_user_model.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
 import 'package:employee_attendance/domain/entities/all_attendance.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
+import 'package:employee_attendance/domain/service/time_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class BackendAsAService {
   final FirebaseService _firebaseService;
-  BackendAsAService(this._firebaseService);
+  final TimeService _timeService;
+  BackendAsAService(this._firebaseService, this._timeService);
 
   firebase_auth.User? get currentUser => _firebaseService.auth.currentUser;
 
-  Future<Either<String, Employee?>> signIn(
+  Future<Either<String, EmployeeEntity?>> signIn(
           String email, String password) async =>
       _signIn(email, password);
 
@@ -40,7 +42,19 @@ class BackendAsAService {
   Future<bool> isCheckOutAllowedToday(String userId) async =>
       _isCheckOutAllowedToday(userId);
 
-  Future<Either<String, Employee?>> _signIn(
+  Stream<AttendanceEntity?> getTodayAttendanceStreamByUserId(String userId) =>
+      _getTodayAttendanceStreamByUserId(userId);
+
+  Stream<List<AttendanceEntity>> getUserAttendanceStreamByUserId(
+          String userId) =>
+      _getUserAttendanceStreamByUserId(userId);
+
+  Stream<List<AttendanceEntity>> streamAllTodayAttendances() =>
+      _streamAllTodayAttendances();
+  Stream<List<AllAttendance>> streamAllAttendanceHistory() =>
+      _streamAllAttendanceHistory();
+
+  Future<Either<String, EmployeeEntity?>> _signIn(
       String email, String password) async {
     try {
       final UserCredential userCredential =
@@ -99,7 +113,7 @@ class BackendAsAService {
 
   Future<void> _markCheckIn(String userId) async {
     try {
-      final DateTime now = DateTime.now();
+      final DateTime nowTimeIsIt = _timeService.getCurrentTime();
       final DocumentReference<Map<String, dynamic>> attendanceRef =
           _firebaseService.firestore.collection(Urls.attendances).doc();
 
@@ -126,12 +140,12 @@ class BackendAsAService {
       );
 
       // Check if current time is after late deadline
-      final bool isLate = now.isAfter(lateDeadline);
+      final bool isLate = nowTimeIsIt.isAfter(lateDeadline);
 
       final AttendanceModel newAttendance = AttendanceModel(
         id: attendanceRef.id,
         userId: userId,
-        checkInTime: now,
+        checkInTime: nowTimeIsIt,
         checkOutTime: null,
         workDuration: null,
         isLate: isLate,
@@ -144,7 +158,7 @@ class BackendAsAService {
   }
 
   Future<void> _markCheckOut(String userId) async {
-    final DateTime now = DateTime.now();
+    final DateTime nowTimeIsIt = _timeService.getCurrentTime();
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firebaseService.firestore
@@ -160,10 +174,10 @@ class BackendAsAService {
             querySnapshot.docs.first;
         final DateTime checkInTime =
             (attendanceDoc.data()['checkInTime'] as Timestamp).toDate();
-        final workDuration = now.difference(checkInTime);
+        final workDuration = nowTimeIsIt.difference(checkInTime);
 
         await attendanceDoc.reference.update({
-          'checkOutTime': now,
+          'checkOutTime': nowTimeIsIt,
           'workDuration': workDuration.inSeconds,
         });
       }
@@ -174,9 +188,9 @@ class BackendAsAService {
   }
 
   Future<bool> _isCheckInAllowedToday(String userId) async {
-    final DateTime today = DateTime.now();
-    final DateTime startOfDay = DateTime(today.year, today.month, today.day);
-    final DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+    final DateTime today = _timeService.getCurrentTime();
+    final DateTime startOfDay = _timeService.getStartOfDay(today);
+    final DateTime endOfDay = _timeService.getEndOfDay(today);
 
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await _firebaseService.firestore
@@ -190,9 +204,9 @@ class BackendAsAService {
   }
 
   Future<bool> _isCheckOutAllowedToday(String userId) async {
-    final DateTime today = DateTime.now();
-    final DateTime startOfDay = DateTime(today.year, today.month, today.day);
-    final DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+    final DateTime today = _timeService.getCurrentTime();
+    final DateTime startOfDay = _timeService.getStartOfDay(today);
+    final DateTime endOfDay = _timeService.getEndOfDay(today);
 
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await _firebaseService.firestore
@@ -206,10 +220,10 @@ class BackendAsAService {
     return querySnapshot.docs.isNotEmpty;
   }
 
-  Stream<Attendance?> getTodayAttendanceStreamByUserId(String userId) {
-    final DateTime now = DateTime.now();
-    final DateTime startOfDay = DateTime(now.year, now.month, now.day);
-    final DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+  Stream<AttendanceEntity?> _getTodayAttendanceStreamByUserId(String userId) {
+    final DateTime nowTimeIsIt = _timeService.getCurrentTime();
+    final DateTime startOfDay = _timeService.getStartOfDay(nowTimeIsIt);
+    final DateTime endOfDay = _timeService.getEndOfDay(nowTimeIsIt);
 
     return _firebaseService.firestore
         .collection(Urls.attendances)
@@ -227,10 +241,10 @@ class BackendAsAService {
     });
   }
 
-  Stream<List<Attendance>> streamAllTodayAttendances() {
-    final DateTime now = DateTime.now();
-    final DateTime startOfDay = DateTime(now.year, now.month, now.day);
-    final DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+  Stream<List<AttendanceEntity>> _streamAllTodayAttendances() {
+    final DateTime nowTimeIsIt = _timeService.getCurrentTime();
+    final DateTime startOfDay = _timeService.getStartOfDay(nowTimeIsIt);
+    final DateTime endOfDay = _timeService.getEndOfDay(nowTimeIsIt);
 
     return _firebaseService.firestore
         .collection(Urls.attendances)
@@ -244,7 +258,8 @@ class BackendAsAService {
     });
   }
 
-  Stream<List<Attendance>> getUserAttendanceStreamByUserId(String userId) {
+  Stream<List<AttendanceEntity>> _getUserAttendanceStreamByUserId(
+      String userId) {
     return _firebaseService.firestore
         .collection(Urls.attendances)
         .where('userId', isEqualTo: userId)
@@ -257,7 +272,7 @@ class BackendAsAService {
     });
   }
 
-  Stream<List<AllAttendance>> streamAllAttendanceHistory() {
+  Stream<List<AllAttendance>> _streamAllAttendanceHistory() {
     return _firebaseService.firestore
         .collection(Urls.attendances)
         .snapshots()

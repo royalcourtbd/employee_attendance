@@ -1,7 +1,7 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/external_libs/loading_indicator.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_image.dart';
 import 'package:employee_attendance/presentation/profile/widgets/profile_name.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatelessWidget {
   final ThemeData theme;
-  final Employee? employee;
+  final EmployeeEntity? employee;
   final VoidCallback? onEdit;
   final bool isPhotoEditable;
   final ProfilePagePresenter presenter;

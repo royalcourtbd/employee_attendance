@@ -6,7 +6,7 @@ import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/usecases/change_password_use_case.dart';
 import 'package:employee_attendance/domain/usecases/fetch_user_data_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_user_stream_use_case.dart';
@@ -93,7 +93,7 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     }
   }
 
-  Future<void> updateUser(Employee updatedUser) async {
+  Future<void> updateUser(EmployeeEntity updatedUser) async {
     await toggleLoading(loading: true);
     try {
       await _updateUserUseCase.execute(updatedUser);

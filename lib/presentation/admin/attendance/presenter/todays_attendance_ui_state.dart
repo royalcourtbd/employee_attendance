@@ -1,12 +1,12 @@
 // lib/presentation/admin/attendance/presenter/todays_attendance_ui_state.dart
 
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 
 class AttendanceWithEmployee {
-  final Attendance attendance;
-  final Employee employee;
+  final AttendanceEntity attendance;
+  final EmployeeEntity employee;
 
   AttendanceWithEmployee({required this.attendance, required this.employee});
 }

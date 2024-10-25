@@ -1,19 +1,16 @@
 import 'dart:async';
-
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/data/models/office_settings_model.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/chech_in_out_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_greeting_usecase.dart';
-
 import 'package:employee_attendance/presentation/home/presenter/home_page_ui_state.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -37,8 +34,8 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   HomePageUiState get currentUiState => uiState.value;
 
   Timer? _timer;
-  StreamSubscription<Attendance?>? _attendanceSubscription;
-  StreamSubscription<OfficeSettings>? _settingsSubscription;
+  StreamSubscription<AttendanceEntity?>? _attendanceSubscription;
+  StreamSubscription<OfficeSettingsEntity>? _settingsSubscription;
 
   @override
   void onInit() {
@@ -123,7 +120,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
           checkInTime: attendance?.checkInTime,
           checkOutTime: attendance?.checkOutTime,
           workDuration: attendance?.workDuration,
-          isCheckedIn: attendance != null && attendance.checkOutTime == null,
+          isCheckedIn: attendance?.isCheckedIn,
         );
         _updateButtonState();
       },
@@ -146,7 +143,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
   void _initSettingsStream() {
     _settingsSubscription =
         _attendanceUseCases.getOfficeSettingsStream().listen(
-      (OfficeSettings settings) {
+      (OfficeSettingsEntity settings) {
         uiState.value = currentUiState.copyWith(
           officeSettings: settings,
         );
@@ -166,7 +163,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
       // Time after 9 hours
       DateTime endTime = now.add(const Duration(hours: 9));
 
-      OfficeSettings officeSettings = OfficeSettings(
+      OfficeSettingsEntity officeSettings = OfficeSettingsEntity(
         startTime: now,
         endTime: endTime,
         lateThreshold: 10,
@@ -184,7 +181,7 @@ class HomePresenter extends BasePresenter<HomePageUiState> {
       );
 
       OfficeSettingsModel officeSettingsModel =
-          OfficeSettingsModel.fromOfficeSettings(officeSettings);
+          OfficeSettingsModel.fromEntity(officeSettings);
 
       await _firebaseService.firestore
           .collection(Urls.settings)

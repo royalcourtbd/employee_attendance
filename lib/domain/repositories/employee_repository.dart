@@ -1,13 +1,13 @@
 import 'package:employee_attendance/data/models/employee_user_model.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 
 abstract class EmployeeRepository {
-  Future<Employee?> createDemoUser();
-  Future<void> addEmployee(Employee employee);
+  Future<EmployeeEntity?> createDemoUser();
+  Future<void> addEmployee(EmployeeEntity employee);
   Future<String?> getLastEmployeeId();
-  Future<Employee?> fetchUserData(String userId);
-  Future<void> updateUser(Employee user);
-  Stream<Employee?> getUserStream(String userId);
+  Future<EmployeeEntity?> fetchUserData(String userId);
+  Future<void> updateUser(EmployeeEntity user);
+  Stream<EmployeeEntity?> getUserStream(String userId);
   Stream<List<EmployeeUserModel>> getAllEmployees();
   Future<String?> getDeviceToken();
 }

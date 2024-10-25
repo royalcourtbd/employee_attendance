@@ -1,5 +1,5 @@
-import 'package:employee_attendance/domain/entities/attendance.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 import 'package:employee_attendance/domain/repositories/attendance/attendance_data_repository.dart';
 import 'package:employee_attendance/domain/repositories/attendance_repository.dart';
 
@@ -8,17 +8,17 @@ class AttendanceUseCases {
   final AttendanceDataRepository _attendanceDataRepository;
 
   AttendanceUseCases(this._repository, this._attendanceDataRepository);
-  Stream<Attendance?> getTodayAttendanceStream(String userId) =>
+  Stream<AttendanceEntity?> getTodayAttendanceStream(String userId) =>
       _attendanceDataRepository.getTodayAttendanceStreamByUserId(userId);
 
-  Stream<List<Attendance>> getUserAttendanceStream(String userId) =>
+  Stream<List<AttendanceEntity>> getUserAttendanceStream(String userId) =>
       _attendanceDataRepository.getUserAttendanceStreamByUserId(userId);
-  Stream<List<Attendance>> getTodaysAttendanceStream() =>
+  Stream<List<AttendanceEntity>> getTodaysAttendanceStream() =>
       _attendanceDataRepository.streamAllTodayAttendances();
 
-  Future<void> updateOfficeSettings(OfficeSettings settings) =>
+  Future<void> updateOfficeSettings(OfficeSettingsEntity settings) =>
       _repository.updateOfficeSettings(settings);
 
-  Stream<OfficeSettings> getOfficeSettingsStream() =>
+  Stream<OfficeSettingsEntity> getOfficeSettingsStream() =>
       _repository.getOfficeSettingsStream();
 }

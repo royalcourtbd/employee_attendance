@@ -1,12 +1,12 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/static/font_family.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/presentation/common/profile_pic_widget.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeListItem extends StatelessWidget {
-  final Employee employee;
+  final EmployeeEntity employee;
   final VoidCallback onEdit;
   final ThemeData theme;
 

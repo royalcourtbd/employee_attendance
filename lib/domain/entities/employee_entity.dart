@@ -1,4 +1,6 @@
-class Employee {
+import 'package:employee_attendance/core/base/base_entity.dart';
+
+class EmployeeEntity extends BaseEntity {
   final String id;
   final String? name;
   final String? role;
@@ -12,7 +14,7 @@ class Employee {
   final String? email;
   final String? designation;
 
-  const Employee({
+  const EmployeeEntity({
     required this.id,
     this.name,
     this.role,
@@ -27,7 +29,23 @@ class Employee {
     this.designation,
   });
 
-  Employee copyWith({
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        role,
+        joiningDate,
+        image,
+        employeeId,
+        documentId,
+        phoneNumber,
+        deviceToken,
+        employeeStatus,
+        email,
+        designation,
+      ];
+
+  EmployeeEntity copyWith({
     String? id,
     String? name,
     String? role,
@@ -41,7 +59,7 @@ class Employee {
     String? email,
     String? designation,
   }) {
-    return Employee(
+    return EmployeeEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       role: role ?? this.role,

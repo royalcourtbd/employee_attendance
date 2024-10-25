@@ -1,6 +1,6 @@
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 
 abstract class AttendanceRepository {
-  Stream<OfficeSettings> getOfficeSettingsStream();
-  Future<void> updateOfficeSettings(OfficeSettings settings);
+  Stream<OfficeSettingsEntity> getOfficeSettingsStream();
+  Future<void> updateOfficeSettings(OfficeSettingsEntity settings);
 }

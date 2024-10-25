@@ -2,7 +2,7 @@
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
 import 'package:employee_attendance/domain/service/holiday_service.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/presentation/history/presenter/history_page_ui_state.dart';
@@ -41,7 +41,7 @@ class HistoryPagePresenter extends BasePresenter<HistoryPageUiState> {
   void initUserAttendanceStream(String userId) {
     toggleLoading(loading: true);
 
-    Rx.combineLatest2<List<Attendance>, DateTime, List<Attendance>>(
+    Rx.combineLatest2<List<AttendanceEntity>, DateTime, List<AttendanceEntity>>(
         _attendanceUseCases.getUserAttendanceStream(userId),
         _selectedMonthSubject.stream, (attendances, selectedMonth) {
       return attendances

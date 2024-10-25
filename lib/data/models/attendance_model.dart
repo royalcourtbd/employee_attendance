@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
 
-class AttendanceModel extends Attendance {
+class AttendanceModel extends AttendanceEntity {
   const AttendanceModel({
     required super.id,
     required super.userId,
@@ -40,14 +40,14 @@ class AttendanceModel extends Attendance {
     };
   }
 
-  factory AttendanceModel.fromAttendance(Attendance attendance) {
+  factory AttendanceModel.fromEntity(AttendanceEntity entity) {
     return AttendanceModel(
-      id: attendance.id,
-      userId: attendance.userId,
-      checkInTime: attendance.checkInTime,
-      checkOutTime: attendance.checkOutTime,
-      workDuration: attendance.workDuration,
-      isLate: attendance.isLate,
+      id: entity.id,
+      userId: entity.userId,
+      checkInTime: entity.checkInTime,
+      checkOutTime: entity.checkOutTime,
+      workDuration: entity.workDuration,
+      isLate: entity.isLate,
     );
   }
 }

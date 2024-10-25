@@ -1,8 +1,8 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 
 class ProfilePageUiState extends BaseUiState {
-  final Employee? employee;
+  final EmployeeEntity? employee;
   final bool isUpdatingImage;
   final double uploadProgress;
 
@@ -36,7 +36,7 @@ class ProfilePageUiState extends BaseUiState {
   ProfilePageUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    Employee? employee,
+    EmployeeEntity? employee,
     bool? isUpdatingImage,
     double? uploadProgress,
   }) {

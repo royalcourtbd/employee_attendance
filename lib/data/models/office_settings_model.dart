@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 
-class OfficeSettingsModel extends OfficeSettings {
+class OfficeSettingsModel extends OfficeSettingsEntity {
   const OfficeSettingsModel({
     required super.startTime,
     required super.endTime,
@@ -39,16 +39,16 @@ class OfficeSettingsModel extends OfficeSettings {
     };
   }
 
-  factory OfficeSettingsModel.fromOfficeSettings(OfficeSettings settings) {
+  factory OfficeSettingsModel.fromEntity(OfficeSettingsEntity entity) {
     return OfficeSettingsModel(
-      startTime: settings.startTime,
-      endTime: settings.endTime,
-      lateThreshold: settings.lateThreshold,
-      workDays: settings.workDays,
-      timeZone: settings.timeZone,
-      ssid: settings.ssid,
-      latitude: settings.latitude,
-      longitude: settings.longitude,
+      startTime: entity.startTime,
+      endTime: entity.endTime,
+      lateThreshold: entity.lateThreshold,
+      workDays: entity.workDays,
+      timeZone: entity.timeZone,
+      ssid: entity.ssid,
+      latitude: entity.latitude,
+      longitude: entity.longitude,
     );
   }
 }

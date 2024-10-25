@@ -1,6 +1,6 @@
 import 'package:employee_attendance/core/config/employee_attendance_app_color.dart';
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
 import 'package:employee_attendance/presentation/common/show_vertical_divider.dart';
 import 'package:employee_attendance/presentation/history/widgets/time_status_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class AttendanceDetails extends StatelessWidget {
   });
 
   final ThemeData theme;
-  final Attendance attendance;
+  final AttendanceEntity attendance;
 
   String _formatTime(DateTime? time) {
     return time != null ? DateFormat('hh:mm a').format(time) : '--:--';

@@ -1,6 +1,6 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/usecases/get_all_employees_use_case.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/employees_ui_state.dart';
 import 'package:employee_attendance/presentation/admin/employee/ui/add_employee_page.dart';
@@ -26,7 +26,7 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
     await toggleLoading(loading: true);
 
     _allEmployeesUseCase.execute().listen(
-      (List<Employee> employees) {
+      (List<EmployeeEntity> employees) {
         uiState.value = currentUiState.copyWith(
           employees: employees,
           filteredEmployees: employees,
@@ -49,7 +49,7 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
         filteredEmployees: currentUiState.employees,
       );
     } else {
-      final List<Employee> filteredList =
+      final List<EmployeeEntity> filteredList =
           currentUiState.employees.where((employee) {
         return employee.name?.toLowerCase().contains(query.toLowerCase()) ==
                 true ||
@@ -62,7 +62,7 @@ class EmployeesPresenter extends BasePresenter<EmployeesUiState> {
     }
   }
 
-  void editEmployee(Employee employee) {
+  void editEmployee(EmployeeEntity employee) {
     // Implement edit employee logic
   }
 

@@ -7,7 +7,7 @@ class GetAllEmployeesUseCase {
   Stream<List<EmployeeUserModel>> execute() =>
       _repository.getAllEmployees().map(
             (employees) => employees
-                .map((employee) => EmployeeUserModel.fromUser(employee))
+                .map((employee) => EmployeeUserModel.fromEntity(employee))
                 .toList(),
           );
 }

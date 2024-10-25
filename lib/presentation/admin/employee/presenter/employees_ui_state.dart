@@ -1,11 +1,11 @@
 // lib/presentation/admin/employee/presenter/employees_ui_state.dart ফাইলে
 
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 
 class EmployeesUiState extends BaseUiState {
-  final List<Employee> employees;
-  final List<Employee> filteredEmployees;
+  final List<EmployeeEntity> employees;
+  final List<EmployeeEntity> filteredEmployees;
 
   const EmployeesUiState({
     required super.isLoading,
@@ -34,8 +34,8 @@ class EmployeesUiState extends BaseUiState {
   EmployeesUiState copyWith({
     bool? isLoading,
     String? userMessage,
-    List<Employee>? employees,
-    List<Employee>? filteredEmployees,
+    List<EmployeeEntity>? employees,
+    List<EmployeeEntity>? filteredEmployees,
   }) {
     return EmployeesUiState(
       isLoading: isLoading ?? this.isLoading,

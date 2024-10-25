@@ -1,6 +1,6 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/usecases/add_employee_use_case.dart';
 import 'package:employee_attendance/domain/usecases/generate_new_employee_id_use_case.dart';
 import 'package:employee_attendance/presentation/admin/employee/presenter/add_employee_ui_state.dart';
@@ -35,7 +35,7 @@ class AddEmployeePresenter extends BasePresenter<AddEmployeeUiState> {
       try {
         final newEmployeeId = await _generateNewEmployeeIdUseCase.execute();
 
-        final newEmployee = Employee(
+        final newEmployee = EmployeeEntity(
           id: '', // This will be set by Firebase
           documentId: '', // This will be set by Firebase
           name: nameController.text,

@@ -1,5 +1,5 @@
 import 'package:employee_attendance/core/base/base_ui_state.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 
 class HomePageUiState extends BaseUiState {
   const HomePageUiState({
@@ -40,7 +40,7 @@ class HomePageUiState extends BaseUiState {
   final DateTime? checkOutTime;
   final Duration? workDuration;
   final bool isCheckedIn;
-  final OfficeSettings? officeSettings;
+  final OfficeSettingsEntity? officeSettings;
 
   @override
   List<Object?> get props => [
@@ -66,7 +66,7 @@ class HomePageUiState extends BaseUiState {
     DateTime? checkOutTime,
     Duration? workDuration,
     bool? isCheckedIn,
-    OfficeSettings? officeSettings,
+    OfficeSettingsEntity? officeSettings,
     bool? canCheckIn,
     bool? canCheckOut,
   }) {

@@ -1,6 +1,6 @@
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 
-class EmployeeUserModel extends Employee {
+class EmployeeUserModel extends EmployeeEntity {
   const EmployeeUserModel({
     required super.id,
     super.name,
@@ -52,21 +52,20 @@ class EmployeeUserModel extends Employee {
     };
   }
 
-  // এই মেথডটি `User` অবজেক্ট থেকে `UserModel` অবজেক্ট তৈরি করতে সহায়ক হবে।
-  factory EmployeeUserModel.fromUser(Employee user) {
+  factory EmployeeUserModel.fromEntity(EmployeeEntity entity) {
     return EmployeeUserModel(
-      id: user.id,
-      name: user.name,
-      role: user.role,
-      joiningDate: user.joiningDate,
-      image: user.image,
-      employeeId: user.employeeId,
-      documentId: user.documentId,
-      phoneNumber: user.phoneNumber,
-      deviceToken: user.deviceToken,
-      employeeStatus: user.employeeStatus,
-      email: user.email,
-      designation: user.designation,
+      id: entity.id,
+      name: entity.name,
+      role: entity.role,
+      joiningDate: entity.joiningDate,
+      image: entity.image,
+      employeeId: entity.employeeId,
+      documentId: entity.documentId,
+      phoneNumber: entity.phoneNumber,
+      deviceToken: entity.deviceToken,
+      employeeStatus: entity.employeeStatus,
+      email: entity.email,
+      designation: entity.designation,
     );
   }
   @override

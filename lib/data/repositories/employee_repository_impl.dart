@@ -4,7 +4,7 @@ import 'package:employee_attendance/core/services/firebase_service.dart';
 import 'package:employee_attendance/core/static/urls.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/data/models/employee_user_model.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/repositories/employee_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +21,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   firebase_auth.User? get currentUser => _firebaseService.auth.currentUser;
 
   @override
-  Future<Employee?> createDemoUser() async {
+  Future<EmployeeEntity?> createDemoUser() async {
     try {
       const email = 'dfhg@jfdg.com';
       const password = '123456';
@@ -73,7 +73,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Future<void> addEmployee(Employee employee) async {
+  Future<void> addEmployee(EmployeeEntity employee) async {
     try {
       const password = '123456';
 
@@ -140,7 +140,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Future<Employee?> fetchUserData(String userId) async {
+  Future<EmployeeEntity?> fetchUserData(String userId) async {
     try {
       final doc = await _firebaseService.firestore
           .collection(Urls.employees)
@@ -161,9 +161,9 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Future<void> updateUser(Employee user) async {
+  Future<void> updateUser(EmployeeEntity user) async {
     try {
-      final EmployeeUserModel userModel = EmployeeUserModel.fromUser(user);
+      final EmployeeUserModel userModel = EmployeeUserModel.fromEntity(user);
       await _firebaseService.firestore
           .collection(Urls.employees)
           .doc(user.id)
@@ -174,7 +174,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Stream<Employee?> getUserStream(String userId) {
+  Stream<EmployeeEntity?> getUserStream(String userId) {
     return _firebaseService.firestore
         .collection(Urls.employees)
         .doc(userId)

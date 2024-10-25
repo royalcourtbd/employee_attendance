@@ -3,7 +3,7 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/data/models/employee_user_model.dart';
-import 'package:employee_attendance/domain/entities/attendance.dart';
+import 'package:employee_attendance/domain/entities/attendance_entity.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/domain/usecases/get_all_employees_use_case.dart';
 import 'package:employee_attendance/presentation/admin/attendance/presenter/todays_attendance_ui_state.dart';
@@ -31,7 +31,7 @@ class TodaysAttendancePresenter extends BasePresenter<TodaysAttendanceUiState> {
   void _loadTodaysAttendance() {
     toggleLoading(loading: true);
 
-    Rx.combineLatest2<List<Attendance>, List<EmployeeUserModel>,
+    Rx.combineLatest2<List<AttendanceEntity>, List<EmployeeUserModel>,
             List<AttendanceWithEmployee>>(
         _attendanceUseCases.getTodaysAttendanceStream(),
         _getAllEmployeesUseCase.execute(), (attendances, employees) {
@@ -54,7 +54,7 @@ class TodaysAttendancePresenter extends BasePresenter<TodaysAttendanceUiState> {
   }
 
   List<AttendanceWithEmployee> _combineAttendancesWithEmployees(
-      List<Attendance> attendances, List<EmployeeUserModel> employees) {
+      List<AttendanceEntity> attendances, List<EmployeeUserModel> employees) {
     return attendances.map((attendance) {
       final employee = employees.firstWhere(
           (emp) => emp.id == attendance.userId,

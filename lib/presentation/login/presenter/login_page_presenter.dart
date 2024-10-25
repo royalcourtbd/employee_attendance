@@ -1,7 +1,7 @@
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
-import 'package:employee_attendance/domain/entities/employee.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
 import 'package:employee_attendance/domain/usecases/create_demo_user_use_case.dart';
 import 'package:employee_attendance/domain/usecases/get_device_token_use_case.dart';
 import 'package:employee_attendance/domain/usecases/login_use_case.dart';
@@ -57,7 +57,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
           debugPrint('Login error: $errorMessage');
           await addUserMessage(errorMessage);
         },
-        (Employee? user) async {
+        (EmployeeEntity? user) async {
           debugPrint('Login successful. User: $user');
           if (user != null) {
             final String? deviceToken = await _getDeviceTokenUseCase.execute();

@@ -1,7 +1,7 @@
 // lib/presentation/admin/settings/presenter/settings_presenter.dart ফাইলে
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
-import 'package:employee_attendance/domain/entities/office_settings.dart';
+import 'package:employee_attendance/domain/entities/office_settings_entity.dart';
 import 'package:employee_attendance/domain/usecases/attendance_usecases.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/admin/settings/presenter/settings_ui_state.dart';
@@ -28,7 +28,7 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
 
   void _listenToOfficeSettings() {
     _attendanceUseCases.getOfficeSettingsStream().listen(
-      (OfficeSettings settings) {
+      (OfficeSettingsEntity settings) {
         uiState.value = SettingsUiState(
           isLoading: false,
           userMessage: '',
@@ -137,7 +137,7 @@ class SettingsPresenter extends BasePresenter<SettingsUiState> {
 
       final now = DateTime.now();
 
-      final updatedSettings = OfficeSettings(
+      final updatedSettings = OfficeSettingsEntity(
         startTime: startTime != null
             ? DateTime(
                 now.year,
