@@ -26,7 +26,7 @@ class BuildHistoryPageBodySection extends StatelessWidget {
       return LoadingIndicator(
         theme: theme,
         color: theme.primaryColor,
-        ringColor: theme.primaryColor.withOpacity(0.5),
+        ringColor: theme.primaryColor.withValues(alpha: 0.5),
       );
     } else if (uiState.filteredAttendances.isEmpty) {
       return const EmptyAttendanceView();

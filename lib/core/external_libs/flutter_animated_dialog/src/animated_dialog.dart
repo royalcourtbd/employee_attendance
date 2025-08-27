@@ -285,8 +285,6 @@ Future<T?> showAnimatedDialog<T extends Object?>({
           );
         case DialogTransitionType.none:
           return child;
-        default:
-          return FadeTransition(opacity: animation, child: child);
       }
     },
   );
@@ -339,7 +337,7 @@ class CustomDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final DialogTheme dialogTheme = DialogTheme.of(context);
+    const DialogTheme dialogTheme = DialogTheme();
     final List<Widget> children = <Widget>[];
     String? label = semanticLabel;
 
@@ -478,7 +476,7 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DialogTheme dialogTheme = DialogTheme.of(context);
+    const DialogTheme dialogTheme = DialogTheme();
     return AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets +
           const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
@@ -496,7 +494,7 @@ class CustomDialog extends StatelessWidget {
             child: Material(
               color: backgroundColor ??
                   dialogTheme.backgroundColor ??
-                  Theme.of(context).dialogBackgroundColor,
+                  const DialogThemeData().backgroundColor,
               elevation:
                   elevation ?? dialogTheme.elevation ?? _defaultElevation,
               shape: shape ?? dialogTheme.shape ?? _defaultDialogShape,

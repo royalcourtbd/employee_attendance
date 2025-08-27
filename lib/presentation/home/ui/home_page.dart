@@ -54,7 +54,8 @@ class HomePage extends StatelessWidget {
                   getFormattedCurrentDate(),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: fourteenPx,
-                    color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+                    color: theme.textTheme.bodyMedium!.color!
+                        .withValues(alpha: 0.6),
                   ),
                 ),
                 gapH50,

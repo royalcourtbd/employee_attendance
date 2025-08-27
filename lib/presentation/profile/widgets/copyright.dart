@@ -13,7 +13,7 @@ class Copyright extends StatelessWidget {
       textAlign: TextAlign.center,
       style: theme.textTheme.bodyMedium!.copyWith(
         fontSize: fourteenPx,
-        color: theme.textTheme.bodyMedium!.color!.withOpacity(0.5),
+        color: theme.textTheme.bodyMedium!.color!.withValues(alpha: .5),
       ),
     );
   }

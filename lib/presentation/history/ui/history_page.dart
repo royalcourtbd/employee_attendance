@@ -36,7 +36,7 @@ class HistoryPage extends StatelessWidget {
                     ? LoadingIndicator(
                         theme: theme,
                         color: theme.primaryColor,
-                        ringColor: theme.primaryColor.withOpacity(0.5),
+                        ringColor: theme.primaryColor.withValues(alpha: 0.5),
                       )
                     : uiState.filteredAttendances.isEmpty
                         ? const EmptyAttendanceView()

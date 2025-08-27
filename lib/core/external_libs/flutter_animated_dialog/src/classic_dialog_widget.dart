@@ -65,7 +65,7 @@ class ClassicGeneralDialogWidget extends StatelessWidget {
                             .textTheme
                             .bodySmall!
                             .color!
-                            .withOpacity(0.6),
+                            .withValues(alpha: .6),
                         fontSize:
                             Theme.of(context).textTheme.labelLarge!.fontSize,
                       ),
@@ -83,7 +83,7 @@ class ClassicGeneralDialogWidget extends StatelessWidget {
                         return Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.5);
+                            .withValues(alpha: 0.5);
                       }
                       return Theme.of(context).splashColor;
                     },
@@ -284,7 +284,7 @@ class ClassicListDialogWidgetState<T>
                         .textTheme
                         .bodySmall!
                         .color!
-                        .withOpacity(0.6),
+                        .withValues(alpha: 0.6),
                     fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
                   ),
                 ),
@@ -318,7 +318,7 @@ class ClassicListDialogWidgetState<T>
                       return Theme.of(context)
                           .colorScheme
                           .primary
-                          .withOpacity(0.5);
+                          .withValues(alpha: 0.5);
                     }
                     return Theme.of(context).splashColor;
                   },

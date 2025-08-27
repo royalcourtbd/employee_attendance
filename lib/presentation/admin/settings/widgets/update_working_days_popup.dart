@@ -77,7 +77,7 @@ class UpdateWorkingDaysPopup extends StatelessWidget {
                           if (states.contains(WidgetState.selected)) {
                             return theme.primaryColor;
                           }
-                          return theme.primaryColor.withOpacity(0.2);
+                          return theme.primaryColor.withValues(alpha: .2);
                         },
                       ),
                       shape: const StadiumBorder(),

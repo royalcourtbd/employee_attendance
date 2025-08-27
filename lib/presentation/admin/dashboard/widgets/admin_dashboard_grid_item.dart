@@ -22,7 +22,7 @@ class AdminDashboardGridItem extends StatelessWidget {
       child: Container(
         padding: padding10,
         decoration: BoxDecoration(
-          color: theme.cardColor.withOpacity(0.5),
+          color: theme.cardColor.withValues(alpha: .5),
           borderRadius: radius10,
         ),
         child: Column(

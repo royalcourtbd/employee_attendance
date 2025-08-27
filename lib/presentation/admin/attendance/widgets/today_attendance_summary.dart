@@ -16,7 +16,7 @@ class TodayAttendanceSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding15,
-      color: theme.primaryColor.withOpacity(0.1),
+      color: theme.primaryColor.withValues(alpha: .1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

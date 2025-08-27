@@ -96,7 +96,7 @@ class RemoveDialog extends StatelessWidget {
                         style: theme.textTheme.bodySmall!.copyWith(
                           // letterSpacing: 1,
                           color: theme.textTheme.bodySmall!.color!
-                              .withOpacity(0.6),
+                              .withValues(alpha: .6),
                           height: 1.8,
                           fontWeight: FontWeight.w400,
                           fontSize: thirteenPx,
@@ -113,7 +113,7 @@ class RemoveDialog extends StatelessWidget {
                     //       isFocused: false,
                     //       theme: theme,
                     //       color: theme.textTheme.bodyMedium!.color!
-                    //           .withOpacity(0.6),
+                    //           .withValues(0.6),
                     //       onTap: () => context.navigatorPop<void>(),
                     //     ),
                     //     gapW15,

@@ -51,7 +51,7 @@ class AttendanceDetails extends StatelessWidget {
           ),
           Divider(
             height: sevenPx,
-            color: EmployeeAttendanceAppColor.textColor.withOpacity(0.1),
+            color: EmployeeAttendanceAppColor.textColor.withValues(alpha: 0.1),
           ),
           Text(
             'Eastern Banabithi Shopping Complex ~ South Banasree',
@@ -59,7 +59,7 @@ class AttendanceDetails extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: thirteenPx,
-              color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+              color: theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.6),
             ),
           ),
         ],

@@ -10,7 +10,7 @@ class ShowVerticalDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EmployeeAttendanceAppColor.textColor.withOpacity(0.1),
+      color: EmployeeAttendanceAppColor.textColor.withValues(alpha: .1),
       width: 1,
       height: thirtyPx,
     );

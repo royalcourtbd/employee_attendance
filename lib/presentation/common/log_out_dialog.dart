@@ -97,7 +97,7 @@ class LogOutDialog extends StatelessWidget {
                         style: theme.textTheme.bodySmall!.copyWith(
                           // letterSpacing: 1,
                           color: theme.textTheme.bodySmall!.color!
-                              .withOpacity(0.6),
+                              .withValues(alpha: .6),
                           height: 1.8,
                           fontWeight: FontWeight.w400,
                           fontSize: thirteenPx,
@@ -113,7 +113,7 @@ class LogOutDialog extends StatelessWidget {
                           isFocused: false,
                           onTap: () => context.navigatorPop<void>(),
                           color: theme.textTheme.bodyMedium!.color!
-                              .withOpacity(0.6),
+                              .withValues(alpha: .6),
                           theme: theme,
                         ),
                         gapW15,

@@ -26,7 +26,7 @@ class LoginHeader extends StatelessWidget {
             'Login to your account',
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: fourteenPx,
-              color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+              color: theme.textTheme.bodyMedium!.color!.withValues(alpha: .6),
             ),
           ),
         ],

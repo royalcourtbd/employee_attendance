@@ -37,7 +37,7 @@ class ProfileHeader extends StatelessWidget {
               ? LoadingIndicator(
                   theme: theme,
                   color: Colors.white,
-                  ringColor: Colors.white.withOpacity(0.4),
+                  ringColor: Colors.white.withValues(alpha: 0.4),
                 )
               : ProfileImage(
                   profileImage: employee!.image ?? '',

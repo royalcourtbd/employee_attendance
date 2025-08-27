@@ -44,7 +44,7 @@ class EmployeeAttendanceTheme {
 
       // checkboxTheme: CheckboxThemeData(
       //   side: BorderSide(
-      //     color: QuranColor.primaryColorLight.withOpacity(0.3),
+      //     color: QuranColor.primaryColorLight.withValues(0.3),
       //     width: 2,
       //   ),
       //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.5)),
@@ -73,7 +73,7 @@ class EmployeeAttendanceTheme {
       //   fillColor: Colors.white,
       // ),
       // dividerTheme: DividerThemeData(
-      //   color: const Color(0xff614730).withOpacity(0.9),
+      //   color: const Color(0xff614730).withValues(0.9),
       //   thickness: 1,
       //   space: 0,
       // ),
@@ -85,7 +85,7 @@ class EmployeeAttendanceTheme {
       // ),
       // textSelectionTheme: TextSelectionThemeData(
       //   cursorColor: QuranColor.primaryColorLight,
-      //   selectionColor: QuranColor.primaryColorLight.withOpacity(0.2),
+      //   selectionColor: QuranColor.primaryColorLight.withValues(0.2),
       //   selectionHandleColor: QuranColor.primaryColorLight,
       // ),
       // disabledColor: const Color(0xff7F909F),
@@ -125,7 +125,7 @@ class EmployeeAttendanceTheme {
       //     displayLarge: const TextStyle(color: QuranColor.primaryColorLight),
       //     displayMedium: const TextStyle(color: Color(0xFF3B3B3B)),
       //     bodySmall: TextStyle(
-      //       color: QuranColor.textColorLight.withOpacity(0.6),
+      //       color: QuranColor.textColorLight.withValues(0.6),
       //       fontFamily: FontFamily.inter,
       //       fontWeight: FontWeight.w400,
       //     ),
@@ -163,7 +163,7 @@ class EmployeeAttendanceTheme {
   //   fontFamily: FontFamily.inter,
   //   checkboxTheme: CheckboxThemeData(
   //     side: BorderSide(
-  //       color: QuranColor.textColorDark.withOpacity(0.3),
+  //       color: QuranColor.textColorDark.withValues(0.3),
   //       width: 2,
   //     ),
   //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.5)),
@@ -202,7 +202,7 @@ class EmployeeAttendanceTheme {
   //   ),
   //   textSelectionTheme: TextSelectionThemeData(
   //     cursorColor: QuranColor.textColorDark,
-  //     selectionColor: QuranColor.textColorDark.withOpacity(0.5),
+  //     selectionColor: QuranColor.textColorDark.withValues(0.5),
   //     selectionHandleColor: QuranColor.textColorDark,
   //   ),
   //   disabledColor: const Color(0xff7F909F),
@@ -247,7 +247,7 @@ class EmployeeAttendanceTheme {
   //       titleSmall: const TextStyle(color: Colors.white),
   //       labelLarge: const TextStyle(color: Colors.white),
   //       bodySmall: TextStyle(
-  //         color: QuranColor.textColorDark.withOpacity(0.6),
+  //         color: QuranColor.textColorDark.withValues(0.6),
   //         fontFamily: FontFamily.inter,
   //         fontWeight: FontWeight.w400,
   //       ),

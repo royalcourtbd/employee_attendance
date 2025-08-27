@@ -150,7 +150,7 @@ Future<void> showComingSoonMessage({BuildContext? context}) async {
       msg: "শীঘ্রই আসছে ইন-শা-আল্লাহ",
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: themeData.colorScheme.scrim.withOpacity(0.9),
+      backgroundColor: themeData.colorScheme.scrim.withValues(alpha: 0.9),
       textColor: themeData.colorScheme.onPrimary,
       fontSize: sixteenPx,
     );
@@ -527,11 +527,11 @@ void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 //     contentPadding: contentPadding ?? padding5,
 //     hintText: hintText,
 //     filled: true,
-//     fillColor: fillColor ?? scrimColor.withOpacity(0.1),
+//     fillColor: fillColor ?? scrimColor.withValues(0.1),
 //     hintStyle: textTheme.bodyMedium?.copyWith(
 //       fontWeight: FontWeight.w400,
 //       fontSize: isMobile ? thirteenPx : eightPx,
-//       color: themeService.isDarkMode ? scrimColor.withOpacity(0.5) : scrimColor,
+//       color: themeService.isDarkMode ? scrimColor.withValues(0.5) : scrimColor,
 //     ),
 //     suffixIcon: suffixIconPath != null
 //         ? SvgImage(

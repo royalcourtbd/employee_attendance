@@ -12,7 +12,7 @@ class BuildLoadingIndicator extends StatelessWidget {
         child: LoadingIndicator(
           theme: theme,
           color: theme.primaryColor,
-          ringColor: theme.primaryColor.withOpacity(0.5),
+          ringColor: theme.primaryColor.withValues(alpha: .5),
         ),
       ),
     );

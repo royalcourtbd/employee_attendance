@@ -20,7 +20,7 @@ class NewAppUpdateDialog extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) => const NewAppUpdateDialog(),
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: Colors.black.withValues(alpha: .5),
       animationType: DialogTransitionType.slideFromBottom,
       curve: Curves.bounceIn,
     );
