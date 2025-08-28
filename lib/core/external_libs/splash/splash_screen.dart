@@ -4,8 +4,6 @@
 // import 'package:flutter/services.dart';
 // import 'package:get/get.dart';
 
-
-
 // // makes sure that the splash screen is not shown when app opened from
 // // minimized state
 // bool _appAlreadyOpen = false;
