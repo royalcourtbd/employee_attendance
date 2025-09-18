@@ -6,7 +6,16 @@ import signal
 import platform
 import subprocess
 import glob
+import re  # Added for git tag functionality
 from functools import wraps
+
+# Cross-platform color support
+try:
+    import colorama
+    if platform.system() == "Windows":
+        colorama.init(autoreset=True)
+except ImportError:
+    pass
 
 # Colors for output
 RED = '\033[0;31m'
@@ -48,13 +57,18 @@ def show_loading(description, process):
         process: Process object to monitor
     """
     spinner_index = 0
-    braille_spinner_list = '⡿⣟⣯⣷⣾⣽⣻⢿'
+    # Use different spinners based on OS
+    if platform.system() == "Windows":
+        braille_spinner_list = '|/-\\'
+    else:
+        braille_spinner_list = '⡿⣟⣯⣷⣾⣽⣻⢿'
+    
     print(description, end='', flush=True)
     # Continue spinning while the process is running
     while process.poll() is None:
         print(f"\b{MAGENTA}{braille_spinner_list[spinner_index]}{NC}", end='', flush=True)
         spinner_index = (spinner_index + 1) % len(braille_spinner_list)
-        time.sleep(0.025)
+        time.sleep(0.1 if platform.system() == "Windows" else 0.025)
     stdout, stderr = process.communicate()
     # Display success or failure icon based on the process exit status
     if process.returncode == 0:
@@ -67,9 +81,15 @@ def show_loading(description, process):
         print(f"\b{CROSS} ", flush=True)
         # Nicher ei stdout statement ta comment out korle r command er out put dekha jabe na.
         if stdout:
-            print(f"\n{GREEN}Output:\n{stdout.decode()}{NC}")
+            try:
+                print(f"\n{GREEN}Output:\n{stdout.decode('utf-8', errors='ignore')}{NC}")
+            except:
+                print(f"\n{GREEN}Output:\n{stdout}{NC}")
         if stderr:
-            print(f"\n{RED}Error Output:\n{stderr.decode()}{NC}")
+            try:
+                print(f"\n{RED}Error Output:\n{stderr.decode('utf-8', errors='ignore')}{NC}")
+            except:
+                print(f"\n{RED}Error Output:\n{stderr}{NC}")
         return False
 
 def display_apk_size():
@@ -90,24 +110,41 @@ def run_flutter_command(cmd_list, description):
         cmd_list: List of command arguments
         description: Description to show with spinner
     """
+    # Windows compatibility for shell commands
+    shell_needed = platform.system() == "Windows" and cmd_list[0] in ['timeout', 'start', 'flutter', 'dart']
+    
     process = subprocess.Popen(
         cmd_list,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stderr=subprocess.PIPE,
+        shell=shell_needed,
+        text=True if sys.version_info >= (3, 7) else False,
+        encoding='utf-8' if sys.version_info >= (3, 6) else None,
+        errors='ignore' if sys.version_info >= (3, 6) else None
     )
     return show_loading(description, process)
 
 def open_directory(directory_path):
     """Opens a directory based on the operating system"""
     try:
+        # Normalize path for the current OS
+        norm_path = os.path.normpath(directory_path)
+        
+        # Check if directory exists
+        if not os.path.exists(norm_path):
+            print(f"{YELLOW}Warning: Directory does not exist: {norm_path}{NC}")
+            print(f"{YELLOW}Creating directory...{NC}")
+            os.makedirs(norm_path, exist_ok=True)
+            
         if platform.system() == "Darwin":  # macOS
-            subprocess.run(["open", directory_path])
+            subprocess.run(["open", norm_path])
         elif platform.system() == "Linux":
-            subprocess.run(["xdg-open", directory_path])
+            subprocess.run(["xdg-open", norm_path])
         elif platform.system() == "Windows":
-            subprocess.run(["start", directory_path], shell=True)
+            # Use os.startfile for Windows - more reliable
+            os.startfile(norm_path)
         else:
-            print(f"Cannot open directory automatically. Please check: {directory_path}")
+            print(f"Cannot open directory automatically. Please check: {norm_path}")
     except Exception as e:
         print(f"Error opening directory: {e}")
         print(f"Please check: {directory_path}")
@@ -249,19 +286,35 @@ def install_apk():
     """
     Installs the built APK on a connected Android device using adb.
     Tries to install arm64-v8a APK first if available.
+    Handles signature mismatch by uninstalling existing app first.
     """
     apk_files = glob.glob("build/app/outputs/flutter-apk/*.apk")
     if not apk_files:
         print(f"{RED}No APK found to install!{NC}")
         return False
-    # Try to install arm64-v8a APK first
+    
+    # Try to install arm64-v8a APK first, otherwise use the first apk
+    target_apk = None
     for apk_path in apk_files:
         if "arm64-v8a" in apk_path:
-            print(f"{YELLOW}Installing {apk_path}...{NC}")
-            return run_flutter_command(["adb", "install", "-r", apk_path], "Installing on device...                              ")
-    # If not found, install the first apk
-    print(f"{YELLOW}Installing {apk_files[0]}...{NC}")
-    return run_flutter_command(["adb", "install", "-r", apk_files[0]], "Installing on device...                              ")
+            target_apk = apk_path
+            break
+    if not target_apk:
+        target_apk = apk_files[0]
+    
+    print(f"{YELLOW}Installing {target_apk}...{NC}")
+    
+    # First try normal install
+    success = run_flutter_command(["adb", "install", "-r", target_apk], "Installing on device...                              ")
+    
+    if not success:
+        print(f"{YELLOW}Installation failed, trying to uninstall existing app first...{NC}")
+        # Try to uninstall existing app first
+        run_flutter_command(["adb", "uninstall", "com.royalcourtbd.dhaka_bus"], "Uninstalling existing app...                        ")
+        # Then try to install again
+        success = run_flutter_command(["adb", "install", target_apk], "Reinstalling on device...                           ")
+    
+    return success
 
 @timer_decorator
 def update_pods():
@@ -273,8 +326,11 @@ def update_pods():
     # Delete Podfile.lock
     try:
         os.remove("Podfile.lock")
-        # Use a dummy process for the loading animation
-        run_flutter_command(["sleep", "0.1"], "Removing Podfile.lock                                 ")
+        # Use platform-specific dummy process for the loading animation
+        if platform.system() == "Windows":
+            run_flutter_command(["timeout", "/t", "1", "/nobreak"], "Removing Podfile.lock                                 ")
+        else:
+            run_flutter_command(["sleep", "0.1"], "Removing Podfile.lock                                 ")
     except FileNotFoundError:
         pass
     # Update pod repo
@@ -284,6 +340,90 @@ def update_pods():
     # Return to root directory
     os.chdir(current_dir)
     print(f"\n{GREEN}✓ iOS pods updated successfully!{NC}")
+
+# ============================================================================
+# GIT TAG FUNCTIONS
+# ============================================================================
+
+def get_version_from_pubspec():
+    """Get the version from pubspec.yaml using regex"""
+    if os.path.isfile("pubspec.yaml"):
+        with open("pubspec.yaml", 'r', encoding='utf-8') as file:
+            try:
+                content = file.read()
+                # Use regex to find the version field in pubspec.yaml
+                version_match = re.search(r'^version:\s*(.+)$', content, re.MULTILINE)
+                if version_match:
+                    version = version_match.group(1).strip()
+                    # Remove quotes if present and split by + to get only version number
+                    version = version.strip('"\'').split('+')[0]
+                    return version
+                else:
+                    print(f"{RED}Error: Could not find 'version' field in pubspec.yaml.{NC}")
+                    return None
+            except Exception as e:
+                print(f"{RED}Error: Could not read pubspec.yaml: {e}{NC}")
+                return None
+    else:
+        print(f"{RED}Error: pubspec.yaml not found in the current directory.{NC}")
+        print(f"Please run this command from the root of a Flutter project.")
+        return None
+
+def create_and_push_tag():
+    """Create git tag from pubspec version and push to remote"""
+    print(f"{YELLOW}Creating and pushing git tag...{NC}\n")
+    
+    # Get version from pubspec.yaml
+    version = get_version_from_pubspec()
+    if not version:
+        return False
+    
+    tag_name = f"v{version}"
+    
+    print(f"{BLUE}Version found: {version}{NC}")
+    print(f"{BLUE}Tag name: {tag_name}{NC}\n")
+    
+    # Check if tag already exists
+    try:
+        result = subprocess.run(["git", "tag", "-l", tag_name], 
+                              capture_output=True, text=True)
+        if result.stdout.strip():
+            print(f"{YELLOW}Warning: Tag {tag_name} already exists locally.{NC}")
+            user_input = input(f"Do you want to delete and recreate it? (y/N): ")
+            if user_input.lower() != 'y':
+                print(f"{YELLOW}Operation cancelled.{NC}")
+                return False
+            # Delete existing tag
+            subprocess.run(["git", "tag", "-d", tag_name])
+            print(f"{GREEN}Deleted existing local tag: {tag_name}{NC}")
+    except Exception as e:
+        print(f"{RED}Error checking existing tags: {e}{NC}")
+        return False
+    
+    # Create git tag
+    success = run_flutter_command(["git", "tag", tag_name], f"Creating tag {tag_name}...                             ")
+    if not success:
+        print(f"{RED}Failed to create git tag.{NC}")
+        return False
+    
+    # Push tag to remote
+    success = run_flutter_command(["git", "push", "-u", "origin", tag_name], f"Pushing tag to remote...                            ")
+    if not success:
+        print(f"{RED}Failed to push tag to remote.{NC}")
+        return False
+    
+    print(f"\n{GREEN}✓ Git tag {tag_name} created and pushed successfully!{NC}")
+    return True
+
+def uninstall_app():
+    """Uninstall the app from connected device"""
+    print(f"{YELLOW}Uninstalling app from device...{NC}\n")
+    success = run_flutter_command(["adb", "uninstall", "com.royalcourtbd.dhaka_bus"], "Uninstalling app...                                 ")
+    if success:
+        print(f"\n{GREEN}✓ App uninstalled successfully!{NC}")
+    else:
+        print(f"\n{RED}✗ Failed to uninstall app!{NC}")
+    return success
 
 def create_page(page_name):
     """Create page structure"""
@@ -316,7 +456,9 @@ def show_usage():
     print("  cache-repair Repair pub cache")
     print("  cleanup      Clean project and get dependencies")
     print("  release-run  Build & install release APK on connected device")
+    print("  uninstall    Uninstall app from connected device")
     print("  pod          Update iOS pods")
+    print("  tag          Create and push git tag from pubspec version")
     print("  page         Create page structure (usage: {sys.argv[0]} page <page_name>)")
     sys.exit(1)
 
@@ -346,8 +488,12 @@ def main():
         cleanup_project()
     elif command == "release-run":
         release_run()
+    elif command == "uninstall":
+        uninstall_app()
     elif command == "pod":
         update_pods()
+    elif command == "tag":
+        create_and_push_tag()
     elif command == "page":
         if len(sys.argv) < 3:
             print(f"{RED}Error: Page name is required.{NC}")
