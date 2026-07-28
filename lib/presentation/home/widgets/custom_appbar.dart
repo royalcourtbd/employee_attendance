@@ -38,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             greetingMessage,
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: thirteenPx, // or any size you prefer
-              color: theme.textTheme.bodyMedium!.color!.withOpacity(0.8),
+              color: theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.8),
             ),
           ),
         ],

@@ -32,7 +32,9 @@ class DatePickerWidget extends StatelessWidget {
                   onPrimary: Colors.white,
                   surface: theme.scaffoldBackgroundColor,
                 ),
-                dialogBackgroundColor: Colors.white,
+                dialogTheme: const DialogThemeData(
+                  backgroundColor: Colors.white,
+                ),
                 dividerTheme: const DividerThemeData(
                   space: 0,
                   thickness: 1,

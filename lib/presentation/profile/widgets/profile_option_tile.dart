@@ -47,7 +47,8 @@ class ProfileOptionTile extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: twentyPx,
-                color: theme.textTheme.bodyMedium!.color!.withOpacity(0.5),
+                color:
+                    theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.5),
               ),
             ],
           ),

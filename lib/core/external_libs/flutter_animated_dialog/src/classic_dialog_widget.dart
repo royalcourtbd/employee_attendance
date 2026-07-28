@@ -65,7 +65,7 @@ class ClassicGeneralDialogWidget extends StatelessWidget {
                             .textTheme
                             .bodySmall!
                             .color!
-                            .withOpacity(0.6),
+                            .withValues(alpha: 0.6),
                         fontSize:
                             Theme.of(context).textTheme.labelLarge!.fontSize,
                       ),
@@ -83,7 +83,7 @@ class ClassicGeneralDialogWidget extends StatelessWidget {
                         return Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.5);
+                            .withValues(alpha: 0.5);
                       }
                       return Theme.of(context).splashColor;
                     },
@@ -190,73 +190,75 @@ class ClassicListDialogWidgetState<T>
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    Widget contentWidget = ListView.builder(
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        if (widget.listItem == null) {
-          switch (widget.listType) {
-            case ListType.single:
-              return ListTile(
-                title: Text(
-                  widget.dataList[index].toString(),
-                  style: Theme.of(context).dialogTheme.contentTextStyle,
-                ),
-                onTap: widget.onListItemClick ??
-                    () {
-                      Navigator.of(context).pop(index);
-                    },
-              );
-            case ListType.singleSelect:
-              return RadioListTile<int>(
-                controlAffinity: widget.controlAffinity!,
-                title: Text(
-                  widget.dataList[index].toString(),
-                  style: Theme.of(context).dialogTheme.contentTextStyle,
-                ),
-                activeColor:
-                    widget.activeColor ?? Theme.of(context).primaryColor,
-                value: index,
-                groupValue: selectedIndex,
-                onChanged: (value) {
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
-              );
-            case ListType.multiSelect:
-              return CheckboxListTile(
-                controlAffinity: widget.controlAffinity!,
-                selected: valueList[index],
-                value: valueList[index],
-                title: Text(
-                  widget.dataList[index].toString(),
-                  style: Theme.of(context).dialogTheme.contentTextStyle,
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    valueList[index] = value!;
-                  });
-                },
-                activeColor:
-                    widget.activeColor ?? Theme.of(context).primaryColor,
-              );
-            default:
-              return ListTile(
-                title: Text(
-                  widget.dataList[index].toString(),
-                  style: Theme.of(context).dialogTheme.contentTextStyle,
-                ),
-                onTap: widget.onListItemClick ??
-                    () {
-                      Navigator.of(context).pop(index);
-                    },
-              );
-          }
-        } else {
-          return widget.listItem!;
-        }
+    Widget contentWidget = RadioGroup<int>(
+      groupValue: selectedIndex,
+      onChanged: (value) {
+        setState(() {
+          selectedIndex = value;
+        });
       },
-      itemCount: widget.dataList.length,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (widget.listItem == null) {
+            switch (widget.listType) {
+              case ListType.single:
+                return ListTile(
+                  title: Text(
+                    widget.dataList[index].toString(),
+                    style: Theme.of(context).dialogTheme.contentTextStyle,
+                  ),
+                  onTap: widget.onListItemClick ??
+                      () {
+                        Navigator.of(context).pop(index);
+                      },
+                );
+              case ListType.singleSelect:
+                return RadioListTile<int>(
+                  controlAffinity: widget.controlAffinity!,
+                  title: Text(
+                    widget.dataList[index].toString(),
+                    style: Theme.of(context).dialogTheme.contentTextStyle,
+                  ),
+                  activeColor:
+                      widget.activeColor ?? Theme.of(context).primaryColor,
+                  value: index,
+                );
+              case ListType.multiSelect:
+                return CheckboxListTile(
+                  controlAffinity: widget.controlAffinity!,
+                  selected: valueList[index],
+                  value: valueList[index],
+                  title: Text(
+                    widget.dataList[index].toString(),
+                    style: Theme.of(context).dialogTheme.contentTextStyle,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      valueList[index] = value!;
+                    });
+                  },
+                  activeColor:
+                      widget.activeColor ?? Theme.of(context).primaryColor,
+                );
+              default:
+                return ListTile(
+                  title: Text(
+                    widget.dataList[index].toString(),
+                    style: Theme.of(context).dialogTheme.contentTextStyle,
+                  ),
+                  onTap: widget.onListItemClick ??
+                      () {
+                        Navigator.of(context).pop(index);
+                      },
+                );
+            }
+          } else {
+            return widget.listItem!;
+          }
+        },
+        itemCount: widget.dataList.length,
+      ),
     );
     contentWidget = SizedBox(
       width: double.maxFinite,
@@ -284,7 +286,7 @@ class ClassicListDialogWidgetState<T>
                         .textTheme
                         .bodySmall!
                         .color!
-                        .withOpacity(0.6),
+                        .withValues(alpha: 0.6),
                     fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
                   ),
                 ),
@@ -318,7 +320,7 @@ class ClassicListDialogWidgetState<T>
                       return Theme.of(context)
                           .colorScheme
                           .primary
-                          .withOpacity(0.5);
+                          .withValues(alpha: 0.5);
                     }
                     return Theme.of(context).splashColor;
                   },

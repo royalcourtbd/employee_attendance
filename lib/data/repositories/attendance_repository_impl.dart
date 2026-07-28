@@ -21,7 +21,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         .map((snapshot) => OfficeSettingsModel.fromJson(snapshot.data() ?? {}));
   }
 
-  Future<OfficeSettingsEntity> _getOfficeSettings() async {
+  Future<OfficeSettingsEntity> getOfficeSettings() async {
     final doc = await _firebaseService.firestore
         .collection(Urls.settings)
         .doc('office')

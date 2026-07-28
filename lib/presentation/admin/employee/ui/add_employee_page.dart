@@ -61,27 +61,29 @@ class AddEmployeePage extends StatelessWidget {
                   labelText: 'Joining Date',
                 ),
                 gapH20,
-                Row(
-                  children: [
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Employee'),
-                        value: 'employee',
-                        groupValue: uiState.selectedRole,
-                        onChanged: (value) =>
-                            _addEmployeePresenter.updateRole(value!),
+                RadioGroup<String>(
+                  groupValue: uiState.selectedRole,
+                  onChanged: (value) {
+                    if (value != null) {
+                      _addEmployeePresenter.updateRole(value);
+                    }
+                  },
+                  child: const Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: Text('Employee'),
+                          value: 'employee',
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Admin'),
-                        value: 'admin',
-                        groupValue: uiState.selectedRole,
-                        onChanged: (value) =>
-                            _addEmployeePresenter.updateRole(value!),
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: Text('Admin'),
+                          value: 'admin',
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 gapH30,
                 LoadingButtonWidget(

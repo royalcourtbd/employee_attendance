@@ -41,13 +41,14 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: icon != null
             ? Icon(
                 icon,
-                color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+                color:
+                    theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.6),
               )
             : null,
         hintText: hintText,
         hintStyle: theme.textTheme.bodyMedium!.copyWith(
           fontSize: fourteenPx,
-          color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+          color: theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.6),
         ),
         border: _outlineInputBorder(theme: theme),
         errorBorder: _outlineInputBorder(theme: theme),
@@ -66,8 +67,8 @@ class CustomTextField extends StatelessWidget {
     return OutlineInputBorder(
       borderRadius: radius10,
       borderSide: BorderSide(
-        color:
-            borderColor ?? theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
+        color: borderColor ??
+            theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.6),
       ),
     );
   }
