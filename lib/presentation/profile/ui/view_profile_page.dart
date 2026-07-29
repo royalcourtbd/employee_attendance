@@ -1,3 +1,4 @@
+import 'package:employee_attendance/core/config/themes.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
@@ -17,58 +18,61 @@ class ViewProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return PresentableWidgetBuilder(
-      presenter: _viewProfilePresenter,
-      builder: () {
-        final EmployeeEntity? employee =
-            _viewProfilePresenter.currentUiState.employee;
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProfileHeader(
-                  theme: theme,
-                  employee: _viewProfilePresenter.currentUiState.employee,
-                  isPhotoEditable: true,
-                  onEdit: () => _viewProfilePresenter.updateProfileImage(
-                      userId: employee!.id),
-                  presenter: _viewProfilePresenter,
-                ),
-                Padding(
-                  padding: padding20,
-                  child: Column(
-                    children: [
-                      ProfileInfoItem(
-                          label: 'Name', value: employee!.name ?? ''),
-                      ProfileInfoItem(
-                          label: 'Email', value: employee.email ?? ''),
-                      ProfileInfoItem(
-                          label: 'Employee ID',
-                          value: employee.employeeId ?? ''),
-                      ProfileInfoItem(
-                          label: 'Designation',
-                          value: employee.designation ?? ''),
-                      ProfileInfoItem(
-                          label: 'Phone', value: employee.phoneNumber ?? ''),
-                      ProfileInfoItem(
-                        label: 'Joining Date',
-                        value: employee.joiningDate != null
-                            ? getFormattedDate(employee.joiningDate)
-                            : '',
-                      ),
-                      ProfileInfoItem(
-                        label: 'Status',
-                        value: employee.employeeStatus ? 'Active' : 'Inactive',
-                      ),
-                    ],
+    return EmployeeAttendanceTheme.withDefaultSystemUiOverlayStyle(
+      child: PresentableWidgetBuilder(
+        presenter: _viewProfilePresenter,
+        builder: () {
+          final EmployeeEntity? employee =
+              _viewProfilePresenter.currentUiState.employee;
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProfileHeader(
+                    theme: theme,
+                    employee: _viewProfilePresenter.currentUiState.employee,
+                    isPhotoEditable: true,
+                    onEdit: () => _viewProfilePresenter.updateProfileImage(
+                        userId: employee!.id),
+                    presenter: _viewProfilePresenter,
                   ),
-                )
-              ],
+                  Padding(
+                    padding: padding20,
+                    child: Column(
+                      children: [
+                        ProfileInfoItem(
+                            label: 'Name', value: employee!.name ?? ''),
+                        ProfileInfoItem(
+                            label: 'Email', value: employee.email ?? ''),
+                        ProfileInfoItem(
+                            label: 'Employee ID',
+                            value: employee.employeeId ?? ''),
+                        ProfileInfoItem(
+                            label: 'Designation',
+                            value: employee.designation ?? ''),
+                        ProfileInfoItem(
+                            label: 'Phone', value: employee.phoneNumber ?? ''),
+                        ProfileInfoItem(
+                          label: 'Joining Date',
+                          value: employee.joiningDate != null
+                              ? getFormattedDate(employee.joiningDate)
+                              : '',
+                        ),
+                        ProfileInfoItem(
+                          label: 'Status',
+                          value:
+                              employee.employeeStatus ? 'Active' : 'Inactive',
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

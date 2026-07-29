@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:employee_attendance/core/external_libs/flutter_animated_dialog/src/custom_dialog_transitions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 bool isShowing = false;
 
@@ -430,15 +429,7 @@ class CustomDialogWidget extends StatelessWidget {
       child: dialogChild,
     );
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarIconBrightness: Brightness.light,
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: dialogChild,
-    );
+    return dialogChild;
   }
 }
 

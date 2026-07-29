@@ -1,15 +1,18 @@
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
+import 'package:employee_attendance/core/config/themes.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/external_libs/presentable_widget_builder.dart';
 import 'package:employee_attendance/core/static/svg_path.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
+import 'package:employee_attendance/domain/entities/employee_entity.dart';
+import 'package:employee_attendance/presentation/admin/dashboard/ui/admin_dashboard_page.dart';
 import 'package:employee_attendance/presentation/common/loading_button_widget.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
 import 'package:employee_attendance/presentation/login/widgets/custom_text_field.dart';
 import 'package:employee_attendance/presentation/login/widgets/login_header.dart';
+import 'package:employee_attendance/presentation/main/ui/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
@@ -23,24 +26,14 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-      statusBarColor: theme.scaffoldBackgroundColor,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-      systemNavigationBarColor: theme.scaffoldBackgroundColor,
-      systemNavigationBarDividerColor: theme.scaffoldBackgroundColor,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarContrastEnforced: false,
-    );
 
-    return PresentableWidgetBuilder(
-      presenter: _loginPresenter,
-      builder: () {
-        final loginState = _loginPresenter.currentUiState;
+    return EmployeeAttendanceTheme.withDefaultSystemUiOverlayStyle(
+      child: PresentableWidgetBuilder(
+        presenter: _loginPresenter,
+        builder: () {
+          final loginState = _loginPresenter.currentUiState;
 
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: systemUiOverlayStyle,
-          child: Scaffold(
+          return Scaffold(
             resizeToAvoidBottomInset: true,
             body: SafeArea(
               child: LayoutBuilder(
@@ -99,8 +92,10 @@ class LoginPage extends StatelessWidget {
                                 isLoading: loginState.isLoading,
                                 theme: theme,
                                 buttonText: 'Login',
-                                onPressed: () =>
-                                    _loginPresenter.handleLogin(context),
+                                onPressed: () => _loginPresenter.handleLogin(
+                                  onSuccess: (user) =>
+                                      _handleLoginSuccess(context, user),
+                                ),
                               ),
                               gapH20,
                             ],
@@ -112,9 +107,24 @@ class LoginPage extends StatelessWidget {
                 },
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
+    );
+  }
+
+  void _handleLoginSuccess(
+    BuildContext context,
+    EmployeeEntity employee,
+  ) {
+    if (!context.mounted) return;
+
+    final Widget destination =
+        employee.role == 'admin' ? AdminDashboardPage() : MainPage();
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(builder: (_) => destination),
+      (_) => false,
     );
   }
 }

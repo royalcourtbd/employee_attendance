@@ -15,13 +15,14 @@ class AdminDashboardPresenter extends BasePresenter<AdminDashboardUiState> {
 
   late final HomePresenter _homePresenter = locate<HomePresenter>();
 
-  Future<void> logout() async {
+  Future<void> logout({required void Function() onSuccess}) async {
     await toggleLoading(loading: true);
     try {
       _homePresenter.resetAttendance();
       await _logoutUseCase.execute();
       uiState.value = AdminDashboardUiState.empty();
       await addUserMessage('Logged out successfully');
+      onSuccess();
     } catch (e) {
       await addUserMessage('Error logging out');
     } finally {

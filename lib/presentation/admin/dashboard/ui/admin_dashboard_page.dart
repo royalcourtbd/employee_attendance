@@ -10,6 +10,7 @@ import 'package:employee_attendance/presentation/admin/settings/ui/settings_page
 import 'package:employee_attendance/presentation/admin/dashboard/widgets/admin_dashboard_grid_item.dart';
 import 'package:employee_attendance/presentation/common/log_out_dialog.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_presenter.dart';
+import 'package:employee_attendance/presentation/login/ui/login_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,9 @@ class AdminDashboardPage extends StatelessWidget {
             onPressed: () => LogOutDialog.show(
               context: context,
               title: 'Sign Out',
-              onRemove: () => _adminDashboardPresenter.logout(),
+              onRemove: () => _adminDashboardPresenter.logout(
+                onSuccess: () => _navigateToLogin(context),
+              ),
             ),
           )
         ],
@@ -76,6 +79,14 @@ class AdminDashboardPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _navigateToLogin(BuildContext context) {
+    if (!context.mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(builder: (_) => LoginPage()),
+      (_) => false,
     );
   }
 }

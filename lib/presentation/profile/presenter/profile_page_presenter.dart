@@ -1,5 +1,4 @@
-// lib/presentation/profile/presenter/profile_page_presenter.dart
-
+import 'dart:async';
 import 'dart:io';
 
 import 'package:employee_attendance/core/base/base_presenter.dart';
@@ -46,24 +45,16 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  @override
-  void onInit() {
-    super.onInit();
-    _initUser();
-  }
+  StreamSubscription<EmployeeEntity?>? _userSubscription;
 
-  void _initUser() {
-    final currentUser = _firebaseService.auth.currentUser;
-    if (currentUser != null) {
-      initUserStream(currentUser.uid);
-    } else {
-      addUserMessage('No user logged in');
-    }
+  void initializeUser(EmployeeEntity employee) {
+    uiState.value = currentUiState.copyWith(employee: employee);
+    initUserStream(employee.id);
   }
 
   void initUserStream(String userId) {
-    debugPrint('User ID: $userId');
-    _getUserStreamUseCase.execute(userId).listen(
+    _userSubscription?.cancel();
+    _userSubscription = _getUserStreamUseCase.execute(userId).listen(
       (user) {
         if (user != null) {
           uiState.value = currentUiState.copyWith(employee: user);
@@ -154,13 +145,16 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout({required void Function() onSuccess}) async {
     await toggleLoading(loading: true);
     try {
       _homePresenter.resetAttendance();
       await _logoutUseCase.execute();
+      await _userSubscription?.cancel();
+      _userSubscription = null;
       uiState.value = ProfilePageUiState.empty();
-      showMessage(message: 'Logged out successfully');
+      await showMessage(message: 'Logged out successfully');
+      onSuccess();
     } catch (e) {
       await addUserMessage('Error logging out');
     } finally {
@@ -210,5 +204,14 @@ class ProfilePagePresenter extends BasePresenter<ProfilePageUiState> {
   @override
   Future<void> toggleLoading({required bool loading}) async {
     uiState.value = currentUiState.copyWith(isLoading: loading);
+  }
+
+  @override
+  void onClose() {
+    _userSubscription?.cancel();
+    currentPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.onClose();
   }
 }

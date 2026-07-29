@@ -3,6 +3,7 @@ import 'package:employee_attendance/core/external_libs/presentable_widget_builde
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
 import 'package:employee_attendance/presentation/common/log_out_dialog.dart';
+import 'package:employee_attendance/presentation/login/ui/login_page.dart';
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:employee_attendance/presentation/profile/ui/view_profile_page.dart';
 import 'package:employee_attendance/presentation/profile/widgets/copyright.dart';
@@ -58,7 +59,9 @@ class ProfilePage extends StatelessWidget {
                         onTap: () => LogOutDialog.show(
                           context: context,
                           title: 'Sign Out',
-                          onRemove: () => _profilePagePresenter.logout(),
+                          onRemove: () => _profilePagePresenter.logout(
+                            onSuccess: () => _navigateToLogin(context),
+                          ),
                         ),
                         icon: Icons.logout,
                         text: 'Log Out',
@@ -73,6 +76,14 @@ class ProfilePage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _navigateToLogin(BuildContext context) {
+    if (!context.mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(builder: (_) => LoginPage()),
+      (_) => false,
     );
   }
 }

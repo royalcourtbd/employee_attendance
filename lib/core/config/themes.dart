@@ -1,15 +1,33 @@
-import 'dart:async';
-
 import 'package:employee_attendance/core/config/employee_attendance_app_color.dart';
-import 'package:employee_attendance/core/static/constants.dart';
 import 'package:employee_attendance/core/static/font_family.dart';
-import 'package:employee_attendance/core/utility/logger_utility.dart';
-import 'package:employee_attendance/presentation/employee_attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class EmployeeAttendanceTheme {
   EmployeeAttendanceTheme._();
+
+  static const SystemUiOverlayStyle defaultSystemUiOverlayStyle =
+      SystemUiOverlayStyle(
+    statusBarColor: EmployeeAttendanceAppColor.scaffoldBachgroundColor,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
+
+  static const SystemUiOverlayStyle appBarSystemUiOverlayStyle =
+      SystemUiOverlayStyle(
+    statusBarColor: EmployeeAttendanceAppColor.appbarColor,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+  );
+
+  static Widget withDefaultSystemUiOverlayStyle({
+    required Widget child,
+  }) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: defaultSystemUiOverlayStyle,
+      child: child,
+    );
+  }
 
   static ThemeData lightTheme = ThemeData(
       fontFamily: FontFamily.inter,
@@ -29,6 +47,7 @@ class EmployeeAttendanceTheme {
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
           backgroundColor: EmployeeAttendanceAppColor.appbarColor,
+          systemOverlayStyle: appBarSystemUiOverlayStyle,
           iconTheme: IconThemeData(color: Colors.white),
           elevation: 0,
           scrolledUnderElevation: 0,
@@ -262,39 +281,4 @@ class EmployeeAttendanceTheme {
   //     inverseSurface: QuranColor.scaffoldBachgroundColorDark,
   //   ).copyWith(background: const Color(0xff122337)),
   // );
-}
-
-Future<SystemUiOverlayStyle?> getSystemUiOverlayStyle({
-  bool? isDark,
-  BuildContext? context,
-}) async {
-  final SystemUiOverlayStyle? uiOverlayStyle =
-      await catchAndReturnFuture(() async {
-    final ThemeData theme =
-        Theme.of(context ?? EmployeeAttendance.globalContext);
-    final Color statusBarColor = isDark == null
-        ? Colors.yellow
-        : (isDark
-            ? const Color.fromARGB(0, 48, 22, 196)
-            : const Color.fromARGB(0, 253, 51, 51));
-    final Color systemNavigationBarColor = isDark == null
-        ? theme.cardColor
-        : (isDark ? const Color(0xff161C23) : const Color(0xffffffff));
-    return SystemUiOverlayStyle(
-      statusBarColor: statusBarColor,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: systemNavigationBarColor,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    );
-  });
-  return uiOverlayStyle;
-}
-
-Future<T?> catchAndReturnFuture<T>(FutureOr<T> Function() function) async {
-  try {
-    return await function();
-  } catch (error, trace) {
-    logErrorStatic("error: $error trace: $trace", packageName);
-    return null;
-  }
 }

@@ -1,3 +1,4 @@
+import 'package:employee_attendance/core/config/employee_attendance_app_color.dart';
 import 'package:employee_attendance/core/config/employee_attendance_screen.dart';
 import 'package:employee_attendance/core/static/ui_const.dart';
 import 'package:employee_attendance/core/utility/logger_utility.dart';
@@ -86,9 +87,15 @@ Future<void> showMessage({
   BuildContext? context,
 }) async {
   if (message == null || message.isEmpty) return;
+  final BuildContext? messageContext =
+      context ?? EmployeeAttendance.globalContextOrNull;
+  final Color backgroundColor = messageContext == null
+      ? EmployeeAttendanceAppColor.primaryColor
+      : Theme.of(messageContext).primaryColor;
+
   await Fluttertoast.showToast(
     msg: message,
-    backgroundColor: Theme.of(EmployeeAttendance.globalContext).primaryColor,
+    backgroundColor: backgroundColor,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
     textColor: Colors.white,

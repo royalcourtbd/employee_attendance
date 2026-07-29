@@ -10,6 +10,7 @@ import 'package:employee_attendance/domain/usecases/login_use_case.dart';
 import 'package:employee_attendance/domain/usecases/update_user_use_case.dart';
 import 'package:employee_attendance/presentation/login/presenter/login_page_ui_state.dart';
 import 'package:employee_attendance/presentation/main/presenter/main_page_presenter.dart';
+import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,8 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final MainPagePresenter _mainPagePresenter = locate<MainPagePresenter>();
+  late final ProfilePagePresenter _profilePagePresenter =
+      locate<ProfilePagePresenter>();
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -43,11 +46,14 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
     return null;
   }
 
-  Future<void> handleLogin(BuildContext context) async {
+  Future<void> handleLogin({
+    required void Function(EmployeeEntity user) onSuccess,
+  }) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       final String email = currentUiState.email.trim();
       final String password = currentUiState.password.trim();
+      EmployeeEntity? authenticatedUser;
 
       debugPrint('Attempting login with email: $email');
       await toggleLoading(loading: true);
@@ -62,9 +68,7 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
           (EmployeeEntity? user) async {
             debugPrint('Login successful. User: $user');
             if (user != null) {
-              _mainPagePresenter.updateIndex(index: 0);
-              unawaited(_syncDeviceToken(user));
-              await addUserMessage('Logged in successfully');
+              authenticatedUser = user;
             } else {
               debugPrint('User is null after successful login');
               await addUserMessage(
@@ -74,6 +78,16 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
         );
       } finally {
         await toggleLoading(loading: false);
+      }
+
+      if (authenticatedUser != null) {
+        _mainPagePresenter.updateIndex(index: 0);
+        if (authenticatedUser!.role != 'admin') {
+          _profilePagePresenter.initializeUser(authenticatedUser!);
+        }
+        unawaited(_syncDeviceToken(authenticatedUser!));
+        await addUserMessage('Logged in successfully');
+        onSuccess(authenticatedUser!);
       }
     }
   }
