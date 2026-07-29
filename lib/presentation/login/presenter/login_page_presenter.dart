@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/core/utility/utility.dart';
@@ -49,34 +51,42 @@ class LoginPagePresenter extends BasePresenter<LoginPageUiState> {
 
       debugPrint('Attempting login with email: $email');
       await toggleLoading(loading: true);
-      final result = await _loginUseCase.execute(email, password);
-      await toggleLoading(loading: false);
+      try {
+        final result = await _loginUseCase.execute(email, password);
 
-      result.fold(
-        (errorMessage) async {
-          debugPrint('Login error: $errorMessage');
-          await addUserMessage(errorMessage);
-        },
-        (EmployeeEntity? user) async {
-          debugPrint('Login successful. User: $user');
-          if (user != null) {
-            final String? deviceToken = await _getDeviceTokenUseCase.execute();
-            debugPrint('Device token: $deviceToken');
-            _mainPagePresenter.updateIndex(index: 0);
-
-            if (deviceToken != null && deviceToken.isNotEmpty) {
-              final updatedUser = user.copyWith(deviceToken: deviceToken);
-              debugPrint('Updating user with device token: $updatedUser');
-              await _updateUserUseCase.execute(updatedUser);
+        await result.fold(
+          (errorMessage) async {
+            debugPrint('Login error: $errorMessage');
+            await addUserMessage(errorMessage);
+          },
+          (EmployeeEntity? user) async {
+            debugPrint('Login successful. User: $user');
+            if (user != null) {
+              _mainPagePresenter.updateIndex(index: 0);
+              unawaited(_syncDeviceToken(user));
               await addUserMessage('Logged in successfully');
+            } else {
+              debugPrint('User is null after successful login');
+              await addUserMessage(
+                  'An error occurred while logging in. Please try again.');
             }
-          } else {
-            debugPrint('User is null after successful login');
-            await addUserMessage(
-                'An error occurred while logging in. Please try again.');
-          }
-        },
-      );
+          },
+        );
+      } finally {
+        await toggleLoading(loading: false);
+      }
+    }
+  }
+
+  Future<void> _syncDeviceToken(EmployeeEntity user) async {
+    try {
+      final String? deviceToken = await _getDeviceTokenUseCase.execute();
+      if (deviceToken != null && deviceToken.isNotEmpty) {
+        final updatedUser = user.copyWith(deviceToken: deviceToken);
+        await _updateUserUseCase.execute(updatedUser);
+      }
+    } catch (_) {
+      // Device-token sync is best-effort and must not block login navigation.
     }
   }
 
