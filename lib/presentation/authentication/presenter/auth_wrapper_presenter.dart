@@ -1,5 +1,7 @@
 // lib/presentation/authentication/presenter/auth_wrapper_presenter.dart
 
+import 'dart:async';
+
 import 'package:employee_attendance/core/base/base_presenter.dart';
 import 'package:employee_attendance/core/di/service_locator.dart';
 import 'package:employee_attendance/data/repositories/employee_repository_impl.dart';
@@ -9,13 +11,6 @@ import 'package:employee_attendance/presentation/authentication/presenter/auth_w
 import 'package:employee_attendance/presentation/profile/presenter/profile_page_presenter.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-enum AuthState {
-  loading,
-  loggedOut,
-  loggedInAdmin,
-  loggedInEmployee,
-}
-
 class AuthWrapperPresenter extends BasePresenter<AuthWrapperUiState> {
   final EmployeeRepository _userRepository = locate<EmployeeRepository>();
   final ProfilePagePresenter _profilePagePresenter =
@@ -24,10 +19,32 @@ class AuthWrapperPresenter extends BasePresenter<AuthWrapperUiState> {
   final Obs<AuthWrapperUiState> uiState = Obs(AuthWrapperUiState.empty());
   AuthWrapperUiState get currentUiState => uiState.value;
 
-  Stream<AuthState> get authStateStream =>
+  StreamSubscription<AuthState>? _authStateSubscription;
+
+  Stream<AuthState> get _authStateStream =>
       (_userRepository as EmployeeRepositoryImpl)
           .authStateChanges
           .asyncMap(_mapUserToAuthState);
+
+  @override
+  void onInit() {
+    super.onInit();
+    _listenToAuthStateChanges();
+  }
+
+  void _listenToAuthStateChanges() {
+    _authStateSubscription = _authStateStream.listen(
+      (authState) {
+        uiState.value = currentUiState.copyWith(authState: authState);
+      },
+      onError: (_) {
+        uiState.value = currentUiState.copyWith(
+          authState: AuthState.loggedOut,
+          userMessage: 'Unable to verify authentication state',
+        );
+      },
+    );
+  }
 
   Future<AuthState> _mapUserToAuthState(firebase_auth.User? user) async {
     if (user == null) {
@@ -56,5 +73,11 @@ class AuthWrapperPresenter extends BasePresenter<AuthWrapperUiState> {
   @override
   Future<void> toggleLoading({required bool loading}) async {
     uiState.value = currentUiState.copyWith(isLoading: loading);
+  }
+
+  @override
+  void onClose() {
+    _authStateSubscription?.cancel();
+    super.onClose();
   }
 }
